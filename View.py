@@ -1827,7 +1827,7 @@ class View:
 		self.price_content_entry.trace("w", self.update_price_content_entry)
 		self.senha_content_entry.trace("w", self.update_senha_content_entry)
 		self.monto_cuota_content_entry.trace("w", self.update_monto_cuota_content_entry)
-		save_button.config(command=lambda:self.controller.guardar_pre_venta(price_content_entry.get(), senha_content_entry.get(), monto_cuota_content_entry.get(),
+		save_button.config(command=lambda:self.controller.guardar_pre_venta(self.price_value, self.senha_value, self.monto_cuota_value,
 				cant_cuota_content_entry.get(), self.pre_venta_fecha_inicio, self.pre_venta_fecha_fin))
 		cancel_button.config(command=lambda:self.widget_destroy(self.frame_pre_venta))
 
