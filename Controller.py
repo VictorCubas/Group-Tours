@@ -134,7 +134,7 @@ class Controller:
 			#print('{} {} {} {} {} {}'.format(pre_venta.precio, pre_venta.senha, pre_venta.monto_cuota, pre_venta.cantidad_cuotas, pre_venta.fecha_inicio, fecha_fin))
 			#self.model.guardar_pre_venta(pre_venta)
 			self.view.set_value_pre_venta(pre_venta)
-			self.view.view_show_message(True, 'Pre venta añdido con exito')
+			self.view.view_show_message(True, 'Pre venta añadido con exito')
 
 	
 	def editar_paquete(self, frame, paquete, pos_paquete, pos_result_busqueda):
@@ -171,6 +171,8 @@ class Controller:
 			#paq = self.model.listar_paquetes()
 			#for p in paq:
 			#	print('paquete: ' + p.get_nombre())
+
+			print('guardando paquete editado..........')
 			self.model.guardar_paquete_editado(paquete, pos_paquete)
 
 			#print('listando paquetes2...')
