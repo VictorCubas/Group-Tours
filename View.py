@@ -1016,10 +1016,6 @@ class View:
 
 	def view_editar_paquete(self, frame, paquete, pos_paquete, pos_result_busqueda):
 		print('editando...')
-		#print('paquete: {}'.format(paquete.get_nombre()))
-		#print('pos paquete: {}'.format(pos_paquete))
-
-		#frame_detalles.destroy()
 		#DEFINIMOS EL FRAME 
 
 		self.frame_pre_venta = None
@@ -1111,10 +1107,7 @@ class View:
 		self.price_content_entry = StringVar()
 
 		texto = ''
-		if paquete.si_pre_venta():
-			precio_texto = str(paquete.get_precio_pre_venta())
-		else:
-			precio_texto = str(paquete.get_precio())
+		precio_texto = str(paquete.get_precio())
 
 		j = 1
 		if len(precio_texto) > 3:
@@ -1146,7 +1139,7 @@ class View:
 		label.config(font=('tahoma', 15, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=0.365)
 
-		#self.senha_value = paquete.get_senha()
+		self.senha_value = paquete.get_senha()
 		self.senha_content_entry = StringVar()
 
 		#print('senha value: {}'.format(self.senha_value))
@@ -1154,14 +1147,14 @@ class View:
 
 		texto = ''
 		senha_texto = ''
-		if paquete.si_pre_venta():
+		#if paquete.si_pre_venta():
 			#print('a')
 			#print(str(paquete.get_senha_pre_venta()))
-			senha_texto = str(paquete.get_senha_pre_venta())
+		#	senha_texto = str(paquete.get_senha_pre_venta())
 			#print('get_senha_pre_venta: '.format(paquete.get_senha_pre_venta()))
-		else:
+		#else:
 			#print('b')
-			senha_texto = str(paquete.get_senha())
+		senha_texto = str(paquete.get_senha())
 
 		#print('senha texto: {}'.format(senha_texto))
 		j = 1
@@ -1267,6 +1260,7 @@ class View:
 		cancel_button.config(command=lambda:self.widget_destroy(frame_detalles))
 
 	def view_editar_pre_venta(self):
+		print('Editando pre venta...')
 		self.frame_pre_venta = Toplevel(self.parent, bg='#F9F9F9', relief=GROOVE, borderwidth=0)
 		self.frame_pre_venta.title('Pre Venta')
 		#frame.tittle('Pre Venta')
@@ -1279,11 +1273,12 @@ class View:
 		label.place(relx=0.02, rely=0.05)
 		#label.grid(row=0, column=1, padx=10, pady=20)
 
-		self.price_content_entry = StringVar()
-		self.price_content_entry.set(self.pre_venta.get_precio())
+		self.price_pre_venta_content_entry = StringVar()
+		self.price_pre_venta_value = self.pre_venta.get_precio()
+		self.price_pre_venta_content_entry.set(self.pre_venta.get_precio())
 		precio_texto = str(self.pre_venta.get_precio())
 
-		price_entry = Entry(self.frame_pre_venta, width='10', font=('tahoma', 13), textvariable=self.price_content_entry)
+		price_entry = Entry(self.frame_pre_venta, width='10', font=('tahoma', 13), textvariable=self.price_pre_venta_content_entry)
 		price_entry.place(relx=0.25, rely=0.075)
 		#price_entry.grid(row=0, column=2, padx=-10)
 
@@ -1299,21 +1294,35 @@ class View:
 		else:
 			texto = precio_texto
 
-		self.price_content_entry.set(texto)
+		self.price_pre_venta_content_entry.set(texto)
 
 		#view senha
 		label = Label(self.frame_pre_venta, text='Seña:', width='11', height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535', anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=0.176)
 
-		#senha_content_entry = StringVar()
-		self.senha_content_entry.set(self.pre_venta.get_senha())
+		self.senha_pre_venta_value = self.pre_venta.get_senha()
+		self.senha_pre_venta_content_entry = StringVar()
+		self.senha_pre_venta_content_entry.set(self.pre_venta.get_senha())
 		senha_texto = str(self.pre_venta.get_senha())
 
+		texto = ''
+		j = 1
+		if len(senha_texto) > 3:
+			for i in range(len(senha_texto) -1, -1, -1):
+				texto = senha_texto[i] + texto
+				if j % 3 == 0 and i != 0:
+					texto = '.' + texto
+
+				j += 1
+		else:
+			texto = senha_texto
+
+		self.senha_pre_venta_content_entry.set(texto)
 		#print('senha: {}'.format(self.senha_content_entry.get()))
 		#print('A VER QUE ONDA...')
 
-		senha_entry = Entry(self.frame_pre_venta, width='10', font=('tahoma', 13), textvariable=self.senha_content_entry)
+		senha_entry = Entry(self.frame_pre_venta, width='10', font=('tahoma', 13), textvariable=self.senha_pre_venta_content_entry)
 		senha_entry.place(relx=0.25, rely=0.2)
 
 		#view monto cuota
@@ -1323,6 +1332,23 @@ class View:
 
 		self.monto_cuota_content_entry = StringVar()
 		self.monto_cuota_content_entry.set(self.pre_venta.get_monto_cuota())
+		self.monto_cuota_value = self.pre_venta.get_monto_cuota()
+		monto_cuota_texto = str(self.pre_venta.get_monto_cuota())
+
+		texto = ''
+		j = 1
+		if len(monto_cuota_texto) > 3:
+			for i in range(len(monto_cuota_texto) -1, -1, -1):
+				texto = monto_cuota_texto[i] + texto
+				if j % 3 == 0 and i != 0:
+					texto = '.' + texto
+
+				j += 1
+		else:
+			texto = monto_cuota_texto
+
+		self.monto_cuota_content_entry.set(texto)
+
 		monto_cuota_entry = Entry(self.frame_pre_venta, width='10', font=('tahoma', 13), textvariable=self.monto_cuota_content_entry)
 		monto_cuota_entry.place(relx=0.25, rely=0.325)
 
@@ -1415,10 +1441,10 @@ class View:
 		#********************************************************
 		button_fecha_inicio.config(command=lambda:self.view_calendar(self.frame_pre_venta, content_button_fecha_inicio, 2, 0.55, 0.06))
 		button_fecha_fin.config(command=lambda:self.view_calendar(self.frame_pre_venta, content_button_fecha_fin, 3, 0.55, 0.13))
-		self.price_content_entry.trace("w", self.update_price_content_entry)
-		self.senha_content_entry.trace("w", self.update_senha_content_entry)
+		self.price_pre_venta_content_entry.trace("w", self.update_price_pre_venta_content_entry)
+		self.senha_pre_venta_content_entry.trace("w", self.update_senha_pre_venta_content_entry)
 		self.monto_cuota_content_entry.trace("w", self.update_monto_cuota_content_entry)
-		save_button.config(command=lambda:self.controller.guardar_pre_venta(price_content_entry.get(), senha_content_entry.get(), monto_cuota_content_entry.get(),
+		save_button.config(command=lambda:self.controller.guardar_pre_venta(self.price_pre_venta_value, self.senha_pre_venta_value, self.monto_cuota_value,
 				cant_cuota_content_entry.get(), self.pre_venta_fecha_inicio, self.pre_venta_fecha_fin))
 		cancel_button.config(command=lambda:self.widget_destroy(self.frame_pre_venta))
 
@@ -1644,8 +1670,65 @@ class View:
 
 		self.switch_frame(self.frame_crear_paquete)
 
+	def update_price_pre_venta_content_entry(self, *args):
+		texto = ''
+		precio_texto = self.price_pre_venta_content_entry.get()
+
+		#eliminamos los puntos '.'
+		if len(precio_texto) > 3:
+			for i in range(len(precio_texto)):
+				if precio_texto[i] != '.':
+					texto += precio_texto[i]
+
+			precio_texto = texto
+			self.price_pre_venta_value = texto
+			texto = ''
+		else:
+			self.price_pre_venta_value = precio_texto
+
+		j = 1
+		if len(precio_texto) > 3:
+			for i in range(len(precio_texto) -1, -1, -1):
+				texto = precio_texto[i] + texto
+				if j % 3 == 0 and i != 0:
+					texto = '.' + texto
+
+				j += 1
+		else:
+			texto = precio_texto
+
+		self.price_pre_venta_content_entry.set(texto)
+
+	def update_senha_pre_venta_content_entry(self, *args):
+		texto = ''
+		senha_texto = self.senha_pre_venta_content_entry.get()
+
+		#eliminamos los puntos '.'
+		if len(senha_texto) > 3:
+			for i in range(len(senha_texto)):
+				if senha_texto[i] != '.':
+					texto += senha_texto[i]
+
+			senha_texto = texto
+			self.senha_pre_venta_value = texto
+			texto = ''
+		else:
+			self.senha_pre_venta_value = senha_texto
+
+		j = 1
+		if len(senha_texto) > 3:
+			for i in range(len(senha_texto) -1, -1, -1):
+				texto = senha_texto[i] + texto
+				if j % 3 == 0 and i != 0:
+					texto = '.' + texto
+
+				j += 1
+		else:
+			texto = senha_texto
+
+		self.senha_pre_venta_content_entry.set(texto)
+
 	def update_price_content_entry(self, *args):
-		#self.price_value = self.price_content_entry.get()
 		texto = ''
 		precio_texto = self.price_content_entry.get()
 
