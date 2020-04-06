@@ -1256,7 +1256,6 @@ class View:
 				cant_pasajeros_content_entry.get(), self.pre_venta, self.parent_detalles))
 		cancel_button.config(command=lambda:self.widget_destroy(frame_detalles))
 
-
 	def view_agregar_editar_pre_venta(self):
 		print('agregando/Editando pre venta...')
 		self.frame_pre_venta = Toplevel(self.parent, bg='#F9F9F9', relief=GROOVE, borderwidth=0)
