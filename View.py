@@ -1049,8 +1049,7 @@ class View:
 		combobox_tipos.set(paquete.TRASLADO)
 		combobox_tipos.place(relx=0.17, rely=0.142)
 
-
-		#.....
+		#.........
 		lista_sub_tipos = ['Estandar', 'Personalizado']
 		combobox_sub_tipos = ttk.Combobox(frame_detalles, values=lista_sub_tipos)
 		combobox_sub_tipos.config(state='readonly', font=(13), width='12', height='6', background='#F9F9F9')
