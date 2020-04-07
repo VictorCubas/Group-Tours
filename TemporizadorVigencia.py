@@ -75,7 +75,7 @@ class TemporizadorVigencia(Thread):
                 #self.stop()
 
             #Esperamos x segundos para volver a ejecutar la comprobación.
-            #sleep(self.delay)
+            sleep(self.delay)
 
         #Si usamos el método stop() salimos del ciclo y el hilo terminará.
         #else:
@@ -100,7 +100,7 @@ class TemporizadorVigencia(Thread):
         except EOFError:
             print('*********************')
             print('*  ERROR: EOFError  *')
-            #print('* result:{}'.format(result_return))
+            print('* result:{}'.format(result_return))
             print('*********************')
             result_return = False
 
@@ -146,14 +146,25 @@ class TemporizadorVigencia(Thread):
         print('estoy revisando la vigencia')
         for paquete in paquetes:
             if paquete.get_esta_vigente():
-                fecha_de_viaje = str(paquete.get_fecha_de_viaje().year) + '-' + str(paquete.get_fecha_de_viaje().month) + '-' + str(paquete.get_fecha_de_viaje().day)
+                fecha_de_viaje = paquete.get_fecha_de_viaje().year*100 + paquete.get_fecha_de_viaje().month
+                fecha_de_viaje = fecha_de_viaje * 100 + paquete.get_fecha_de_viaje().day
                 #print('fecha de viaje: {}'.format(fecha_de_viaje))
-                hoy = str(datetime.today().year) + '-' + str(datetime.today().month) + '-' + str(datetime.today().day)
-                #print('ahora: {}',format(hoy))
+                hoy = (datetime.today().year * 100 + datetime.today().month) * 100 + datetime.today().day
+                #print('fecha de hoy: {}'.format(hoy))
+
+                if hoy > fecha_de_viaje:
+                    print('la fecha de hoy es mayor a la de viaje. DEBERIA DE CAMBIAR VIGENCIA')
+                elif hoy < fecha_de_viaje:
+                    print('la fecha de viaje es mayor a la fecha de hoy. NO DEBERIA DE CAMBIAR LA VIGENCIA ')
+                else:
+                    print('Ambas fechas son iguales')
+
                 if hoy > fecha_de_viaje:
                     si_cambio_vigencia = True
                     print('Cambiando vigencia....')
                     paquete.set_esta_vigente(False)
+
+                print('.......')
 
         return si_cambio_vigencia
 
