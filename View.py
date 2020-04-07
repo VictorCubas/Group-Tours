@@ -1049,7 +1049,6 @@ class View:
 		combobox_tipos.set(paquete.TRASLADO)
 		combobox_tipos.place(relx=0.17, rely=0.142)
 
-		#.........
 		lista_sub_tipos = ['Estandar', 'Personalizado']
 		combobox_sub_tipos = ttk.Combobox(frame_detalles, values=lista_sub_tipos)
 		combobox_sub_tipos.config(state='readonly', font=(13), width='12', height='6', background='#F9F9F9')
@@ -1257,9 +1256,7 @@ class View:
 				cant_pasajeros_content_entry.get(), self.pre_venta, self.parent_detalles))
 		cancel_button.config(command=lambda:self.widget_destroy(frame_detalles))
 
-
-		#..
-	def view_agregar_editar_pre_venta(self):
+	def v1iew_agregar_editar_pre_venta(self):
 		print('agregando/Editando pre venta...')
 		self.frame_pre_venta = Toplevel(self.parent, bg='#F9F9F9', relief=GROOVE, borderwidth=0)
 		self.frame_pre_venta.title('Pre Venta')
