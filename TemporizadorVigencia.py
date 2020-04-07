@@ -153,13 +153,6 @@ class TemporizadorVigencia(Thread):
                 #print('fecha de hoy: {}'.format(hoy))
 
                 if hoy > fecha_de_viaje:
-                    print('la fecha de hoy es mayor a la de viaje. DEBERIA DE CAMBIAR VIGENCIA')
-                elif hoy < fecha_de_viaje:
-                    print('la fecha de viaje es mayor a la fecha de hoy. NO DEBERIA DE CAMBIAR LA VIGENCIA ')
-                else:
-                    print('Ambas fechas son iguales')
-
-                if hoy > fecha_de_viaje:
                     si_cambio_vigencia = True
                     print('Cambiando vigencia....')
                     paquete.set_esta_vigente(False)
