@@ -40,9 +40,6 @@ class TemporizadorVigencia(Thread):
             print('modificando fecha de comprobacion...')
             hora += timedelta(days=1)
 
-        #print('Comprobando la actualizacion de vigencias de los paquetes...')
-        #print('Proxima ejecucion programada el {0} a las {1}'.format(hora.date(),  hora.time()))
-
         #Iniciamos el ciclo:
         si_cambio_vigencia = None
         paquetes = []
@@ -156,8 +153,6 @@ class TemporizadorVigencia(Thread):
                     si_cambio_vigencia = True
                     print('Cambiando vigencia....')
                     paquete.set_esta_vigente(False)
-
-                print('.......')
 
         return si_cambio_vigencia
 
