@@ -376,7 +376,7 @@ class Model:
 			precio = int(precio)
 
 			if senha == '':
-				raise Exception('Seña incorrecto')
+				raise Exception('Seña incorrecta')
 
 			senha = int(senha)
 			if senha > precio:
