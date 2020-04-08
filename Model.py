@@ -370,7 +370,11 @@ class Model:
 
 	def validar_datos_pre_venta(self, precio, senha, monto_cuota, cant_cuotas, fecha_inicio, fecha_fin):
 		try:
+			if precio == None or senha == None or monto_cuota == None:
+				raise Exception('Debes completar todos los campos')
+
 			precio = int(precio)
+
 			if senha == '':
 				raise Exception('Seña incorrecto')
 
@@ -404,7 +408,7 @@ class Model:
 			raise
 
 	def crear_paquete(self, nombre, tipo, sub_tipo, esta_vigente, fecha, precio, senha, incluye, cant_pasajeros):
-		print('Model: creado paquete...')
+		print('Model: creando paquete...')
 		paquete = None
 
 		print()
