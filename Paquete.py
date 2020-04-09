@@ -20,12 +20,13 @@ class Paquete(metaclass=ABCMeta):
 		self.total = 0 #VER
 		self.usuarios = []
 		self.facturas = []
-		self.pre_venta = None
+		self.pre_ventas = []
 		self.esta_vigente = None
 		self.codigo = None
 		self.cantidad_pagos_actual = 0
 		self.cantidad_de_usuarios_total = 0
 		self.cantidad_de_usuarios_actual = 0
+		self.cantidad_de_pre_ventas = 0
 		#Incrementamos la cantidad de instancias
 		Paquete.cantidad_total_paquetes += 1
 
@@ -93,10 +94,10 @@ class Paquete(metaclass=ABCMeta):
 		return self.cantidad_pagos_actual
 
 	def agregar_pre_venta(self, pre_venta):
-		self.pre_venta = pre_venta
+		self.pre_ventas.append(pre_venta)
 
-	def get_pre_venta(self):
-		return self.pre_venta
+	def get_pre_ventas(self):
+		return self.pre_ventas
 
 	def set_codigo(self, codigo):
 		self.codigo = codigo
@@ -114,7 +115,7 @@ class Paquete(metaclass=ABCMeta):
 		return self.nombre_paquete
 
 	def si_pre_venta(self):
-		return not(self.pre_venta == None)
+		return not(self.cantidad_de_pre_ventas == 0)
 
 	def set_precio(self, precio):
 		self.precio = precio
@@ -122,15 +123,16 @@ class Paquete(metaclass=ABCMeta):
 	def get_precio(self):
 		return self.precio
 
-	def set_precio_pre_venta(self, precio_pre_venta):
-		if self.si_pre_venta():
-			self.pre_venta.set_precio(precio_pre_venta)
+	#def set_precio_pre_venta(self, precio_pre_venta):
+	#	if self.si_pre_venta():
+	#		self.pre_venta.set_precio(precio_pre_venta)
 
-		return None
+	#	return None
 
 	def get_precio_pre_venta(self):
+		#devolvemos la preventa mas actual que se adecue a la fehca
 		if self.si_pre_venta():
-			return self.pre_venta.get_precio()
+			return self.pre_ventas[self.cantidad_de_pre_ventas - 1]
 
 		return None
 
