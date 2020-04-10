@@ -1469,7 +1469,7 @@ class View:
 			self.pila_siguiente = []
 
 	def pop_pila_anterior(self, codigo_actual):
-		if len(self.pila_anterior) == 0:
+		if len(self.pila_anterior) == 0:	
 			return
 
 		#si no esta vacia
@@ -1710,7 +1710,7 @@ class View:
 		self.switch_frame(self.frame_crear_paquete)
 
 	def show_result_agregar_pre_venta(self):
-		print('actualizando la secion de pre ventas....')
+		print('actualizando la seccion de pre ventas....')
 		pre_venta_view = None
 
 		#eliminamos los resultados anteriores a la busqueda actual (si elminamos la lista anterior tambien se elimina la lista actual, por ref)
@@ -1735,9 +1735,9 @@ class View:
 				pre_venta_frame.pack(padx=10, pady=5)
 
 				
-				pre_venta_name_view = Label(pre_venta_frame, text='Soy una pre venta', width='20', height='1', relief=GROOVE, borderwidth=1)
-				pre_venta_name_view.config(font=('tahoma', 15, 'bold'), bg='#F9F9F9', fg='#343535', activeforeground='#343535', anchor=W) #posicionamos el texto a la izquierda
-				pre_venta_name_view.place(relx=0.1, rely=0.05)
+				pre_venta_name_view = Label(pre_venta_frame, text='Pre venta ' + str(aux+1), width='10', height='1', relief=GROOVE, borderwidth=1)
+				pre_venta_name_view.config(font=('tahoma', 10, 'bold'), bg='#F9F9F9', fg='#343535', activeforeground='#343535', anchor=W) #posicionamos el texto a la izquierda
+				pre_venta_name_view.place(relx=0.02, rely=0.05)
 
 				'''
 				#fecha view
@@ -1848,6 +1848,7 @@ class View:
 				#print(paquete_detalles_view.config("text")[-1])
 				'''
 
+				self.view_result_pre_ventas_agregados.append(pre_venta_frame)
 				#self.view_result_busqueda_paquete.append(paquete_view)
 
 	def update_price_pre_venta_content_entry(self, *args):
@@ -2020,7 +2021,7 @@ class View:
 		if self.frame_pre_venta is not None and success:
 			self.widget_destroy(self.frame_pre_venta)
 			self.frame_pre_venta = None
-			self.content_pre_venta_button.set('Disponible')
+			#self.content_pre_venta_button.set('Disponible')
 
 		ok.config(command=lambda:self.widget_destroy(message))
 		ok.pack(pady=10)
