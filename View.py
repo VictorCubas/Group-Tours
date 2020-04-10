@@ -1403,6 +1403,7 @@ class View:
 		self.pre_venta_fecha_inicio = None
 		if self.pre_venta:
 			self.pre_venta_fecha_inicio = self.pre_venta.get_fecha_inicio()
+
 		button_fecha_inicio = Button(self.frame_pre_venta, textvariable=content_button_fecha_inicio, width='8', height='1', relief=GROOVE, borderwidth=0)
 		button_fecha_inicio.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
 		button_fecha_inicio.place(relx=0.73, rely=0.07)
@@ -2037,7 +2038,15 @@ class View:
 		frame_date = Frame(frame_calendar, bg='#F9F9F9', relief=GROOVE, borderwidth=0)
 		frame_date.pack()
 
-		calendario = Calendar(frame_date)
+		fecha = None
+		if cod_fecha == 2:
+			#en caso de que vayemos a seleccionar la fecha de inicio de la pre venta
+			fecha = self.pre_venta_fecha_inicio
+		elif cod_fecha == 3:
+			#en caso de que vayemos a seleccionar la fecha de fin de la pre venta
+			fecha = self.pre_venta_fecha_fin
+
+		calendario = Calendar(frame_date, fecha)
 		ok = Button(frame_calendar, width=5, bg='#F9F9F9', text='OK', command=lambda:self.update_button_fecha_de_viaje(frame_calendar, content, calendario, cod_fecha))
 		ok.pack(pady=2)
 
@@ -2048,9 +2057,11 @@ class View:
 		if cod_fecha == 1:
 			self.fecha_de_viaje = date
 		elif cod_fecha == 2:
-			self.pre_venta_fecha_inicio = date
+			if date is not None:
+				self.pre_venta_fecha_inicio = date
 		elif cod_fecha == 3:
-			self.pre_venta_fecha_fin = date
+			if date is not None:
+				self.pre_venta_fecha_fin = date
 
 		if date is None:
 			return
