@@ -455,7 +455,7 @@ class Model:
 
 	def guardar_paquete(self, paquete):
 		result = []
-		print('guardando paquete...')
+		print('Model: guardando paquete...')
 
 		try:
 			archivo = open('data_base_files/paquete.pickle', 'rb')
