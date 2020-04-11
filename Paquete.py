@@ -96,6 +96,9 @@ class Paquete(metaclass=ABCMeta):
 	def agregar_pre_venta(self, pre_venta):
 		self.pre_ventas.append(pre_venta)
 
+	def set_pre_ventas(self, pre_ventas):
+		self.pre_ventas = pre_ventas
+
 	def get_pre_ventas(self):
 		return self.pre_ventas
 
