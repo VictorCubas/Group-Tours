@@ -1710,12 +1710,11 @@ class View:
 
 		self.switch_frame(self.frame_crear_paquete)
 
-	def show_result_agregar_pre_venta(self):
+	def show_pre_ventas(self):
 		print('actualizando la seccion de pre ventas....')
 		pre_venta_view = None
 
 		#eliminamos los resultados anteriores a la busqueda actual (si elminamos la lista anterior tambien se elimina la lista actual, por ref)
-		#if self.next_back_starting_aux == False and len(self.view_result_busqueda_paquete) != 0:
 		if len(self.view_result_pre_ventas_agregados) != 0:
 			for pre_venta_view in self.view_result_pre_ventas_agregados:
 				pre_venta_view.destroy()
@@ -1724,133 +1723,121 @@ class View:
 
 		#aplicamos los nuevos resultados a la lista de pre ventas agregados
 		pre_venta_frame = None
-		#print(str(len(self.result_busqueda_paquete[0])))
+
 		if len(self.pre_ventas) != 0:
 			pos_result_pre_venta = -1
 			aux = -1
-			for paquete in self.pre_ventas:
+			for pre_venta in self.pre_ventas:
 				pos_result_pre_venta += 1
 				aux += 1
 
-				pre_venta_frame = Frame(self.frame_result_pre_venta_aux, bg='#F9F9F9', width='380', height='90', relief=GROOVE, borderwidth=1)
+				pre_venta_frame = Frame(self.frame_result_pre_venta_aux, bg='#F9F9F9', width='380', height='80', relief=GROOVE, borderwidth=1)
 				pre_venta_frame.pack(padx=10, pady=5)
 
-				
-				pre_venta_name_view = Label(pre_venta_frame, text='Pre venta ' + str(aux+1), width='10', height='1', relief=GROOVE, borderwidth=1)
-				pre_venta_name_view.config(font=('tahoma', 10, 'bold'), bg='#F9F9F9', fg='#343535', activeforeground='#343535', anchor=W) #posicionamos el texto a la izquierda
-				pre_venta_name_view.place(relx=0.02, rely=0.05)
+				#pre venta label view
+				label = Label(pre_venta_frame, text='Pre venta ' + str(aux+1), width='10', height='1', relief=GROOVE, borderwidth=0)
+				label.config(font=('tahoma', 10, 'bold'), bg='#F9F9F9', fg='#27A221', anchor=W) #posicionamos el texto a la izquierda
+				label.place(relx=0.02, rely=0.05)
 
-				'''
-				#fecha view
-				texto = ''
-				date = paquete.get_fecha_de_viaje()
-				if date!= None:
-					if date.day < 10:
-						texto = '0'
+				#precio label view
+				label = Label(pre_venta_frame, text='Precio:', width='6', height='1', relief=GROOVE, borderwidth=0)
+				label.config(font=('tahoma', 10, 'bold'), bg='#F9F9F9', fg='#2F3030', anchor=W) #posicionamos el texto a la izquierda
+				label.place(relx=0.02, rely=0.34)
 
-					texto = texto + str(date.day) + '/'
+				texto = self.convert_amount_to_string(pre_venta.get_precio())
 
-					if date.month < 10:
-						texto = texto + '0'
+				label = Label(pre_venta_frame, text=texto, width='11', height='1', relief=GROOVE, borderwidth=0)
+				label.config(font=('tahoma', 10), bg='#F9F9F9', fg='#2F3030', anchor=W) #posicionamos el texto a la izquierda
+				label.place(relx=0.18, rely=0.34)
 
-					texto = texto + str(date.month) + '/' + str(date.year)
-				else:
-					texto = '-- / -- / --'
-				
+				#senha label view
+				label = Label(pre_venta_frame, text='Seña:', width='6', height='1', relief=GROOVE, borderwidth=0)
+				label.config(font=('tahoma', 10, 'bold'), bg='#F9F9F9', fg='#2F3030', anchor=W) #posicionamos el texto a la izquierda
+				label.place(relx=0.02, rely=0.63)
 
-				#paquete_fecha_de_viaje_view = Button(paquete_view, text='Probando', width='21', height='1', relief=GROOVE, borderwidth=0)
-				#paquete_fecha_de_viaje_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
-				#paquete_fecha_de_viaje_view.place(relx=0.3, rely=0.25)
+				texto = self.convert_amount_to_string(pre_venta.get_senha())
 
-				
-				#vigente view
-				texto = 'Vigente'
-				if paquete.get_esta_vigente() == False:
-					texto = 'No vigente'
+				label = Label(pre_venta_frame, text=texto, width='11', height='1', relief=GROOVE, borderwidth=0)
+				label.config(font=('tahoma', 10), bg='#F9F9F9', fg='#2F3030', anchor=W) #posicionamos el texto a la izquierda
+				label.place(relx=0.18, rely=0.63)
 
-				paquete_fecha_de_viaje_view = Button(paquete_view, text=texto, width='21', height='1', relief=GROOVE, borderwidth=0)
-				paquete_fecha_de_viaje_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
-				paquete_fecha_de_viaje_view.place(relx=0.3, rely=0.50)
+				#monto cuota label view
+				label = Label(pre_venta_frame, text='Monto cuota:', width='11', height='1', relief=GROOVE, borderwidth=0)
+				label.config(font=('tahoma', 10, 'bold'), bg='#F9F9F9', fg='#2F3030', anchor=W) #posicionamos el texto a la izquierda
+				label.place(relx=0.45, rely=0.34)
 
-				texto = 'Tipo: ' + paquete.TRASLADO
-				paquete_fecha_de_viaje_view = Button(paquete_view, text=texto, width='21', height='1', relief=GROOVE, borderwidth=0)
-				paquete_fecha_de_viaje_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
-				paquete_fecha_de_viaje_view.place(relx=0.3, rely=0.75)
+				texto = self.convert_amount_to_string(pre_venta.get_monto_cuota())
 
-				#SEGUNDA CULUMNA
-				#precio view
-				#agregamos los puntos al precio, ej: 3000000 ---> 3.000.000Gs
-				texto = ''
-				#precio_texto = str(paquete.get_precio())
-				if paquete.si_pre_venta():
-					precio_texto = str(paquete.get_precio_pre_venta())
-				else:
-					precio_texto = str(paquete.get_precio())
+				label = Label(pre_venta_frame, text=texto, width='11', height='1', relief=GROOVE, borderwidth=0)
+				label.config(font=('tahoma', 10), bg='#F9F9F9', fg='#2F3030', anchor=W) #posicionamos el texto a la izquierda
+				label.place(relx=0.73, rely=0.34)
 
-				j = 1
-				if len(precio_texto) > 3:
-					for i in range(len(precio_texto) - 1, -1, -1):
-						texto = precio_texto[i] + texto
-						if j % 3 == 0 and i != 0:
-							texto = '.' + texto
+				#cantidad de cuotas label view
+				label = Label(pre_venta_frame, text='Cant cuotas:', width='11', height='1', relief=GROOVE, borderwidth=0)
+				label.config(font=('tahoma', 10, 'bold'), bg='#F9F9F9', fg='#2F3030', anchor=W) #posicionamos el texto a la izquierda
+				label.place(relx=0.45, rely=0.63)
 
-						j += 1
-				else:
-					texto = precio_texto
+				texto = str(pre_venta.get_cantidad_cuotas())
 
-				if paquete.get_precio() < 100000: #significa que el precio esta en dolares, ya que en guaranies se considera 5 digitos como minimo
-					texto = 'Precio: ' + texto + '$'
-				else:
-					texto = 'Precio: ' + texto + 'Gs.'
+				label = Label(pre_venta_frame, text=texto, width='11', height='1', relief=GROOVE, borderwidth=0)
+				label.config(font=('tahoma', 10), bg='#F9F9F9', fg='#2F3030', anchor=W) #posicionamos el texto a la izquierda
+				label.place(relx=0.73, rely=0.63)
 
-				paquete_precio_view = Button(paquete_view, text=texto, width='18', height='1', relief=GROOVE, borderwidth=0)
-				paquete_precio_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
-				paquete_precio_view.place(relx=0.7, rely=0)
+				#fecha inicio label view
+				texto = self.convert_date_to_string(pre_venta.get_fecha_inicio())
 
-				#pre venta view
-				if paquete.si_pre_venta():
-					texto = 'Pre venta: si'
-				else:
-					texto = 'Pre venta: no'
+				label = Label(pre_venta_frame, text=texto, width='9', height='1', relief=GROOVE, borderwidth=0)
+				label.config(font=('tahoma', 10, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
+				label.place(relx=0.35, rely=0.05)
 
-				paquete_pre_venta_view = Button(paquete_view, text=texto, width='18', height='1', relief=GROOVE, borderwidth=0)
-				paquete_pre_venta_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
-				paquete_pre_venta_view.place(relx=0.7, rely=0.25)
+				#separador label view
+				label = Label(pre_venta_frame, text='-', width='1', height='1', relief=GROOVE, borderwidth=0)
+				label.config(font=('tahoma', 10, 'bold'), bg='#F9F9F9', fg='#2F3030', anchor=W) #posicionamos el texto a la izquierda
+				label.place(relx=0.6, rely=0.05)
 
-				#lugares disponibles view
-				texto = 'Lugares disponible: '
-				lugares_disponibles = paquete.get_lugares_disponibles()
-				color = '#2F3030'
-				if lugares_disponibles > 0:
-					texto = texto + str(lugares_disponibles)
-				elif lugares_disponibles == 0:
-					texto = 'SOLD OUT'
-					color = '#E60700'
-				#elif paquete.get_esta_vigente() is False:
-				#	texto = 'No disponible'
-				else:
-					texto = texto + '--'
+				#fecha fin label view
+				texto = self.convert_date_to_string(pre_venta.get_fecha_fin())
 
-				#print('esta vigente: ' + str(paquete.get_esta_vigente()))
-
-				paquete_pre_venta_view = Button(paquete_view, text=texto, width='18', height='1', relief=GROOVE, borderwidth=0)
-				paquete_pre_venta_view.config(font=('tahoma', 13), bg='#F9F9F9', fg=color, activeforeground=color, highlightthickness=0, anchor=W)
-				paquete_pre_venta_view.place(relx=0.7, rely=0.5)
-
-				pos_paquete = self.result_busqueda_paquete[1][aux]
-				#detalles view
-				texto = 'Ver detalles      >'
-				paquete_detalles_view = Button(paquete_view, text=texto, width='18', height='1', relief=GROOVE, borderwidth=0)
-				paquete_detalles_view.config(font=('tahoma', 13), bg='#27A221', fg='#FFFFFF', activeforeground='#FFFFFF', activebackground='#20801B', highlightthickness=0, anchor=W)
-				paquete_detalles_view.place(relx=0.7, rely=0.75)
-				paquete_detalles_view.config(command=lambda paquete=paquete, pos_paquete=pos_paquete,
-						pos_result_busqueda=pos_result_busqueda:self.view_paquete_detalles(paquete, pos_paquete, pos_result_busqueda))
-				#print(paquete_name_view.config("text")[-1])
-				#print(paquete_detalles_view.config("text")[-1])
-				'''
+				label = Label(pre_venta_frame, text=texto, width='9', height='1', relief=GROOVE, borderwidth=0)
+				label.config(font=('tahoma', 10, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
+				label.place(relx=0.65, rely=0.05)
 
 				self.view_result_pre_ventas_agregados.append(pre_venta_frame)
-				#self.view_result_busqueda_paquete.append(paquete_view)
+
+	def convert_date_to_string(self, fecha):
+		date_texto = ''
+		if fecha.day < 10:
+			date_texto = '0'
+
+		date_texto = date_texto + str(fecha.day) + '/'
+
+		if fecha.month < 10:
+			date_texto = date_texto + '0'
+
+		date_texto = date_texto + str(fecha.month) + '/' + str(fecha.year)
+
+		return date_texto
+
+	def convert_amount_to_string(self, monto):
+		texto = ''
+		monto_texto = str(monto)
+		j = 1
+		if len(monto_texto) > 3:
+			for i in range(len(monto_texto) - 1, -1, -1):
+				texto = monto_texto[i] + texto
+				if j % 3 == 0 and i != 0:
+					texto = '.' + texto
+
+				j += 1
+		else:
+			texto = monto_texto
+
+		if monto < 100000: #significa que el precio esta en dolares, ya que en guaranies se considera 5 digitos como minimo
+			texto = texto + '$'
+		else:
+			texto = texto + 'Gs.'
+
+		return texto
 
 	def update_price_pre_venta_content_entry(self, *args):
 		texto = ''
@@ -2001,7 +1988,7 @@ class View:
 	
 	def set_value_pre_venta(self, pre_venta):
 		self.pre_ventas.append(pre_venta)
-		self.show_result_agregar_pre_venta()
+		self.show_pre_ventas()
 
 	def view_show_message(self, success, msj):
 		message = Toplevel(self.parent, bg='#F9F9F9')
