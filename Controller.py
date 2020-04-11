@@ -89,7 +89,7 @@ class Controller:
 	#def agregar_pre_venta_editar(pre_venta):
 	#	self.view.view_agregar_pre_venta_editar(pre_venta)
 
-	def guardar_paquete(self, nombre, tipo, sub_tipo, esta_vigente, lista_fecha, precio, senha, incluye, cant_pasajeros, pre_venta):
+	def guardar_paquete(self, nombre, tipo, sub_tipo, esta_vigente, lista_fecha, precio, senha, incluye, cant_pasajeros, pre_ventas):
 		#print('{}, {}, {}, {}, {}, {}, {}, {}'.format(nombre, tipo, sub_tipo, fecha, esta_vigente, precio, senha, incluye))
 		if len(lista_fecha) > 0:
 			try:
@@ -105,8 +105,8 @@ class Controller:
 					print('guardanding....')
 					paquete = self.model.crear_paquete(nombre, tipo, sub_tipo, esta_vigente, fecha, precio, senha, incluye, cant_pasajeros)
 
-					if pre_venta is not None:
-						paquete.agregar_pre_venta(pre_venta)
+					if len(pre_ventas) is not 0:
+						paquete.set_pre_ventas(pre_ventas)
 
 					self.model.guardar_paquete(paquete)
 
@@ -135,7 +135,7 @@ class Controller:
 			#print('{} {} {} {} {} {}'.format(pre_venta.precio, pre_venta.senha, pre_venta.monto_cuota, pre_venta.cantidad_cuotas, pre_venta.fecha_inicio, fecha_fin))
 			#self.model.guardar_pre_venta(pre_venta)
 			self.view.set_value_pre_venta(pre_venta)
-			self.view.view_show_message(True, 'Pre venta añdido con exito')
+			self.view.view_show_message(True, 'Pre venta añadida con exito')
 
 	
 	def editar_paquete(self, frame, paquete, pos_paquete, pos_result_busqueda):
