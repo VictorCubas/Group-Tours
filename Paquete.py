@@ -98,6 +98,7 @@ class Paquete(metaclass=ABCMeta):
 
 	def set_pre_ventas(self, pre_ventas):
 		self.pre_ventas = pre_ventas
+		self.cantidad_de_pre_ventas = len(pre_ventas)
 
 	def get_pre_ventas(self):
 		return self.pre_ventas
@@ -135,7 +136,8 @@ class Paquete(metaclass=ABCMeta):
 	def get_precio_pre_venta(self):
 		#devolvemos la preventa mas actual que se adecue a la fehca
 		if self.si_pre_venta():
-			return self.pre_ventas[self.cantidad_de_pre_ventas - 1]
+			print('Paquete: falta editar aqui....')
+			return self.pre_ventas[0].get_precio()
 
 		return None
 
@@ -153,7 +155,8 @@ class Paquete(metaclass=ABCMeta):
 
 	def get_senha_pre_venta(self):
 		if self.si_pre_venta():
-			return self.pre_venta.get_senha()
+			print('Paquete: falta editar aqui....')
+			return self.pre_ventas[0].get_senha()
 
 		return None
 
@@ -162,18 +165,6 @@ class Paquete(metaclass=ABCMeta):
 
 	def get_senha(self):
 		return self.senha
-
-	def set_senha_pre_venta(self, senha_pre_venta):
-		if self.si_pre_venta():
-			self.pre_venta.set_senha(precio_pre_venta)
-
-		return None
-
-	def get_precio_pre_venta(self):
-		if self.si_pre_venta():
-			return self.pre_venta.get_precio()
-
-		return None
 
 	def set_fecha_de_viaje(self, fecha_de_viaje):
 		self.fecha_de_viaje = fecha_de_viaje
