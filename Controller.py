@@ -102,7 +102,6 @@ class Controller:
 				self.view.view_show_message(False, e)
 			else:
 				for fecha in lista_fecha:
-					print('guardanding....')
 					paquete = self.model.crear_paquete(nombre, tipo, sub_tipo, esta_vigente, fecha, precio, senha, incluye, cant_pasajeros)
 
 					if len(pre_ventas) is not 0:
@@ -142,7 +141,6 @@ class Controller:
 		self.view.view_editar_paquete(frame, paquete, pos_paquete, pos_result_busqueda)
 
 	def guardar_paquete_editado(self, pos_paquete, pos_result_busqueda, nombre, tipo, sub_tipo, esta_vigente, fecha, precio, senha, incluye, cant_pasajeros, pre_venta, parent_detalles):
-		#print('{}, {}, {}, {}, {}, {}, {}, {}'.format(nombre, tipo, sub_tipo, fecha, esta_vigente, precio, senha, incluye))
 		success = None
 		try:
 			self.model.validar_datos_paquete(nombre, tipo, sub_tipo, esta_vigente, fecha, precio, senha, incluye, cant_pasajeros)
@@ -160,23 +158,12 @@ class Controller:
 			self.view.view_show_message(True, 'Se ha guardado con exito')
 			paquete = self.model.crear_paquete(nombre, tipo, sub_tipo, esta_vigente, fecha, precio, senha, incluye, cant_pasajeros)
 
-			if pre_venta is not None:
-				paquete.agregar_pre_venta(pre_venta)
+			if len(pre_ventas) is not 0:
+				paquete.set_pre_ventas(pre_ventas)
 
-			#print('paquete a guardar: ' + paquete.get_nombre())
-			#print('pos_paquete: ' + str(pos_paquete))
-			#print('listando paquetes1...')
-			#paq = self.model.listar_paquetes()
-			#for p in paq:
-			#	print('paquete: ' + p.get_nombre())
-
-			print('guardando paquete editado..........')
+			print('guardando paquete editado...')
 			self.model.guardar_paquete_editado(paquete, pos_paquete)
 
-			#print('listando paquetes2...')
-			#paq = self.model.listar_paquetes()
-			#for p in paq:
-			#	print('paquete: ' + p.get_nombre())
 			self.view.view_paquete_detalles(paquete, pos_paquete, pos_result_busqueda)
 			self.view.widget_destroy(parent_detalles)
 
