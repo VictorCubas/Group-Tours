@@ -730,7 +730,7 @@ class View:
 		separator_top.pack(side=TOP, fill=X, padx=30, pady=15)
 
 		#view detalles precio con pre venta
-		label = Label(precio_parent, text='Precio del paquete', width='18', height='1', relief=GROOVE, borderwidth=0)
+		label = Label(precio_parent, text='Precio de venta', width='18', height='1', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 10), bg='#F9F9F9') #posicionamos el texto a la izquierda
 		label.place(relx=0.38, rely=0.01)
 
@@ -859,22 +859,10 @@ class View:
 		label.place(relx=0.02, rely=0.245)
 
 		content_button_fecha = StringVar()
-		date_texto = ''
 		date = paquete.get_fecha_de_viaje()
+
 		self.fecha_de_viaje = date
-		if date!= None:
-			if date.day < 10:
-				date_texto = '0'
-
-			date_texto = date_texto + str(date.day) + '/'
-
-			if date.month < 10:
-				date_texto = date_texto + '0'
-
-			date_texto = date_texto + str(date.month) + '/' + str(date.year)
-		else:
-			date_texto = '-- / -- / --'
-
+		date_texto = self.convert_date_to_string(date)
 		content_button_fecha.set(date_texto)
 		button_fecha_de_viaje = Button(frame_detalles, textvariable=content_button_fecha, width='8', height='1', relief=GROOVE, borderwidth=0)
 		button_fecha_de_viaje.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
@@ -888,33 +876,11 @@ class View:
 		self.price_value = paquete.get_precio()
 		self.price_content_entry = StringVar()
 
-		texto = ''
-		precio_texto = str(paquete.get_precio())
-
-		j = 1
-		if len(precio_texto) > 3:
-			for i in range(len(precio_texto) -1, -1, -1):
-				texto = precio_texto[i] + texto
-				if j % 3 == 0 and i != 0:
-					texto = '.' + texto
-
-				j += 1
-		else:
-			texto = precio_texto
-
+		texto = self.convert_amount_to_string(paquete.get_precio())
 		self.price_content_entry.set(texto)
 
 		price_entry = Entry(frame_detalles, width='25', font=('tahoma', 13), textvariable=self.price_content_entry)
 		price_entry.place(relx=0.17, rely=0.318)
-
-		#if self.prece_value < 100000: #significa que el precio esta en dolares, ya que en guaranies se considera 5 digitos como minimo
-		#	texto = '$'
-		#else:
-		#	texto = 'Gs.'
-
-		#label = Label(frame_detalles, text=texto, width='10', height='2', relief=GROOVE, borderwidth=2)
-		#label.config(font=('tahoma', 15, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
-		#label.place(relx=0.02, rely=0.365)
 
 		#view senha
 		label = Label(frame_detalles, text='Seña:', width='10', height='2', relief=GROOVE, borderwidth=0)
@@ -927,30 +893,7 @@ class View:
 		#print('senha value: {}'.format(self.senha_value))
 		#print('senha value content: {}'.format())
 
-		texto = ''
-		senha_texto = ''
-		#if paquete.si_pre_venta():
-			#print('a')
-			#print(str(paquete.get_senha_pre_venta()))
-		#	senha_texto = str(paquete.get_senha_pre_venta())
-			#print('get_senha_pre_venta: '.format(paquete.get_senha_pre_venta()))
-		#else:
-			#print('b')
-		senha_texto = str(paquete.get_senha())
-
-		#print('senha texto: {}'.format(senha_texto))
-		j = 1
-		if len(senha_texto) > 3:
-			for i in range(len(senha_texto) -1, -1, -1):
-				texto = senha_texto[i] + texto
-				if j % 3 == 0 and i != 0:
-					texto = '.' + texto
-
-				j += 1
-		else:
-			texto = senha_texto
-
-		#print('texto: {}'.format(texto))
+		texto = self.convert_amount_to_string(paquete.get_senha())
 		self.senha_content_entry.set(texto)
 
 		senha_entry = Entry(frame_detalles, width='25', font=('tahoma', 13), textvariable=self.senha_content_entry)
@@ -991,7 +934,7 @@ class View:
 		cant_pasajeros_entry.place(relx=0.742, rely=0.078)
 
 		#view pre venta
-		self.pre_venta = paquete.get_pre_venta()
+		self.pre_ventas = paquete.get_pre_ventas()
 		label = Label(frame_detalles, text='Pre venta:', width='13', height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 15, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
 		label.place(relx=0.56, rely=0.125)
@@ -1492,7 +1435,6 @@ class View:
 		self.switch_frame(self.frame_crear_paquete)
 
 	def show_pre_ventas(self):
-		print('actualizando la seccion de pre ventas....')
 		pre_venta_view = None
 
 		#eliminamos los resultados anteriores a la busqueda actual (si elminamos la lista anterior tambien se elimina la lista actual, por ref)
@@ -1812,7 +1754,10 @@ class View:
 		frame_date.pack()
 
 		fecha = None
-		if cod_fecha == 2:
+		if cod_fecha == 1:
+			#en caso de que se este editando el paquete
+			fecha = self.fecha_de_viaje
+		elif cod_fecha == 2:
 			#en caso de que vayemos a seleccionar la fecha de inicio de la pre venta
 			fecha = self.pre_venta_fecha_inicio
 		elif cod_fecha == 3:
