@@ -1417,7 +1417,7 @@ class View:
 		button_siguiente.config(command=lambda:self.pop_pila_siguiente())
 		self.price_content_entry.trace("w", self.update_price_content_entry)
 		self.senha_content_entry.trace("w", self.update_senha_content_entry)
-		button_fecha_de_viaje.config(command=lambda:self.view_calendar(self.frame_crear_paquete, None, 1, 0.17, 0.277))
+		button_fecha_de_viaje.config(command=lambda:self.view_calendar(self.frame_crear_paquete, None, 0, 0.17, 0.277))
 		pre_venta_button.config(command=lambda:self.controller.agregar_editar_pre_venta())
 		save_button.config(command=lambda:self.controller.guardar_paquete(name_content_entry.get(), combobox_tipos.get(), combobox_sub_tipos.get(),
 				combobox_vigencia.get(), self.lista_fecha, self.price_value, self.senha_value, incluye_text_widget.get(1.0, END),
@@ -1746,6 +1746,12 @@ class View:
 		widget.destroy()
 
 	def view_calendar(self, frame, content, cod_fecha, x, y):
+		'''
+		cod = 0 fecha de viaje al momento de creacion un paquete
+		cod = 1 fecha de viaje al momento de edicion de paquete
+		cod = 2 fecha de inicio de pre venta
+		cod = 3 fecha de fin de pre venta
+		'''
 		frame_calendar = Frame(frame, bg='#F9F9F9', width='260', height='270', relief=GROOVE, borderwidth=1)
 		frame_calendar.place(relx=x, rely=y)
 		frame_calendar.pack_propagate(0)
@@ -1769,10 +1775,17 @@ class View:
 		ok.pack(pady=2)
 
 	def update_button_fecha_de_viaje(self, frame_calendar, content, calendario, cod_fecha):
+		'''
+		cod = 0 fecha de viaje al momento de creacion un paquete
+		cod = 1 fecha de viaje al momento de edicion de paquete
+		cod = 2 fecha de inicio de pre venta
+		cod = 3 fecha de fin de pre venta
+		'''
+
 		frame_calendar.destroy()
 		date = calendario.get_date_selected()
 
-		if cod_fecha == 1:
+		if cod_fecha == 1 or cod_fecha == 0:
 			self.fecha_de_viaje = date
 		elif cod_fecha == 2:
 			if date is not None:
@@ -1794,7 +1807,7 @@ class View:
 		else:
 			month = str(date.month)
 
-		if cod_fecha == 1:
+		if cod_fecha == 0:
 			self.combobox_add_fecha.destroy()
 			self.lista_fecha.append(date)
 			self.lista_fecha_combobox.append(day + '/' + month + '/' + str(date.year))
