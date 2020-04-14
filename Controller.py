@@ -114,11 +114,14 @@ class Controller:
 		else:
 			self.view.view_show_message(False, 'Debe introducir una fecha')
 
+	def listar_pre_venta(self):
+		self.view.view_listar_pre_venta()
+
 	def agregar_editar_pre_venta(self):
 		#self.view.view_agregar_pre_venta()
 		self.view.view_agregar_editar_pre_venta()
 
-	def guardar_pre_venta(self, precio, senha, monto_cuota, cant_cuotas, fecha_inicio, fecha_fin):
+	def guardar_pre_venta(self, precio, senha, monto_cuota, cant_cuotas, fecha_inicio, fecha_fin, frame_pre_venta):
 		success = None
 		try:
 			self.model.validar_datos_pre_venta(precio, senha, monto_cuota, cant_cuotas, fecha_inicio, fecha_fin)
@@ -131,16 +134,17 @@ class Controller:
 			self.view.view_show_message(False, e)
 		else:
 			pre_venta = self.model.crear_pre_venta(precio, senha, monto_cuota, cant_cuotas, fecha_inicio, fecha_fin)
-			#print('{} {} {} {} {} {}'.format(pre_venta.precio, pre_venta.senha, pre_venta.monto_cuota, pre_venta.cantidad_cuotas, pre_venta.fecha_inicio, fecha_fin))
+			
 			#self.model.guardar_pre_venta(pre_venta)
 			self.view.set_value_pre_venta(pre_venta)
 			self.view.view_show_message(True, 'Pre venta añadida con exito')
-
+			self.view.widget_destroy(frame_pre_venta)
 	
 	def editar_paquete(self, frame, paquete, pos_paquete, pos_result_busqueda):
 		self.view.view_editar_paquete(frame, paquete, pos_paquete, pos_result_busqueda)
 
-	def guardar_paquete_editado(self, pos_paquete, pos_result_busqueda, nombre, tipo, sub_tipo, esta_vigente, fecha, precio, senha, incluye, cant_pasajeros, pre_venta, parent_detalles):
+	def guardar_paquete_editado(self, pos_paquete, pos_result_busqueda, nombre, tipo, sub_tipo, esta_vigente, fecha, precio,
+																senha, incluye, cant_pasajeros, pre_ventas, parent_detalles):
 		success = None
 		try:
 			self.model.validar_datos_paquete(nombre, tipo, sub_tipo, esta_vigente, fecha, precio, senha, incluye, cant_pasajeros)
@@ -164,8 +168,10 @@ class Controller:
 			print('guardando paquete editado...')
 			self.model.guardar_paquete_editado(paquete, pos_paquete)
 
-			self.view.view_paquete_detalles(paquete, pos_paquete, pos_result_busqueda)
 			self.view.widget_destroy(parent_detalles)
+			print('destruyendo paquete detalles (anterior)')
+			self.view.view_paquete_detalles(paquete, pos_paquete, pos_result_busqueda)
+			print('reconstruyendo el nuevo paquete detalles')
 
 			#actualizamos el vector resultado de la busqueda
 			#mostramos el vector resultado de la busqueda despues de la edicion
