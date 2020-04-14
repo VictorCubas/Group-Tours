@@ -432,7 +432,8 @@ class View:
 				paquete_view.pack(padx=10, pady=5)
 
 				paquete_name_view = Label(paquete_view, text=paquete.get_nombre(), width='20', height='1', relief=GROOVE, borderwidth=0)
-				paquete_name_view.config(font=('tahoma', 15, 'bold'), bg='#F9F9F9', fg='#343535', activeforeground='#343535', anchor=W) #posicionamos el texto a la izquierda
+				paquete_name_view.config(font=('tahoma', 15, 'bold'), bg='#F9F9F9', fg='#343535',
+												activeforeground='#343535', anchor=W) #posicionamos el texto a la izquierda
 				paquete_name_view.place(relx=0.315, rely=0.05)
 
 				#fecha view
@@ -452,7 +453,8 @@ class View:
 					texto = '-- / -- / --'
 
 				paquete_fecha_de_viaje_view = Button(paquete_view, text=texto, width='21', height='1', relief=GROOVE, borderwidth=0)
-				paquete_fecha_de_viaje_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
+				paquete_fecha_de_viaje_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030',
+										activeforeground='#2F3030', highlightthickness=0, anchor=W)
 				paquete_fecha_de_viaje_view.place(relx=0.3, rely=0.25)
 
 				#vigente view
@@ -461,12 +463,14 @@ class View:
 					texto = 'No vigente'
 
 				paquete_fecha_de_viaje_view = Button(paquete_view, text=texto, width='21', height='1', relief=GROOVE, borderwidth=0)
-				paquete_fecha_de_viaje_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
+				paquete_fecha_de_viaje_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030',
+												activeforeground='#2F3030', highlightthickness=0, anchor=W)
 				paquete_fecha_de_viaje_view.place(relx=0.3, rely=0.50)
 
 				texto = 'Tipo: ' + paquete.TRASLADO
 				paquete_fecha_de_viaje_view = Button(paquete_view, text=texto, width='21', height='1', relief=GROOVE, borderwidth=0)
-				paquete_fecha_de_viaje_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
+				paquete_fecha_de_viaje_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030',
+													activeforeground='#2F3030', highlightthickness=0, anchor=W)
 				paquete_fecha_de_viaje_view.place(relx=0.3, rely=0.75)
 
 				#SEGUNDA CULUMNA
@@ -513,7 +517,8 @@ class View:
 				#detalles view
 				texto = 'Ver detalles      >'
 				paquete_detalles_view = Button(paquete_view, text=texto, width='18', height='1', relief=GROOVE, borderwidth=0)
-				paquete_detalles_view.config(font=('tahoma', 13), bg='#27A221', fg='#FFFFFF', activeforeground='#FFFFFF', activebackground='#20801B', highlightthickness=0, anchor=W)
+				paquete_detalles_view.config(font=('tahoma', 13), bg='#27A221', fg='#FFFFFF', activeforeground='#FFFFFF',
+											activebackground='#20801B', highlightthickness=0, anchor=W)
 				paquete_detalles_view.place(relx=0.7, rely=0.75)
 				paquete_detalles_view.config(command=lambda paquete=paquete, pos_paquete=pos_paquete,
 						pos_result_busqueda=pos_result_busqueda:self.view_paquete_detalles(paquete, pos_paquete, pos_result_busqueda))
@@ -637,7 +642,9 @@ class View:
 
 		texto = 'Ver precio en detalles      >'
 		precio_detalles_button = Button(frame_detalles, text=texto, width='19', height='1', relief=GROOVE, borderwidth=2)
-		precio_detalles_button.config(font=('tahoma', 13), bg='#27A221', fg='#FFFFFF', activeforeground='#FFFFFF', activebackground='#20801B', highlightthickness=0, anchor=W)
+		precio_detalles_button.config(font=('tahoma', 13), bg='#27A221', fg='#FFFFFF', activeforeground='#FFFFFF',
+										activebackground='#20801B', highlightthickness=0, anchor=W)
+
 		if paquete.si_pre_venta():
 			precio_detalles_button.config(bg='#27A221', activebackground='#20801B')
 			precio_detalles_button.config(command=lambda:self.view_precio_detalles(paquete.get_precio(), paquete.get_senha(), paquete.get_pre_ventas()))
@@ -677,7 +684,7 @@ class View:
 		lugares_disponibles_value_label.place(relx=0.877, rely=0.155)
 
 		#maxima cantidad de pasajeros
-		max_cantidad_pasajeros_label = Label(frame_detalles, text='Max de pasajeros:', width='15', height='1', relief=GROOVE, borderwidth=0)
+		max_cantidad_pasajeros_label = Label(frame_detalles, text='Total pasajeros:', width='15', height='1', relief=GROOVE, borderwidth=0)
 		max_cantidad_pasajeros_label.config(font=('tahoma', 14, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
 		max_cantidad_pasajeros_label.place(relx=0.65, rely=0.20)
 
@@ -787,7 +794,7 @@ class View:
 
 		#almacenamos los resultados en forma de botones de las pre ventas(views)
 		self.view_result_pre_ventas_agregados = []
-		self.show_pre_ventas()
+		self.show_pre_ventas(False)
 
 		#view ok
 		ok_button = Button(precio_parent, text='OK', width=110, height=30, relief=GROOVE, borderwidth=0)
@@ -899,13 +906,33 @@ class View:
 		senha_entry = Entry(frame_detalles, width='25', font=('tahoma', 13), textvariable=self.senha_content_entry)
 		senha_entry.place(relx=0.17, rely=0.378)
 
+		#view pre venta
+		self.pre_ventas = paquete.get_pre_ventas()
+		label = Label(frame_detalles, text='Pre venta:', width='13', height='2', relief=GROOVE, borderwidth=0)
+		label.config(font=('tahoma', 15, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
+		#label.place(relx=0.56, rely=0.125)
+		label.place(relx=0.02, rely=0.425)
+
+		self.content_pre_venta_button = StringVar()
+		si_pre_venta = paquete.si_pre_venta()
+		if si_pre_venta:
+			si_pre_venta = 'Editar'
+		else:
+			si_pre_venta = 'Agregar'
+
+		self.content_pre_venta_button.set(si_pre_venta)
+
+		pre_venta_button = Button(frame_detalles, textvariable=self.content_pre_venta_button, width=10, height=1, relief=GROOVE, borderwidth=0)
+		pre_venta_button.config(font=('tahoma', 13), bg='#F9F9F9')
+		pre_venta_button.place(relx=0.17, rely=0.432)
+
 		#incluye view
 		label = Label(frame_detalles, text='Incluye:', width='10', height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 15, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
-		label.place(relx=0.02, rely=0.425)
+		label.place(relx=0.56, rely=0.125)
 
 		incluye_frame = Frame(frame_detalles, width='400', height='200', bg='#F9F9F9', relief=GROOVE, borderwidth=0)
-		incluye_frame.place(relx=0.17, rely=0.435)
+		incluye_frame.place(relx=0.56, rely=0.185)
 
 		scroll = Scrollbar(incluye_frame, orient=VERTICAL)
 		scroll.pack(side=RIGHT, fill=Y)
@@ -921,7 +948,7 @@ class View:
 		incluye_text_widget.config(wrap=WORD, yscrollcommand=scroll.set)
 
 		#view cantidad de pasajeros
-		label = Label(frame_detalles, text='Cant pasajeros:', width='13', height='2', relief=GROOVE, borderwidth=0)
+		label = Label(frame_detalles, text='Total pasajeros:', width='13', height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 15, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
 		label.place(relx=0.56, rely=0.065)
 
@@ -931,26 +958,7 @@ class View:
 			texto = '--'
 		cant_pasajeros_content_entry.set(texto)
 		cant_pasajeros_entry = Entry(frame_detalles, width='15', font=('tahoma', 13), textvariable=cant_pasajeros_content_entry)
-		cant_pasajeros_entry.place(relx=0.742, rely=0.078)
-
-		#view pre venta
-		self.pre_ventas = paquete.get_pre_ventas()
-		label = Label(frame_detalles, text='Pre venta:', width='13', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 15, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
-		label.place(relx=0.56, rely=0.125)
-
-		self.content_pre_venta_button = StringVar()
-		si_pre_venta = paquete.si_pre_venta()
-		if si_pre_venta:
-			si_pre_venta = 'Editar'
-		else:
-			si_pre_venta = 'Agregar'
-
-		self.content_pre_venta_button.set(si_pre_venta)
-
-		pre_venta_button = Button(frame_detalles, textvariable=self.content_pre_venta_button, width=10, height=1, relief=GROOVE, borderwidth=0)
-		pre_venta_button.config(font=('tahoma', 13), bg='#F9F9F9')
-		pre_venta_button.place(relx=0.742, rely=0.138)
+		cant_pasajeros_entry.place(relx=0.748, rely=0.078)
 
 		#view ok and cancel
 		save_button = Button(frame_detalles, text='Guardar', width=110, height=30, relief=GROOVE, borderwidth=0)
@@ -974,15 +982,50 @@ class View:
 		self.senha_content_entry.trace("w", self.update_senha_content_entry)
 		button_fecha_de_viaje.config(command=lambda:self.view_calendar(frame_detalles, content_button_fecha, 1, 0.17, 0.258))
 
-		pre_venta_button.config(command=lambda:self.controller.agregar_editar_pre_venta())
+		pre_venta_button.config(command=lambda:self.controller.listar_pre_venta())
 
-		save_button.config(command=lambda:self.controller.guardar_paquete_editado(pos_paquete, pos_result_busqueda, name_content_entry.get(), combobox_tipos.get(), combobox_sub_tipos.get(),
-				combobox_vigencia.get(), self.fecha_de_viaje, self.price_value, self.senha_value, incluye_text_widget.get(1.0, END),
-				cant_pasajeros_content_entry.get(), self.pre_venta, self.parent_detalles))
+		save_button.config(command=lambda:self.controller.guardar_paquete_editado(pos_paquete, pos_result_busqueda, name_content_entry.get(),
+				combobox_tipos.get(), combobox_sub_tipos.get(), combobox_vigencia.get(), self.fecha_de_viaje, self.price_value, self.senha_value,
+				incluye_text_widget.get(1.0, END), cant_pasajeros_content_entry.get(), self.pre_ventas, self.parent_detalles))
+
 		cancel_button.config(command=lambda:self.widget_destroy(frame_detalles))
+
+	def view_listar_pre_venta(self):
+		print('')
+		self.toplevel_pre_venta = Toplevel(self.parent, bg='#F9F9F9', relief=GROOVE, borderwidth=0)
+		self.toplevel_pre_venta.title('Pre Venta')
+		#frame.tittle('Pre Venta')
+		self.toplevel_pre_venta.geometry('600x400+650+150')
+		self.toplevel_pre_venta.resizable(width=False, height=False)
+
+		self.frame_pre_venta = Frame(self.toplevel_pre_venta, bg='#F9F9F9', width='600', height='400', relief=GROOVE, borderwidth=0)
+		self.frame_pre_venta.pack()
+		self.frame_pre_venta.pack_propagate(0)
+
+		#crearmos una seccion para mostrar la lista de pre ventas que se van creando
+		#creamos un frame, un canvas y un scrollbar para luego conectarlos
+		frame_result_pre_venta = Frame(self.frame_pre_venta, width='500', height='280', bg='#FFFFFF', relief=GROOVE, borderwidth=0)
+		self.canvas_pre_ventas=Canvas(frame_result_pre_venta,bg='#FFFFFF',width=500,height=280)
+		vbar=Scrollbar(frame_result_pre_venta, orient=VERTICAL)
+		vbar.pack(side=RIGHT,fill=Y)
+		vbar.config(command=self.canvas_pre_ventas.yview)
+		self.canvas_pre_ventas.config(yscrollcommand=vbar.set)
+		self.canvas_pre_ventas.pack()
+		frame_result_pre_venta.pack(side='top', pady=20)
+		#frame_result_pre_venta.place(relx=0.15, rely=0.1)
+
+		#los botones estan dentro de un frame auxiliar
+		self.frame_result_pre_venta_aux = Frame(self.canvas_pre_ventas, bg='#FFFFFF', borderwidth=0, relief=GROOVE)
+		self.canvas_pre_ventas.create_window(0, 0, window=self.frame_result_pre_venta_aux, anchor=NW)
+		self.frame_result_pre_venta_aux.bind("<Configure>", self.on_frame_pre_venta_configure)
+
+		#almacenamos los resultados en forma de botones de las pre ventas(views)
+		self.view_result_pre_ventas_agregados = []
+		self.show_pre_ventas(True)
 
 	def view_agregar_editar_pre_venta(self):
 		print('agregando/Editando pre venta...')
+
 		self.frame_pre_venta = Toplevel(self.parent, bg='#F9F9F9', relief=GROOVE, borderwidth=0)
 		self.frame_pre_venta.title('Pre Venta')
 		#frame.tittle('Pre Venta')
@@ -999,6 +1042,7 @@ class View:
 		self.price_pre_venta_content_entry.set('')
 		self.price_pre_venta_value = None
 
+		self.pre_venta = None
 		if self.pre_venta:
 			self.price_pre_venta_value = self.pre_venta.get_precio()
 			self.price_pre_venta_content_entry.set(self.pre_venta.get_precio())
@@ -1183,8 +1227,9 @@ class View:
 		self.price_pre_venta_content_entry.trace("w", self.update_price_pre_venta_content_entry)
 		self.senha_pre_venta_content_entry.trace("w", self.update_senha_pre_venta_content_entry)
 		self.monto_cuota_content_entry.trace("w", self.update_monto_cuota_content_entry)
-		save_button.config(command=lambda:self.controller.guardar_pre_venta(self.price_pre_venta_value, self.senha_pre_venta_value, self.monto_cuota_value,
-				cant_cuota_content_entry.get(), self.pre_venta_fecha_inicio, self.pre_venta_fecha_fin))
+		save_button.config(command=lambda:self.controller.guardar_pre_venta(self.price_pre_venta_value, self.senha_pre_venta_value,
+				self.monto_cuota_value, cant_cuota_content_entry.get(), self.pre_venta_fecha_inicio, self.pre_venta_fecha_fin, self.frame_pre_venta))
+
 		cancel_button.config(command=lambda:self.widget_destroy(self.frame_pre_venta))
 
 	def add_pila_anterior(self, clave):
@@ -1346,8 +1391,8 @@ class View:
 
 		#crearmos una seccion para mostras la lista de pre ventas que se van creando
 		#creamos un frame, un canvas y un scrollbar para luego conectarlos
-		frame_result_pre_venta = Frame(self.frame_crear_paquete, width='400', height='170', bg='#FFFFFF', relief=GROOVE, borderwidth=0)
-		self.canvas_pre_ventas=Canvas(frame_result_pre_venta,bg='#FFFFFF',width=400,height=170)
+		frame_result_pre_venta = Frame(self.frame_crear_paquete, width='400', height='200', bg='#FFFFFF', relief=GROOVE, borderwidth=0)
+		self.canvas_pre_ventas=Canvas(frame_result_pre_venta,bg='#FFFFFF',width=400,height=200)
 		vbar=Scrollbar(frame_result_pre_venta, orient=VERTICAL)
 		vbar.pack(side=RIGHT,fill=Y)
 		vbar.config(command=self.canvas_pre_ventas.yview)
@@ -1401,12 +1446,12 @@ class View:
 		save_button = Button(self.frame_crear_paquete, text='Guardar', width=110, height=30, relief=GROOVE, borderwidth=0)
 		save_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#343535')
 		save_button.config(image=self.imagenes['save_icon'], compound=LEFT)
-		save_button.place(relx=0.5, rely=0.85)
+		save_button.place(relx=0.5, rely=0.90)
 
 		cancel_button = Button(self.frame_crear_paquete, text='Cancelar', width=110, height=30, relief=GROOVE, borderwidth=0)
 		cancel_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#343535')
 		cancel_button.config(image=self.imagenes['not_ok_icon'], compound=LEFT)
-		cancel_button.place(relx=0.34, rely=0.85)
+		cancel_button.place(relx=0.34, rely=0.90)
 
 		#********************************************************
 
@@ -1434,7 +1479,7 @@ class View:
 
 		self.switch_frame(self.frame_crear_paquete)
 
-	def show_pre_ventas(self):
+	def show_pre_ventas(self, flag):
 		pre_venta_view = None
 
 		#eliminamos los resultados anteriores a la busqueda actual (si elminamos la lista anterior tambien se elimina la lista actual, por ref)
@@ -1447,6 +1492,17 @@ class View:
 		#aplicamos los nuevos resultados a la lista de pre ventas agregados
 		pre_venta_frame = None
 
+		if flag:
+			#viniendo de editar pre venta
+			print('aqui 1')
+			frame_width = 480
+			frame_height = 80
+		else:
+			#viniendo de crear un paquete
+			print('aqui 2')
+			frame_width = 380
+			frame_height = 80
+
 		if len(self.pre_ventas) != 0:
 			pos_result_pre_venta = -1
 			aux = -1
@@ -1454,7 +1510,8 @@ class View:
 				pos_result_pre_venta += 1
 				aux += 1
 
-				pre_venta_frame = Frame(self.frame_result_pre_venta_aux, bg='#F9F9F9', width='380', height='80', relief=GROOVE, borderwidth=1)
+				pre_venta_frame = Frame(self.frame_result_pre_venta_aux, bg='#F9F9F9', width=frame_width,
+														height=frame_height, relief=GROOVE, borderwidth=1)
 				pre_venta_frame.pack(padx=10, pady=5)
 
 				#pre venta label view
@@ -1471,7 +1528,10 @@ class View:
 
 				label = Label(pre_venta_frame, text=texto, width='11', height='1', relief=GROOVE, borderwidth=0)
 				label.config(font=('tahoma', 10), bg='#F9F9F9', fg='#2F3030', anchor=W) #posicionamos el texto a la izquierda
-				label.place(relx=0.18, rely=0.34)
+				if flag:
+					label.place(relx=0.16, rely=0.34)
+				else:
+					label.place(relx=0.18, rely=0.34)
 
 				#senha label view
 				label = Label(pre_venta_frame, text='Seña:', width='6', height='1', relief=GROOVE, borderwidth=0)
@@ -1482,29 +1542,44 @@ class View:
 
 				label = Label(pre_venta_frame, text=texto, width='11', height='1', relief=GROOVE, borderwidth=0)
 				label.config(font=('tahoma', 10), bg='#F9F9F9', fg='#2F3030', anchor=W) #posicionamos el texto a la izquierda
-				label.place(relx=0.18, rely=0.63)
+				if flag:
+					label.place(relx=0.16, rely=0.63)
+				else:
+					label.place(relx=0.18, rely=0.34)
 
 				#monto cuota label view
 				label = Label(pre_venta_frame, text='Monto cuota:', width='11', height='1', relief=GROOVE, borderwidth=0)
 				label.config(font=('tahoma', 10, 'bold'), bg='#F9F9F9', fg='#2F3030', anchor=W) #posicionamos el texto a la izquierda
-				label.place(relx=0.45, rely=0.34)
+				if flag:
+					label.place(relx=0.43, rely=0.34)
+				else:
+					label.place(relx=0.45, rely=0.34)
 
 				texto = self.convert_amount_to_string(pre_venta.get_monto_cuota())
 
 				label = Label(pre_venta_frame, text=texto, width='11', height='1', relief=GROOVE, borderwidth=0)
 				label.config(font=('tahoma', 10), bg='#F9F9F9', fg='#2F3030', anchor=W) #posicionamos el texto a la izquierda
-				label.place(relx=0.73, rely=0.34)
+				if flag:
+					label.place(relx=0.67, rely=0.34)
+				else:
+					label.place(relx=0.73, rely=0.34)
 
 				#cantidad de cuotas label view
 				label = Label(pre_venta_frame, text='Cant cuotas:', width='11', height='1', relief=GROOVE, borderwidth=0)
 				label.config(font=('tahoma', 10, 'bold'), bg='#F9F9F9', fg='#2F3030', anchor=W) #posicionamos el texto a la izquierda
-				label.place(relx=0.45, rely=0.63)
+				if flag:
+					label.place(relx=0.43, rely=0.63)
+				else:
+					label.place(relx=0.45, rely=0.63)
 
 				texto = str(pre_venta.get_cantidad_cuotas())
 
 				label = Label(pre_venta_frame, text=texto, width='11', height='1', relief=GROOVE, borderwidth=0)
 				label.config(font=('tahoma', 10), bg='#F9F9F9', fg='#2F3030', anchor=W) #posicionamos el texto a la izquierda
-				label.place(relx=0.73, rely=0.63)
+				if flag:
+					label.place(relx=0.67, rely=0.63)
+				else:
+					label.place(relx=0.73, rely=0.63)
 
 				#fecha inicio label view
 				texto = self.convert_date_to_string(pre_venta.get_fecha_inicio())
@@ -1516,7 +1591,7 @@ class View:
 				#separador label view
 				label = Label(pre_venta_frame, text='-', width='1', height='1', relief=GROOVE, borderwidth=0)
 				label.config(font=('tahoma', 10, 'bold'), bg='#F9F9F9', fg='#2F3030', anchor=W) #posicionamos el texto a la izquierda
-				label.place(relx=0.6, rely=0.05)
+				label.place(relx=0.58, rely=0.05)
 
 				#fecha fin label view
 				texto = self.convert_date_to_string(pre_venta.get_fecha_fin())
@@ -1525,7 +1600,24 @@ class View:
 				label.config(font=('tahoma', 10, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
 				label.place(relx=0.65, rely=0.05)
 
+				#view editar
+				if flag:
+					editar_button = Button(pre_venta_frame, width=30, height=30, relief=GROOVE, borderwidth=0)
+					editar_button.config(bg='#F9F9F9', fg='#343535', highlightthickness=0)
+					editar_button.config(image=self.imagenes['edit_icon'], compound=LEFT)
+					editar_button.place(relx=0.9, rely=0.28)
+					#editar_button.config(command=lambda pre_venta=pre_venta, pos_pre_venta=pos_pre_venta)
+
+					#config(command=lambda paquete=paquete, pos_paquete=pos_paquete,
+					#	pos_result_busqueda=pos_result_busqueda:self.view_paquete_detalles(paquete, pos_paquete, pos_result_busqueda))
+
 				self.view_result_pre_ventas_agregados.append(pre_venta_frame)
+
+			#salir_button = Button(frame_detalles, text='Salir', width=110, height=30, relief=GROOVE, borderwidth=0)
+			#salir_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#343535')
+			#salir_button.config(image=self.imagenes['not_ok_icon'], compound=LEFT)
+			#salir_button.place(relx=0.34, rely=0.85)
+
 
 	def convert_date_to_string(self, fecha):
 		date_texto = ''
@@ -1716,7 +1808,7 @@ class View:
 	
 	def set_value_pre_venta(self, pre_venta):
 		self.pre_ventas.append(pre_venta)
-		self.show_pre_ventas()
+		self.show_pre_ventas(False)
 
 	def view_show_message(self, success, msj):
 		message = Toplevel(self.parent, bg='#F9F9F9')
@@ -1734,9 +1826,10 @@ class View:
 		else:
 			ok.config(image=self.imagenes['not_ok_icon'])
 
-		if self.frame_pre_venta is not None and success:
-			self.widget_destroy(self.frame_pre_venta)
-			self.frame_pre_venta = None
+		#if self.frame_pre_venta is not None and success:
+		#	print('CUANDO ENTRO ACA???**************')
+		#	self.widget_destroy(self.frame_pre_venta)
+		#	self.frame_pre_venta = None
 			#self.content_pre_venta_button.set('Disponible')
 
 		ok.config(command=lambda:self.widget_destroy(message))
