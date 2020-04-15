@@ -909,7 +909,10 @@ class View:
 
 		self.content_pre_venta_button = StringVar()
 		si_pre_venta = paquete.si_pre_venta()
-		self.content_pre_venta_button.set('Editar')
+		if si_pre_venta:
+			self.content_pre_venta_button.set('Editar')
+		else:
+			self.content_pre_venta_button.set('Agregar')
 
 		pre_venta_button = Button(frame_detalles, textvariable=self.content_pre_venta_button, width=10, height=1, relief=GROOVE, borderwidth=0)
 		pre_venta_button.config(font=('tahoma', 13), bg='#F9F9F9')
@@ -971,7 +974,10 @@ class View:
 		self.senha_content_entry.trace("w", self.update_senha_content_entry)
 		button_fecha_de_viaje.config(command=lambda:self.view_calendar(frame_detalles, content_button_fecha, 1, 0.17, 0.258))
 
-		pre_venta_button.config(command=lambda:self.controller.listar_pre_venta())
+		if si_pre_venta:
+			pre_venta_button.config(command=lambda:self.controller.listar_pre_venta())
+		else:
+			pre_venta_button.config(command=lambda:self.controller.agregar_editar_pre_venta())
 
 		save_button.config(command=lambda:self.controller.guardar_paquete_editado(pos_paquete, pos_result_busqueda, name_content_entry.get(),
 				combobox_tipos.get(), combobox_sub_tipos.get(), combobox_vigencia.get(), self.fecha_de_viaje, self.price_value, self.senha_value,
@@ -1119,8 +1125,9 @@ class View:
 		self.price_pre_venta_content_entry.trace("w", self.update_price_pre_venta_content_entry)
 		self.senha_pre_venta_content_entry.trace("w", self.update_senha_pre_venta_content_entry)
 		self.monto_cuota_content_entry.trace("w", self.update_monto_cuota_content_entry)
-		save_button.config(command=lambda:self.controller.guardar_pre_venta(self.price_pre_venta_value, self.senha_pre_venta_value,
-				self.monto_cuota_value, cant_cuota_content_entry.get(), self.pre_venta_fecha_inicio, self.pre_venta_fecha_fin, frame_pre_venta))
+		save_button.config(command=lambda:self.controller.guardar_pre_venta(self.price_pre_venta_value,
+							self.senha_pre_venta_value, self.monto_cuota_value, cant_cuota_content_entry.get(),
+							self.pre_venta_fecha_inicio, self.pre_venta_fecha_fin, frame_pre_venta, posicion_pre_venta))
 
 		cancel_button.config(command=lambda:self.go_to_view_listar_pre_venta(frame_pre_venta))
 
@@ -1268,8 +1275,9 @@ class View:
 		self.price_pre_venta_content_entry.trace("w", self.update_price_pre_venta_content_entry)
 		self.senha_pre_venta_content_entry.trace("w", self.update_senha_pre_venta_content_entry)
 		self.monto_cuota_content_entry.trace("w", self.update_monto_cuota_content_entry)
-		save_button.config(command=lambda:self.controller.guardar_pre_venta(self.price_pre_venta_value, self.senha_pre_venta_value,
-				self.monto_cuota_value, cant_cuota_content_entry.get(), self.pre_venta_fecha_inicio, self.pre_venta_fecha_fin, self.toplevel_pre_venta))
+		save_button.config(command=lambda:self.controller.guardar_pre_venta(self.price_pre_venta_value,
+					self.senha_pre_venta_value, self.monto_cuota_value, cant_cuota_content_entry.get(),
+					self.pre_venta_fecha_inicio, self.pre_venta_fecha_fin, self.toplevel_pre_venta, None))
 
 		cancel_button.config(command=lambda:self.widget_destroy(self.toplevel_pre_venta))
 
@@ -1548,8 +1556,7 @@ class View:
 			for pre_venta in self.pre_ventas:
 				posicion_pre_venta += 1
 
-				pre_venta_frame = Frame(self.frame_pre_ventas, bg='#F9F9F9', width=frame_width,
-											height=frame_height, relief=GROOVE, borderwidth=1)
+				pre_venta_frame = Frame(self.frame_pre_ventas, bg='#F9F9F9', width=frame_width, height=frame_height, relief=GROOVE, borderwidth=1)
 				pre_venta_frame.pack(padx=10, pady=5)
 
 				#pre venta label view
@@ -1645,7 +1652,7 @@ class View:
 					editar_button.config(image=self.imagenes['edit_icon'], compound=LEFT)
 					editar_button.place(relx=0.9, rely=0.28)
 					editar_button.config(command=lambda pre_venta=pre_venta, posicion_pre_venta=posicion_pre_venta:
-													self.view_editar_pre_venta(pre_venta, posicion_pre_venta))
+													self.controller.editar_pre_venta(pre_venta, posicion_pre_venta))
 
 				self.view_result_pre_ventas.append(pre_venta_frame)
 
@@ -1843,9 +1850,11 @@ class View:
 
 		self.monto_cuota_content_entry.set(texto)
 	
-	def set_value_pre_venta(self, pre_venta):
-		self.pre_ventas.append(pre_venta)
-		self.show_pre_ventas(False)
+	def set_value_pre_venta(self, pre_venta, posicion_pre_venta):
+		if posicion_pre_venta is not None:
+			self.pre_ventas[posicion_pre_venta] = pre_venta
+		else:
+			self.pre_ventas.append(pre_venta)
 
 	def view_show_message(self, success, msj):
 		message = Toplevel(self.parent, bg='#F9F9F9')
