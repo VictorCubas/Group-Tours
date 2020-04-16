@@ -114,12 +114,12 @@ class Controller:
 		else:
 			self.view.view_show_message(False, 'Debe introducir una fecha')
 
-	def listar_pre_venta(self):
-		self.view.view_listar_pre_venta()
+	def listar_pre_venta(self, flujo_desde_edicion):
+		self.view.view_listar_pre_venta(flujo_desde_edicion)
 
-	def agregar_editar_pre_venta(self, si_pre_venta):
+	def agregar_pre_venta(self, flujo):
 		#self.view.view_agregar_pre_venta()
-		self.view.view_agregar_editar_pre_venta(si_pre_venta)
+		self.view.view_agregar_editar_pre_venta(flujo)
 
 	def editar_pre_venta(self, pre_venta, posicion_pre_venta):
 		self.view.view_editar_pre_venta(pre_venta, posicion_pre_venta)
@@ -139,9 +139,12 @@ class Controller:
 			pre_venta = self.model.crear_pre_venta(precio, senha, monto_cuota, cant_cuotas, fecha_inicio, fecha_fin)
 
 			#print('Controller: posicion_pre_venta: ' + str(posicion_pre_venta))
-			self.view.set_value_pre_venta(pre_venta, posicion_pre_venta)
+			self.view.set_value_pre_venta(pre_venta, posicion_pre_venta, flujo_desde_edicion)
 			#SOLO CUANDO SE AGREGA LA PRIMERA PRE VENTA SE DEBERIA DE HACER ESTO
-			self.view.set_value_content_button_pre_venta()
+			
+			if flujo_desde_edicion:
+				print('this way 1...')
+				self.view.set_value_content_button_pre_venta()
 			self.view.view_show_message(True, 'Pre venta añadida con exito')
 			self.view.widget_destroy(frame_pre_venta)
 
@@ -151,6 +154,7 @@ class Controller:
 			else:
 				#self.view.view_listar_pre_venta_frame()
 				#para agregar a una lista de pre ventas vacia desde editar paquete
+				print('this way 2...')
 				self.view.show_pre_ventas(flujo_desde_edicion)
 				#para agregar a una lista de pre ventas vacia desde crear paquete
 				#self.view.show_pre_ventas(False)
