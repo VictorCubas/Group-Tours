@@ -918,6 +918,8 @@ class View:
 		pre_venta_button.config(font=('tahoma', 13), bg='#F9F9F9')
 		pre_venta_button.place(relx=0.17, rely=0.432)
 
+		self.view_result_pre_ventas = []
+
 		#incluye view
 		label = Label(frame_detalles, text='Incluye:', width='10', height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 15, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
@@ -980,7 +982,8 @@ class View:
 		else:
 			pre_venta_button.config(command=lambda:self.controller.agregar_editar_pre_venta())
 		'''
-		pre_venta_button.config(command=lambda:self.controller.listar_pre_venta())
+		flujo_desde_edicion = True
+		pre_venta_button.config(command=lambda:self.controller.listar_pre_venta(flujo_desde_edicion))
 
 		save_button.config(command=lambda:self.controller.guardar_paquete_editado(pos_paquete, pos_result_busqueda, name_content_entry.get(),
 				combobox_tipos.get(), combobox_sub_tipos.get(), combobox_vigencia.get(), self.fecha_de_viaje, self.price_value, self.senha_value,
@@ -988,7 +991,7 @@ class View:
 
 		cancel_button.config(command=lambda:self.widget_destroy(frame_detalles))
 
-	def view_listar_pre_venta(self):
+	def view_listar_pre_venta(self, flujo_desde_edicion):
 		self.toplevel_pre_venta = Toplevel(self.parent, bg='#F9F9F9', relief=GROOVE, borderwidth=0)
 		self.toplevel_pre_venta.title('Pre Venta')
 		#frame.tittle('Pre Venta')
@@ -996,14 +999,13 @@ class View:
 		self.toplevel_pre_venta.resizable(width=False, height=False)
 
 		#almacenamos los resultados en forma de botones de las pre ventas(views)
-		self.view_result_pre_ventas = []
-		if self.si_pre_venta:
+		if self.si_pre_venta and flujo_desde_edicion:
 			#lo cual implica que se esta editando una pre_venta ya existente de un paquete
 			self.view_listar_pre_venta_frame()
 		else:
 			#lo cual implica que se este agregando una pre_venta a un paquete que todavia tiene pre_venta
-			flujo_desde_edicion = True
-			self.view_agregar_editar_pre_venta(flujo_desde_edicion)
+			flujo_desde_edicion = False
+			self.view_agregar_pre_venta(flujo_desde_edicion)
 
 	def view_listar_pre_venta_frame(self):
 		self.building_frame_where_to_show_lista_pre_venta()
@@ -1150,7 +1152,7 @@ class View:
 		self.widget_destroy(frame)
 		self.view_listar_pre_venta_frame()
 
-	def view_agregar_editar_pre_venta(self, flujo):
+	def view_agregar_pre_venta(self, flujo):
 		print('Agregando primera pre venta...')
 
 		frame_pre_venta = Frame(self.toplevel_pre_venta, bg='#F9F9F9', width='600', height='400', relief=GROOVE, borderwidth=0)
@@ -1252,13 +1254,19 @@ class View:
 		self.price_pre_venta_content_entry.trace("w", self.update_price_pre_venta_content_entry)
 		self.senha_pre_venta_content_entry.trace("w", self.update_senha_pre_venta_content_entry)
 		self.monto_cuota_content_entry.trace("w", self.update_monto_cuota_content_entry)
-		save_button.config(command=lambda:self.controller.guardar_pre_venta(self.price_pre_venta_value,
+
+		#if self.si_pre_venta:
+		if flujo:
+			save_button.config(command=lambda:self.controller.guardar_pre_venta(self.price_pre_venta_value,
 					self.senha_pre_venta_value, self.monto_cuota_value, cant_cuota_content_entry.get(),
 					self.pre_venta_fecha_inicio, self.pre_venta_fecha_fin, frame_pre_venta, None, flujo))
 
-		if self.si_pre_venta:
 			cancel_button.config(command=lambda:self.go_to_view_listar_pre_venta(frame_pre_venta))
 		else:
+			save_button.config(command=lambda:self.controller.guardar_pre_venta(self.price_pre_venta_value,
+					self.senha_pre_venta_value, self.monto_cuota_value, cant_cuota_content_entry.get(),
+					self.pre_venta_fecha_inicio, self.pre_venta_fecha_fin, self.toplevel_pre_venta, None, flujo))
+
 			cancel_button.config(command=lambda:self.widget_destroy(self.toplevel_pre_venta))
 
 	def add_pila_anterior(self, clave):
@@ -1407,7 +1415,9 @@ class View:
 
 		#view pre venta
 		self.pre_ventas = []
-		self.pre_venta = None
+		self.si_pre_venta = False
+		#para almacenar las pre_ventas mostrados al usuario
+		self.view_result_pre_ventas = []
 		label = Label(self.frame_crear_paquete, text='Pre venta:', width='13', height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
 		label.place(relx=0.02, rely=0.492)
@@ -1492,8 +1502,8 @@ class View:
 		self.price_content_entry.trace("w", self.update_price_content_entry)
 		self.senha_content_entry.trace("w", self.update_senha_content_entry)
 		button_fecha_de_viaje.config(command=lambda:self.view_calendar(self.frame_crear_paquete, None, 0, 0.17, 0.277))
-		flujo_desde_edicion  = False
-		pre_venta_button.config(command=lambda:self.controller.agregar_editar_pre_venta(flujo_desde_edicion))
+		flujo_desde_edicion = False
+		pre_venta_button.config(command=lambda:self.controller.listar_pre_venta(flujo_desde_edicion))
 		save_button.config(command=lambda:self.controller.guardar_paquete(name_content_entry.get(), combobox_tipos.get(), combobox_sub_tipos.get(),
 				combobox_vigencia.get(), self.lista_fecha, self.price_value, self.senha_value, incluye_text_widget.get(1.0, END),
 				cant_pasajeros_content_entry.get(), self.pre_ventas))
@@ -1513,7 +1523,6 @@ class View:
 		#pre_venta_view = None
 
 		#eliminamos los resultados anteriores a la busqueda actual (si elminamos la lista anterior tambien se elimina la lista actual, por ref)
-		#if self.si_pre_venta:
 		for pre_venta_view in self.view_result_pre_ventas:
 			pre_venta_view.destroy()
 
@@ -1830,9 +1839,9 @@ class View:
 
 		self.monto_cuota_content_entry.set(texto)
 	
-	def set_value_pre_venta(self, pre_venta, posicion_pre_venta):
+	def set_value_pre_venta(self, pre_venta, posicion_pre_venta, flujo_desde_edicion):
 		#if posicion_pre_venta is not None:
-		if self.si_pre_venta:
+		if self.si_pre_venta and flujo_desde_edicion:
 			#en caso de editar una pre_venta
 			self.pre_ventas[posicion_pre_venta] = pre_venta
 		else:
