@@ -86,9 +86,6 @@ class Controller:
 	def crear_paquete(self, value):
 		self.view.view_crear_paquete(value)
 
-	#def agregar_pre_venta_editar(pre_venta):
-	#	self.view.view_agregar_pre_venta_editar(pre_venta)
-
 	def guardar_paquete(self, nombre, tipo, sub_tipo, esta_vigente, lista_fecha, precio, senha, incluye, cant_pasajeros, pre_ventas):
 		#print('{}, {}, {}, {}, {}, {}, {}, {}'.format(nombre, tipo, sub_tipo, fecha, esta_vigente, precio, senha, incluye))
 		if len(lista_fecha) > 0:
@@ -118,13 +115,13 @@ class Controller:
 		self.view.view_listar_pre_venta(flujo_desde_edicion)
 
 	def agregar_pre_venta(self, flujo):
-		#self.view.view_agregar_pre_venta()
-		self.view.view_agregar_editar_pre_venta(flujo)
+		self.view.view_agregar_pre_venta(flujo)
+		#self.view.view_agregar_editar_pre_venta(flujo)
 
 	def editar_pre_venta(self, pre_venta, posicion_pre_venta):
 		self.view.view_editar_pre_venta(pre_venta, posicion_pre_venta)
 
-	def guardar_pre_venta(self, precio, senha, monto_cuota, cant_cuotas, fecha_inicio, fecha_fin, frame_pre_venta, posicion_pre_venta, flujo_desde_edicion):
+	def guardar_pre_venta(self, precio, senha, monto_cuota, cant_cuotas, fecha_inicio, fecha_fin, frame_pre_venta, posicion_pre_venta, agregando):
 		success = None
 		try:
 			self.model.validar_datos_pre_venta(precio, senha, monto_cuota, cant_cuotas, fecha_inicio, fecha_fin)
@@ -139,25 +136,13 @@ class Controller:
 			pre_venta = self.model.crear_pre_venta(precio, senha, monto_cuota, cant_cuotas, fecha_inicio, fecha_fin)
 
 			#print('Controller: posicion_pre_venta: ' + str(posicion_pre_venta))
-			self.view.set_value_pre_venta(pre_venta, posicion_pre_venta, flujo_desde_edicion)
+			self.view.set_value_pre_venta(pre_venta, posicion_pre_venta, agregando)
 			#SOLO CUANDO SE AGREGA LA PRIMERA PRE VENTA SE DEBERIA DE HACER ESTO
 			
-			if flujo_desde_edicion:
-				print('this way 1...')
-				self.view.set_value_content_button_pre_venta()
 			self.view.view_show_message(True, 'Pre venta añadida con exito')
 			self.view.widget_destroy(frame_pre_venta)
-
-			if flujo_desde_edicion:
-				#cuando se este editando/agregando una preventa de un paquete
-				self.view.view_listar_pre_venta_frame()
-			else:
-				#self.view.view_listar_pre_venta_frame()
-				#para agregar a una lista de pre ventas vacia desde editar paquete
-				print('this way 2...')
-				self.view.show_pre_ventas(flujo_desde_edicion)
-				#para agregar a una lista de pre ventas vacia desde crear paquete
-				#self.view.show_pre_ventas(False)
+			#volvemos a mostras las pre ventas
+			self.view.show_pre_ventas()
 
 	def editar_paquete(self, frame, paquete, pos_paquete, pos_result_busqueda):
 		self.view.view_editar_paquete(frame, paquete, pos_paquete, pos_result_busqueda)
