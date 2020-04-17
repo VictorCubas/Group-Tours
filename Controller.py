@@ -147,6 +147,14 @@ class Controller:
 	def editar_paquete(self, frame, paquete, pos_paquete, pos_result_busqueda):
 		self.view.view_editar_paquete(frame, paquete, pos_paquete, pos_result_busqueda)
 
+	def guardar_paquete_background(self, paquete, pos_paquete):
+	#def guardar_paquete_background(self, pos_paquete, pos_result_busqueda, nombre, tipo, sub_tipo, esta_vigente, fecha, precio,
+	#															senha, incluye, cant_pasajeros, pre_ventas):
+
+		#paquete = self.model.crear_paquete(nombre, tipo, sub_tipo, esta_vigente, fecha, precio, senha, incluye, cant_pasajeros)
+		#paquete.set_pre_ventas(pre_ventas)
+		self.model.guardar_paquete_editado(paquete, pos_paquete)
+
 	def guardar_paquete_editado(self, pos_paquete, pos_result_busqueda, nombre, tipo, sub_tipo, esta_vigente, fecha, precio,
 																senha, incluye, cant_pasajeros, pre_ventas, parent_detalles):
 		success = None
