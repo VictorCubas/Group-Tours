@@ -410,13 +410,13 @@ class View:
 
 		#eliminamos los resultados anteriores a la busqueda actual (si elminamos la lista anterior tambien se elimina la lista actual, por ref)
 		#if self.next_back_starting_aux == False and len(self.view_result_busqueda_paquete) != 0:
-		if len(self.view_result_busqueda_paquete) != 0:
-			for paquete_view in self.view_result_busqueda_paquete:
-				#print('index before destroy: ' + str(paquete_view[f][1]))
-				#paquete_view[f][0].destroy()
-				paquete_view.destroy()
+		#if len(self.view_result_busqueda_paquete) != 0:
+		for paquete_view in self.view_result_busqueda_paquete:
+			#print('index before destroy: ' + str(paquete_view[f][1]))
+			#paquete_view[f][0].destroy()
+			paquete_view.destroy()
 
-			self.view_result_busqueda_paquete = []
+		self.view_result_busqueda_paquete = []
 
 		#aplicamos los nuevos resultados de la busqueda
 		paquete_view = None
@@ -635,6 +635,9 @@ class View:
 
 		if paquete.si_pre_venta():
 			precio_detalles_button.config(bg='#27A221', activebackground='#20801B')
+			self.paquete = paquete
+			self.pos_paquete = pos_paquete
+			self.estoy_en_precio_detalles = True
 			precio_detalles_button.config(command=lambda:self.view_precio_detalles(paquete.get_precio(), paquete.get_senha(), paquete.get_pre_ventas()))
 		else:
 			precio_detalles_button.config(bg='#A6A0A0', activebackground='#A6A0A0')
@@ -1773,6 +1776,10 @@ class View:
 		else:
 			#en caso de editar una pre_venta
 			self.pre_ventas[posicion_pre_venta] = pre_venta
+
+			if self.estoy_en_precio_detalles:
+				self.controller.guardar_paquete_background(self.paquete, self.pos_paquete)
+				self.estoy_en_precio_detalles = False
 
 	def view_show_message(self, success, msj):
 		message = Toplevel(self.parent, bg='#F9F9F9')
