@@ -36,7 +36,7 @@ class Controller:
 
 		for key, value in kwargs.items():
 			if result_encontrando[1] and key == 'content1' and value != '':
-				print('1')
+				#print('1')
 				result_encontrando = self.model.buscar_paquete_por_nombre(value, cantidad_de_filtros, result_encontrando[1])
 				#print(str(result_encontrando[1]))
 			elif result_encontrando[1] and key == 'content2':
@@ -86,6 +86,14 @@ class Controller:
 	def crear_paquete(self, value):
 		self.view.view_crear_paquete(value)
 
+	def editar_paquete(self, frame, paquete, pos_paquete):
+		self.view.view_editar_paquete(frame, paquete, pos_paquete)
+
+	def guardar_paquete_background(self, paquete, pos_paquete):
+		print('Controller: guardando en background...')
+		self.model.guardar_paquete_editado(paquete, pos_paquete)
+
+
 	def guardar_paquete(self, nombre, tipo, sub_tipo, esta_vigente, lista_fecha, precio, senha, incluye, cant_pasajeros, pre_ventas):
 		#print('{}, {}, {}, {}, {}, {}, {}, {}'.format(nombre, tipo, sub_tipo, fecha, esta_vigente, precio, senha, incluye))
 		if len(lista_fecha) > 0:
@@ -111,51 +119,7 @@ class Controller:
 		else:
 			self.view.view_show_message(False, 'Debe introducir una fecha')
 
-	def listar_pre_venta(self, flujo_desde_edicion):
-		self.view.view_listar_pre_venta(flujo_desde_edicion)
-
-	def agregar_pre_venta(self, flujo):
-		self.view.view_agregar_pre_venta(flujo)
-		#self.view.view_agregar_editar_pre_venta(flujo)
-
-	def editar_pre_venta(self, pre_venta, posicion_pre_venta):
-		self.view.view_editar_pre_venta(pre_venta, posicion_pre_venta)
-
-	def guardar_pre_venta(self, precio, senha, monto_cuota, cant_cuotas, fecha_inicio, fecha_fin, frame_pre_venta, posicion_pre_venta, agregando):
-		success = None
-		try:
-			self.model.validar_datos_pre_venta(precio, senha, monto_cuota, cant_cuotas, fecha_inicio, fecha_fin)
-			success = True
-		except Exception as e:
-			success = False
-			self.view.view_show_message(False, e)
-		except ValueError as e:
-			success = False
-			self.view.view_show_message(False, e)
-		else:
-			pre_venta = self.model.crear_pre_venta(precio, senha, monto_cuota, cant_cuotas, fecha_inicio, fecha_fin)
-
-			#print('Controller: posicion_pre_venta: ' + str(posicion_pre_venta))
-			self.view.set_value_pre_venta(pre_venta, posicion_pre_venta, agregando)
-			#SOLO CUANDO SE AGREGA LA PRIMERA PRE VENTA SE DEBERIA DE HACER ESTO
-			
-			self.view.view_show_message(True, 'Pre venta añadida con exito')
-			self.view.widget_destroy(frame_pre_venta)
-			#volvemos a mostras las pre ventas
-			self.view.show_pre_ventas()
-
-	def editar_paquete(self, frame, paquete, pos_paquete, pos_result_busqueda):
-		self.view.view_editar_paquete(frame, paquete, pos_paquete, pos_result_busqueda)
-
-	def guardar_paquete_background(self, paquete, pos_paquete):
-	#def guardar_paquete_background(self, pos_paquete, pos_result_busqueda, nombre, tipo, sub_tipo, esta_vigente, fecha, precio,
-	#															senha, incluye, cant_pasajeros, pre_ventas):
-
-		#paquete = self.model.crear_paquete(nombre, tipo, sub_tipo, esta_vigente, fecha, precio, senha, incluye, cant_pasajeros)
-		#paquete.set_pre_ventas(pre_ventas)
-		self.model.guardar_paquete_editado(paquete, pos_paquete)
-
-	def guardar_paquete_editado(self, pos_paquete, pos_result_busqueda, nombre, tipo, sub_tipo, esta_vigente, fecha, precio,
+	def guardar_paquete_editado(self, pos_paquete, nombre, tipo, sub_tipo, esta_vigente, fecha, precio,
 																senha, incluye, cant_pasajeros, pre_ventas, parent_detalles):
 		success = None
 		try:
@@ -180,15 +144,43 @@ class Controller:
 			print('guardando paquete editado...')
 			self.model.guardar_paquete_editado(paquete, pos_paquete)
 
-			self.view.widget_destroy(parent_detalles)
+			#self.view.widget_destroy(parent_detalles)
 			print('destruyendo paquete detalles (anterior)')
-			self.view.view_paquete_detalles(paquete, pos_paquete, pos_result_busqueda)
+			self.view.view_paquete_detalles(parent_detalles, paquete, pos_paquete)
 			print('reconstruyendo el nuevo paquete detalles')
 
 			#actualizamos el vector resultado de la busqueda
 			#mostramos el vector resultado de la busqueda despues de la edicion
 			#self.view.show_result_busqueda_paquete()
 			self.view.update_buscar_paquete()
+
+	def agregar_pre_venta(self, flujo):
+		self.view.view_agregar_pre_venta(flujo)
+
+	def editar_pre_venta(self, pre_venta, posicion_pre_venta):
+		self.view.view_editar_pre_venta(pre_venta, posicion_pre_venta)
+
+	def guardar_pre_venta(self, precio, senha, monto_cuota, cant_cuotas, fecha_inicio, fecha_fin, frame_pre_venta, posicion_pre_venta, agregando):
+		success = None
+		try:
+			self.model.validar_datos_pre_venta(precio, senha, monto_cuota, cant_cuotas, fecha_inicio, fecha_fin)
+			success = True
+		except Exception as e:
+			success = False
+			self.view.view_show_message(False, e)
+		except ValueError as e:
+			success = False
+			self.view.view_show_message(False, e)
+		else:
+			pre_venta = self.model.crear_pre_venta(precio, senha, monto_cuota, cant_cuotas, fecha_inicio, fecha_fin)
+
+			#print('Controller: posicion_pre_venta: ' + str(posicion_pre_venta))
+			self.view.set_value_pre_venta(pre_venta, posicion_pre_venta, agregando)
+			
+			self.view.view_show_message(True, 'Pre venta añadida con exito')
+			self.view.widget_destroy(frame_pre_venta)
+			#volvemos a mostras las pre ventas
+			self.view.show_pre_ventas()
 
 	def registrar_cliente(self, next_back_starting):
 		self.view.view_registrar_cliente(next_back_starting)
