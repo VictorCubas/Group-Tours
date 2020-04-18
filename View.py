@@ -363,41 +363,41 @@ class View:
 
 		self.switch_frame(frame)
 
-	def set_values_paquetes_posiciones(self):
-		self.paquetes = self.result_busqueda_paquete[0]
-		self.paquetes_posiciones = self.result_busqueda_paquete[1]
+	def set_values_paquetes_posiciones(self, result_busqueda_paquete):
+		self.paquetes = result_busqueda_paquete[0]
+		self.paquetes_posiciones = result_busqueda_paquete[1]
 
 	def buscar_paquete_por_nombre(self, *args):
-		self.result_busqueda_paquete = self.controller.buscar_paquete(content1=self.content_entry.get(), content2=self.radio_variable.get(),
+		result_busqueda_paquete = self.controller.buscar_paquete(content1=self.content_entry.get(), content2=self.radio_variable.get(),
 									content3=self.combobox_anhos.get(), content4=self.combobox_tipos.get(), content5=self.combobox_sub_tipos.get())
-		self.set_values_paquetes_posiciones()
+		self.set_values_paquetes_posiciones(result_busqueda_paquete)
 		self.show_paquetes()
 
 	def buscar_paquete_por_vigencia(self, radio_variable):
-		self.result_busqueda_paquete = self.controller.buscar_paquete(content1=self.content_entry.get(), content2=radio_variable,
+		result_busqueda_paquete = self.controller.buscar_paquete(content1=self.content_entry.get(), content2=radio_variable,
 									content3=self.combobox_anhos.get(), content4=self.combobox_tipos.get(), content5=self.combobox_sub_tipos.get())
-		self.set_values_paquetes_posiciones()
+		self.set_values_paquetes_posiciones(result_busqueda_paquete)
 		self.show_paquetes()
 
 	def buscar_paquete_por_anho(self, *args):
 		self.filtro_anho_value = self.combobox_anhos.get()
-		self.result_busqueda_paquete = self.controller.buscar_paquete(content1=self.content_entry.get(), content2=self.radio_variable.get(),
+		result_busqueda_paquete = self.controller.buscar_paquete(content1=self.content_entry.get(), content2=self.radio_variable.get(),
 									content3=self.combobox_anhos.get(), content4=self.combobox_tipos.get(), content5=self.combobox_sub_tipos.get())
-		self.set_values_paquetes_posiciones()
+		self.set_values_paquetes_posiciones(result_busqueda_paquete)
 		self.show_paquetes()
 
 	def buscar_paquete_por_tipo(self, *args):
 		self.filtro_tipo_value = self.combobox_tipos.get()
-		self.result_busqueda_paquete = self.controller.buscar_paquete(content1=self.content_entry.get(), content2=self.radio_variable.get(),
+		result_busqueda_paquete = self.controller.buscar_paquete(content1=self.content_entry.get(), content2=self.radio_variable.get(),
 									content3=self.combobox_anhos.get(), content4=self.combobox_tipos.get(), content5=self.combobox_sub_tipos.get())
-		self.set_values_paquetes_posiciones()
+		self.set_values_paquetes_posiciones(result_busqueda_paquete)
 		self.show_paquetes()
 
 	def buscar_paquete_por_sub_tipo(self, *args):
 		self.filtro_sub_tipo_value = self.combobox_sub_tipos.get()
-		self.result_busqueda_paquete = self.controller.buscar_paquete(content1=self.content_entry.get(), content2=self.radio_variable.get(),
+		result_busqueda_paquete = self.controller.buscar_paquete(content1=self.content_entry.get(), content2=self.radio_variable.get(),
 									content3=self.combobox_anhos.get(), content4=self.combobox_tipos.get(), content5=self.combobox_sub_tipos.get())
-		self.set_values_paquetes_posiciones()
+		self.set_values_paquetes_posiciones(result_busqueda_paquete)
 		self.show_paquetes()
 
 	def update_buscar_paquete(self):
@@ -405,7 +405,7 @@ class View:
 		self.filtro_tipo_value = self.combobox_tipos.get()
 		self.filtro_sub_tipo_value = self.combobox_sub_tipos.get()
 		#print('content nombre: ' + self.content_entry.get())
-		self.result_busqueda_paquete = self.controller.buscar_paquete(content1=self.content_entry.get(), content2=self.radio_variable.get(),
+		result_busqueda_paquete = self.controller.buscar_paquete(content1=self.content_entry.get(), content2=self.radio_variable.get(),
 									content3=self.combobox_anhos.get(), content4=self.combobox_tipos.get(), content5=self.combobox_sub_tipos.get())
 		self.show_paquetes()
 
@@ -515,20 +515,27 @@ class View:
 			paquete_detalles_view.config(font=('tahoma', 13), bg='#27A221', fg='#FFFFFF', activeforeground='#FFFFFF',
 										activebackground='#20801B', highlightthickness=0, anchor=W)
 			paquete_detalles_view.place(relx=0.7, rely=0.75)
-			paquete_detalles_view.config(command=lambda paquete=paquete, pos_paquete=pos_paquete:self.view_paquete_detalles(paquete, pos_paquete))
+			paquete_detalles_view.config(command=lambda paquete=paquete, pos_paquete=pos_paquete:self.view_paquete_detalles_toplevel(None, paquete, pos_paquete))
 			#print(paquete_name_view.config("text")[-1])
 			#print(paquete_detalles_view.config("text")[-1])
 
 			self.view_result_busqueda_paquete.append(paquete_view)
 
-	def view_paquete_detalles(self, paquete, pos_paquete):
+	def view_paquete_detalles_toplevel(self, frame, paquete, pos_paquete):
 		print('viendo detalles')
-		self.parent_detalles = Toplevel(self.parent, bg='#F9F9F9', relief=GROOVE, borderwidth=0)
-		self.parent_detalles.title('Paquete Detalles')
-		self.parent_detalles.geometry('1000x800+450+100')
-		self.parent_detalles.resizable(width=False, height=False)
+		self.paquete_detalles_top_level = Toplevel(self.parent, bg='#F9F9F9', relief=GROOVE, borderwidth=0)
+		self.paquete_detalles_top_level.geometry('1000x800+450+100')
+		self.paquete_detalles_top_level.resizable(width=False, height=False)
+		self.view_paquete_detalles(frame, paquete, pos_paquete)
 
-		frame_detalles = Frame(self.parent_detalles, width='1000', height='900', bg='#F9F9F9', relief=GROOVE, borderwidth=0)
+	def view_paquete_detalles(self, frame_detalles, paquete, pos_paquete):
+		print('viendo detalles')
+		self.paquete_detalles_top_level.title('Paquete Detalles')
+
+		if frame_detalles is not None:
+			self.widget_destroy(frame_detalles)
+
+		frame_detalles = Frame(self.paquete_detalles_top_level, width='1000', height='900', bg='#F9F9F9', relief=GROOVE, borderwidth=0)
 		frame_detalles.pack()
 		frame_detalles.pack_propagate(0)
 		paquete_name_label = Label(frame_detalles, text=paquete.get_nombre(), width='20', height='2', relief=GROOVE, borderwidth=0)
@@ -717,7 +724,7 @@ class View:
 		#********************************************************
 		#				CONFIGURAMOS LOS EVENTOS				*
 		#********************************************************
-		salir_button.config(command=lambda:self.widget_destroy(self.parent_detalles))
+		salir_button.config(command=lambda:self.widget_destroy(self.paquete_detalles_top_level))
 		editar_button.config(command=lambda:self.controller.editar_paquete(frame_detalles, paquete, pos_paquete))
 		#editar_button.config(command=lambda:self.widget_destroy(frame_detalles))
 
@@ -790,14 +797,16 @@ class View:
 		ok_button.place(relx=0.39, rely=0.85)
 		ok_button.config(command=lambda:self.widget_destroy(precio_parent))
 
-	def view_editar_paquete(self, frame, paquete, pos_paquete):
+	def view_editar_paquete(self, frame_editar_paquete, paquete, pos_paquete):
 		print('editando paquete...')
+		self.paquete_detalles_top_level.title('Editar paquete')
 		#DEFINIMOS EL FRAME 
+		self.widget_destroy(frame_editar_paquete)
 
 		self.frame_pre_venta = None
-		frame_detalles = Frame(self.parent_detalles, width='1000', height='900', bg='#F9F9F9', relief=GROOVE, borderwidth=0)
-		frame_detalles.place(relx=0, rely=0)
-		#frame.pack()
+		frame_detalles = Frame(self.paquete_detalles_top_level, width='1000', height='900', bg='#F9F9F9', relief=GROOVE, borderwidth=0)
+		#frame_detalles.place(relx=0, rely=0)
+		frame_detalles.pack()
 		frame_detalles.pack_propagate(0)
 
 		#********************************************************
@@ -915,9 +924,9 @@ class View:
 		pre_venta_button.place(relx=0.17, rely=0.432)
 
 		width='480'
-		height='250'
+		height='270'
 		relx=0.02
-		rely=0.47
+		rely=0.485
 
 		self.view_result_pre_ventas = []
 		self.building_frame_where_to_show_lista_pre_venta(frame_detalles, width, height, relx, rely)
@@ -961,12 +970,12 @@ class View:
 		save_button = Button(frame_detalles, text='Guardar', width=110, height=30, relief=GROOVE, borderwidth=0)
 		save_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#343535')
 		save_button.config(image=self.imagenes['save_icon'], compound=LEFT)
-		save_button.place(relx=0.5, rely=0.75)
+		save_button.place(relx=0.5, rely=0.85)
 
 		cancel_button = Button(frame_detalles, text='Salir', width=110, height=30, relief=GROOVE, borderwidth=0)
 		cancel_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#343535')
 		cancel_button.config(image=self.imagenes['not_ok_icon'], compound=LEFT)
-		cancel_button.place(relx=0.34, rely=0.75)
+		cancel_button.place(relx=0.34, rely=0.85)
 		#********************************************************
 
 		#********************************************************
@@ -984,10 +993,10 @@ class View:
 
 		save_button.config(command=lambda:self.controller.guardar_paquete_editado(pos_paquete, name_content_entry.get(),
 				combobox_tipos.get(), combobox_sub_tipos.get(), combobox_vigencia.get(), self.fecha_de_viaje, self.price_value, self.senha_value,
-				incluye_text_widget.get(1.0, END), cant_pasajeros_content_entry.get(), self.pre_ventas, self.parent_detalles))
+				incluye_text_widget.get(1.0, END), cant_pasajeros_content_entry.get(), self.pre_ventas, frame_detalles))
 
-		cancel_button.config(command=lambda:self.widget_destroy(frame_detalles))
-
+		cancel_button.config(command=lambda:self.view_paquete_detalles(frame_detalles, paquete, pos_paquete))
+		
 	def building_frame_where_to_show_lista_pre_venta(self, frame_container, width, height, relx, rely):
 		#crearmos una seccion para mostrar la lista de pre ventas que se van creando
 		#creamos un frame, un canvas y un scrollbar para luego conectarlos
