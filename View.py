@@ -121,9 +121,11 @@ class View:
 		#				CREAMOS TODOS LOS BOTONES				*
 		#********************************************************
 		frame_bottom = Frame(frame, width='850', height='180', bg='#66CDFC', relief=GROOVE, borderwidth=0)
-		button_buscar_paquete = Button(frame_bottom, text='Buscar Paquete', font=('tahoma', 11), bg='#66CDFC', width='100', height='100', highlightthickness=0, borderwidth=0)
+		button_buscar_paquete = Button(frame_bottom, text='Buscar Paquete', font=('tahoma', 11),
+									bg='#66CDFC', width='100', height='100', highlightthickness=0, borderwidth=0)
 		button_buscar_paquete.config(activebackground='#48C2FA')
-		button_buscar_usuario = Button(frame_bottom, text='Buscar Usuario', font=('tahoma', 11), bg='#66CDFC', width='100', height='100', highlightthickness=0, borderwidth=0)
+		button_buscar_usuario = Button(frame_bottom, text='Buscar Usuario', font=('tahoma', 11),
+									bg='#66CDFC', width='100', height='100', highlightthickness=0, borderwidth=0)
 		button_buscar_usuario.config(activebackground='#48C2FA')
 
 		#********************************************************
@@ -196,7 +198,6 @@ class View:
 		#********************************************************
 		button_search.config(command=lambda:self.view_buscar_paquete(True))
 		button_siguiente.config(command=lambda:self.pop_pila_siguiente())
-		#button_create.config(command=lambda:self.view_crear_paquete(True))
 		button_create.config(command=lambda:self.controller.crear_paquete(True))
 
 		#********************************************************
@@ -358,37 +359,46 @@ class View:
 
 		#REPONEMOS EL ESTADO DE LA BUSQUEDA EN CASO DE SE VUELVA ATRAS O ADELANTE CON LOS BOTONES
 		if next_back_starting == False:
-			self.show_result_busqueda_paquete()
+			self.show_paquetes()
 
 		self.switch_frame(frame)
+
+	def set_values_paquetes_posiciones(self):
+		self.paquetes = self.result_busqueda_paquete[0]
+		self.paquetes_posiciones = self.result_busqueda_paquete[1]
 
 	def buscar_paquete_por_nombre(self, *args):
 		self.result_busqueda_paquete = self.controller.buscar_paquete(content1=self.content_entry.get(), content2=self.radio_variable.get(),
 									content3=self.combobox_anhos.get(), content4=self.combobox_tipos.get(), content5=self.combobox_sub_tipos.get())
-		self.show_result_busqueda_paquete()
+		self.set_values_paquetes_posiciones()
+		self.show_paquetes()
 
 	def buscar_paquete_por_vigencia(self, radio_variable):
 		self.result_busqueda_paquete = self.controller.buscar_paquete(content1=self.content_entry.get(), content2=radio_variable,
 									content3=self.combobox_anhos.get(), content4=self.combobox_tipos.get(), content5=self.combobox_sub_tipos.get())
-		self.show_result_busqueda_paquete()
+		self.set_values_paquetes_posiciones()
+		self.show_paquetes()
 
 	def buscar_paquete_por_anho(self, *args):
 		self.filtro_anho_value = self.combobox_anhos.get()
 		self.result_busqueda_paquete = self.controller.buscar_paquete(content1=self.content_entry.get(), content2=self.radio_variable.get(),
 									content3=self.combobox_anhos.get(), content4=self.combobox_tipos.get(), content5=self.combobox_sub_tipos.get())
-		self.show_result_busqueda_paquete()
+		self.set_values_paquetes_posiciones()
+		self.show_paquetes()
 
 	def buscar_paquete_por_tipo(self, *args):
 		self.filtro_tipo_value = self.combobox_tipos.get()
 		self.result_busqueda_paquete = self.controller.buscar_paquete(content1=self.content_entry.get(), content2=self.radio_variable.get(),
 									content3=self.combobox_anhos.get(), content4=self.combobox_tipos.get(), content5=self.combobox_sub_tipos.get())
-		self.show_result_busqueda_paquete()
+		self.set_values_paquetes_posiciones()
+		self.show_paquetes()
 
 	def buscar_paquete_por_sub_tipo(self, *args):
 		self.filtro_sub_tipo_value = self.combobox_sub_tipos.get()
 		self.result_busqueda_paquete = self.controller.buscar_paquete(content1=self.content_entry.get(), content2=self.radio_variable.get(),
 									content3=self.combobox_anhos.get(), content4=self.combobox_tipos.get(), content5=self.combobox_sub_tipos.get())
-		self.show_result_busqueda_paquete()
+		self.set_values_paquetes_posiciones()
+		self.show_paquetes()
 
 	def update_buscar_paquete(self):
 		self.filtro_anho_value = self.combobox_anhos.get()
@@ -397,7 +407,7 @@ class View:
 		#print('content nombre: ' + self.content_entry.get())
 		self.result_busqueda_paquete = self.controller.buscar_paquete(content1=self.content_entry.get(), content2=self.radio_variable.get(),
 									content3=self.combobox_anhos.get(), content4=self.combobox_tipos.get(), content5=self.combobox_sub_tipos.get())
-		self.show_result_busqueda_paquete()
+		self.show_paquetes()
 
 	def on_frame_configure(self, event=None):
 	    self.canvas.configure(scrollregion=self.canvas.bbox("all"))
@@ -405,7 +415,7 @@ class View:
 	def on_frame_pre_venta_configure(self, event=None):
 	    self.canvas_pre_ventas.configure(scrollregion=self.canvas_pre_ventas.bbox("all"))
 
-	def show_result_busqueda_paquete(self):
+	def show_paquetes(self):
 		paquete_view = None
 
 		#eliminamos los resultados anteriores a la busqueda actual (si elminamos la lista anterior tambien se elimina la lista actual, por ref)
@@ -421,101 +431,97 @@ class View:
 		#aplicamos los nuevos resultados de la busqueda
 		paquete_view = None
 		#print(str(len(self.result_busqueda_paquete[0])))
-		if len(self.result_busqueda_paquete[0]) != 0:
-			pos_result_busqueda = -1
-			aux = -1
-			for paquete in self.result_busqueda_paquete[0]:
-				pos_result_busqueda += 1
-				aux += 1
+		aux = -1
+		for paquete in self.paquetes:
+			aux += 1
 
-				paquete_view = Frame(self.frame_result_aux, bg='#F9F9F9', width='770', height='150', relief=GROOVE, borderwidth=0)
-				paquete_view.pack(padx=10, pady=5)
+			paquete_view = Frame(self.frame_result_aux, bg='#F9F9F9', width='770', height='150', relief=GROOVE, borderwidth=0)
+			paquete_view.pack(padx=10, pady=5)
 
-				paquete_name_view = Label(paquete_view, text=paquete.get_nombre(), width='20', height='1', relief=GROOVE, borderwidth=0)
-				paquete_name_view.config(font=('tahoma', 15, 'bold'), bg='#F9F9F9', fg='#343535',
-												activeforeground='#343535', anchor=W) #posicionamos el texto a la izquierda
-				paquete_name_view.place(relx=0.315, rely=0.05)
+			paquete_name_view = Label(paquete_view, text=paquete.get_nombre(), width='20', height='1', relief=GROOVE, borderwidth=0)
+			paquete_name_view.config(font=('tahoma', 15, 'bold'), bg='#F9F9F9', fg='#343535',
+											activeforeground='#343535', anchor=W) #posicionamos el texto a la izquierda
+			paquete_name_view.place(relx=0.315, rely=0.05)
 
-				#fecha view
-				date = paquete.get_fecha_de_viaje()
-				texto = self.convert_date_to_string(date)
+			#fecha view
+			date = paquete.get_fecha_de_viaje()
+			texto = self.convert_date_to_string(date)
 
-				paquete_fecha_de_viaje_view = Button(paquete_view, text=texto, width='21', height='1', relief=GROOVE, borderwidth=0)
-				paquete_fecha_de_viaje_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030',
-										activeforeground='#2F3030', highlightthickness=0, anchor=W)
-				paquete_fecha_de_viaje_view.place(relx=0.3, rely=0.25)
+			paquete_fecha_de_viaje_view = Button(paquete_view, text=texto, width='21', height='1', relief=GROOVE, borderwidth=0)
+			paquete_fecha_de_viaje_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030',
+									activeforeground='#2F3030', highlightthickness=0, anchor=W)
+			paquete_fecha_de_viaje_view.place(relx=0.3, rely=0.25)
 
-				#vigente view
-				texto = 'Vigente'
-				if paquete.get_esta_vigente() == False:
-					texto = 'No vigente'
+			#vigente view
+			texto = 'Vigente'
+			if paquete.get_esta_vigente() == False:
+				texto = 'No vigente'
 
-				paquete_fecha_de_viaje_view = Button(paquete_view, text=texto, width='21', height='1', relief=GROOVE, borderwidth=0)
-				paquete_fecha_de_viaje_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030',
+			paquete_fecha_de_viaje_view = Button(paquete_view, text=texto, width='21', height='1', relief=GROOVE, borderwidth=0)
+			paquete_fecha_de_viaje_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030',
+											activeforeground='#2F3030', highlightthickness=0, anchor=W)
+			paquete_fecha_de_viaje_view.place(relx=0.3, rely=0.50)
+
+			texto = 'Tipo: ' + paquete.TRASLADO
+			paquete_fecha_de_viaje_view = Button(paquete_view, text=texto, width='21', height='1', relief=GROOVE, borderwidth=0)
+			paquete_fecha_de_viaje_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030',
 												activeforeground='#2F3030', highlightthickness=0, anchor=W)
-				paquete_fecha_de_viaje_view.place(relx=0.3, rely=0.50)
+			paquete_fecha_de_viaje_view.place(relx=0.3, rely=0.75)
 
-				texto = 'Tipo: ' + paquete.TRASLADO
-				paquete_fecha_de_viaje_view = Button(paquete_view, text=texto, width='21', height='1', relief=GROOVE, borderwidth=0)
-				paquete_fecha_de_viaje_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030',
-													activeforeground='#2F3030', highlightthickness=0, anchor=W)
-				paquete_fecha_de_viaje_view.place(relx=0.3, rely=0.75)
+			#SEGUNDA CULUMNA
+			#precio view
+			texto = ''
 
-				#SEGUNDA CULUMNA
-				#precio view
-				texto = ''
+			if paquete.si_pre_venta():
+				texto = self.convert_amount_to_string(paquete.get_precio_pre_venta(), True)
+			else:
+				texto = self.convert_amount_to_string(paquete.get_precio(), True)
 
-				if paquete.si_pre_venta():
-					texto = self.convert_amount_to_string(paquete.get_precio_pre_venta(), True)
-				else:
-					texto = self.convert_amount_to_string(paquete.get_precio(), True)
+			paquete_precio_view = Button(paquete_view, text=texto, width='18', height='1', relief=GROOVE, borderwidth=0)
+			paquete_precio_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
+			paquete_precio_view.place(relx=0.7, rely=0)
 
-				paquete_precio_view = Button(paquete_view, text=texto, width='18', height='1', relief=GROOVE, borderwidth=0)
-				paquete_precio_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
-				paquete_precio_view.place(relx=0.7, rely=0)
+			#pre venta view
+			if paquete.si_pre_venta():
+				texto = 'Pre venta: si'
+			else:
+				texto = 'Pre venta: no'
 
-				#pre venta view
-				if paquete.si_pre_venta():
-					texto = 'Pre venta: si'
-				else:
-					texto = 'Pre venta: no'
+			paquete_pre_venta_view = Button(paquete_view, text=texto, width='18', height='1', relief=GROOVE, borderwidth=0)
+			paquete_pre_venta_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
+			paquete_pre_venta_view.place(relx=0.7, rely=0.25)
 
-				paquete_pre_venta_view = Button(paquete_view, text=texto, width='18', height='1', relief=GROOVE, borderwidth=0)
-				paquete_pre_venta_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
-				paquete_pre_venta_view.place(relx=0.7, rely=0.25)
+			#lugares disponibles view
+			texto = 'Lugares disponible: '
+			lugares_disponibles = paquete.get_lugares_disponibles()
+			color = '#2F3030'
+			if lugares_disponibles > 0:
+				texto = texto + str(lugares_disponibles)
+			elif lugares_disponibles == 0:
+				texto = 'SOLD OUT'
+				color = '#E60700'
+			else:
+				texto = texto + '--'
 
-				#lugares disponibles view
-				texto = 'Lugares disponible: '
-				lugares_disponibles = paquete.get_lugares_disponibles()
-				color = '#2F3030'
-				if lugares_disponibles > 0:
-					texto = texto + str(lugares_disponibles)
-				elif lugares_disponibles == 0:
-					texto = 'SOLD OUT'
-					color = '#E60700'
-				else:
-					texto = texto + '--'
+			paquete_pre_venta_view = Button(paquete_view, text=texto, width='18', height='1', relief=GROOVE, borderwidth=0)
+			paquete_pre_venta_view.config(font=('tahoma', 13), bg='#F9F9F9', fg=color, activeforeground=color, highlightthickness=0, anchor=W)
+			paquete_pre_venta_view.place(relx=0.7, rely=0.5)
 
-				paquete_pre_venta_view = Button(paquete_view, text=texto, width='18', height='1', relief=GROOVE, borderwidth=0)
-				paquete_pre_venta_view.config(font=('tahoma', 13), bg='#F9F9F9', fg=color, activeforeground=color, highlightthickness=0, anchor=W)
-				paquete_pre_venta_view.place(relx=0.7, rely=0.5)
+			pos_paquete = self.paquetes_posiciones[aux]
 
-				pos_paquete = self.result_busqueda_paquete[1][aux]
+			#detalles view
+			texto = 'Ver detalles      >'
+			paquete_detalles_view = Button(paquete_view, text=texto, width='18', height='1', relief=GROOVE, borderwidth=0)
+			paquete_detalles_view.config(font=('tahoma', 13), bg='#27A221', fg='#FFFFFF', activeforeground='#FFFFFF',
+										activebackground='#20801B', highlightthickness=0, anchor=W)
+			paquete_detalles_view.place(relx=0.7, rely=0.75)
+			paquete_detalles_view.config(command=lambda paquete=paquete, pos_paquete=pos_paquete:self.view_paquete_detalles(paquete, pos_paquete))
+			#print(paquete_name_view.config("text")[-1])
+			#print(paquete_detalles_view.config("text")[-1])
 
-				#detalles view
-				texto = 'Ver detalles      >'
-				paquete_detalles_view = Button(paquete_view, text=texto, width='18', height='1', relief=GROOVE, borderwidth=0)
-				paquete_detalles_view.config(font=('tahoma', 13), bg='#27A221', fg='#FFFFFF', activeforeground='#FFFFFF',
-											activebackground='#20801B', highlightthickness=0, anchor=W)
-				paquete_detalles_view.place(relx=0.7, rely=0.75)
-				paquete_detalles_view.config(command=lambda paquete=paquete, pos_paquete=pos_paquete,
-						pos_result_busqueda=pos_result_busqueda:self.view_paquete_detalles(paquete, pos_paquete, pos_result_busqueda))
-				#print(paquete_name_view.config("text")[-1])
-				#print(paquete_detalles_view.config("text")[-1])
+			self.view_result_busqueda_paquete.append(paquete_view)
 
-				self.view_result_busqueda_paquete.append(paquete_view)
-
-	def view_paquete_detalles(self, paquete, pos_paquete, pos_result_busqueda):
+	def view_paquete_detalles(self, paquete, pos_paquete):
 		print('viendo detalles')
 		self.parent_detalles = Toplevel(self.parent, bg='#F9F9F9', relief=GROOVE, borderwidth=0)
 		self.parent_detalles.title('Paquete Detalles')
@@ -712,7 +718,7 @@ class View:
 		#				CONFIGURAMOS LOS EVENTOS				*
 		#********************************************************
 		salir_button.config(command=lambda:self.widget_destroy(self.parent_detalles))
-		editar_button.config(command=lambda:self.controller.editar_paquete(frame_detalles, paquete, pos_paquete, pos_result_busqueda))
+		editar_button.config(command=lambda:self.controller.editar_paquete(frame_detalles, paquete, pos_paquete))
 		#editar_button.config(command=lambda:self.widget_destroy(frame_detalles))
 
 	def view_precio_detalles(self, precio, senha, pre_ventas):
@@ -784,7 +790,7 @@ class View:
 		ok_button.place(relx=0.39, rely=0.85)
 		ok_button.config(command=lambda:self.widget_destroy(precio_parent))
 
-	def view_editar_paquete(self, frame, paquete, pos_paquete, pos_result_busqueda):
+	def view_editar_paquete(self, frame, paquete, pos_paquete):
 		print('editando paquete...')
 		#DEFINIMOS EL FRAME 
 
@@ -976,7 +982,7 @@ class View:
 		agregando = True
 		pre_venta_button.config(command=lambda:self.controller.agregar_pre_venta(agregando))
 
-		save_button.config(command=lambda:self.controller.guardar_paquete_editado(pos_paquete, pos_result_busqueda, name_content_entry.get(),
+		save_button.config(command=lambda:self.controller.guardar_paquete_editado(pos_paquete, name_content_entry.get(),
 				combobox_tipos.get(), combobox_sub_tipos.get(), combobox_vigencia.get(), self.fecha_de_viaje, self.price_value, self.senha_value,
 				incluye_text_widget.get(1.0, END), cant_pasajeros_content_entry.get(), self.pre_ventas, self.parent_detalles))
 
@@ -1127,7 +1133,7 @@ class View:
 		cancel_button.config(command=lambda:self.widget_destroy(self.toplevel_pre_venta))
 
 	def view_agregar_pre_venta(self, flujo):
-		print('Agregando primera pre venta...')
+		print('Agregando pre venta...')
 		self.toplevel_pre_venta = Toplevel(self.parent, bg='#F9F9F9', relief=GROOVE, borderwidth=0)
 		self.toplevel_pre_venta.title('Pre Venta')
 		#frame.tittle('Pre Venta')
@@ -1768,7 +1774,6 @@ class View:
 		self.monto_cuota_content_entry.set(texto)
 	
 	def set_value_pre_venta(self, pre_venta, posicion_pre_venta, agregando):
-		#if posicion_pre_venta is not None:
 		if agregando:
 			#en caso de que se este agregando una pre_venta y el paquete no tenga ninguna pre_venta todavia
 			self.pre_ventas.append(pre_venta)
