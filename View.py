@@ -25,14 +25,13 @@ class View:
 		self.parent.title('Group Tours')
 		self.parent.geometry('1300x800+300+80')
 		self.parent.resizable(width=False, height=False)
-		#self.parent.configure(background='white')
+		#self.parent.iconbitmap('imagenes/inicio.png')
+		self.parent.iconphoto(False, PhotoImage(file='imagenes/group_tours.png'))
 
 		self.main_frame = Frame(self.parent, width='1300', height='800', bg='#F9F9F9')
 		self.main_frame.pack_propagate(0)
 		self.left_frame = Frame(self.main_frame, width='365', height='400', bg='#F9F9F9', relief=GROOVE, borderwidth=0)
 		self.right_frame = None
-		#self.right_frame = Frame(self.main_frame, width='900', height='700', bg='#F9F9F9', relief=GROOVE, borderwidth=0)
-		#self.right_frame.pack_propagate(0)
 
 		self.anterior = 'inicio'
 		self.buttons = {'inicio': Button(self.left_frame, text=' Inicio', font=('tahoma', 17), bg='#F9F9F9', width='300', height='90'),
