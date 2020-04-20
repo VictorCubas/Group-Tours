@@ -96,36 +96,34 @@ class Controller:
 		return self.model.es_la_pre_venta_actual(pre_venta)
 
 	def guardar_paquete(self, nombre, tipo, sub_tipo, esta_vigente, lista_fecha, precio, senha, incluye, cant_pasajeros, pre_ventas, frame_agregar_paquete):
-		#print('{}, {}, {}, {}, {}, {}, {}, {}'.format(nombre, tipo, sub_tipo, fecha, esta_vigente, precio, senha, incluye))
-		if len(lista_fecha) > 0:
-			try:
-				self.model.validar_datos_paquete(nombre, tipo, sub_tipo, esta_vigente, lista_fecha[0], precio, senha, incluye, cant_pasajeros)
-			except NombreException as e:
-				self.view.view_show_message(False, e)
-			except Exception as e:
-				self.view.view_show_message(False, e)
-			except ValueError as e:
-				self.view.view_show_message(False, e)
-			else:
-				for fecha in lista_fecha:
-					paquete = self.model.crear_paquete(nombre, tipo, sub_tipo, esta_vigente, fecha, precio, senha, incluye, cant_pasajeros)
-
-					if len(pre_ventas) is not 0:
-						paquete.set_pre_ventas(pre_ventas)
-
-					self.model.guardar_paquete(paquete)
-
-				self.view.view_show_message(True, 'Se ha guardado con exito')
-				self.view.widget_destroy(frame_agregar_paquete)
-				self.view.update_buscar_paquete()
+		try:
+			self.model.validar_datos_paquete(nombre, tipo, sub_tipo, esta_vigente, lista_fecha, precio, senha, incluye, cant_pasajeros, True)
+		except NombreException as e:
+			self.view.view_show_message(False, e)
+		except Exception as e:
+			self.view.view_show_message(False, e)
+		except ValueError as e:
+			self.view.view_show_message(False, e)
 		else:
+			for fecha in lista_fecha:
+				paquete = self.model.crear_paquete(nombre, tipo, sub_tipo, esta_vigente, fecha, precio, senha, incluye, cant_pasajeros)
+
+				if len(pre_ventas) is not 0:
+					paquete.set_pre_ventas(pre_ventas)
+
+				self.model.guardar_paquete(paquete)
+
+			self.view.view_show_message(True, 'Se ha guardado con exito')
+			self.view.widget_destroy(frame_agregar_paquete)
+			self.view.update_buscar_paquete()
+		#else:
 			self.view.view_show_message(False, 'Debe introducir una fecha')
 
 	def guardar_paquete_editado(self, pos_paquete, nombre, tipo, sub_tipo, esta_vigente, fecha, precio,
 								senha, incluye, cant_pasajeros, pre_ventas, parent_detalles):
 		success = None
 		try:
-			self.model.validar_datos_paquete(nombre, tipo, sub_tipo, esta_vigente, fecha, precio, senha, incluye, cant_pasajeros)
+			self.model.validar_datos_paquete(nombre, tipo, sub_tipo, esta_vigente, fecha, precio, senha, incluye, cant_pasajeros, False)
 			success = True
 		except NombreException as e:
 			success = False
