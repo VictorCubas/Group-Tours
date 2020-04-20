@@ -340,7 +340,7 @@ class Model:
 
 		return lista_anhos
 
-	def validar_datos_paquete(self, nombre, tipo, sub_tipo, esta_vigente, fecha, precio, senha, incluye, cant_pasajeros):
+	def validar_datos_paquete(self, nombre, tipo, sub_tipo, esta_vigente, fecha, precio, senha, incluye, cant_pasajeros, banderita):
 		print('validando...')
 
 		try:
@@ -356,8 +356,15 @@ class Model:
 			if esta_vigente == '':
 				raise Exception('Vigencia incorrecto')
 
-			if fecha is None and tipo == 'Terrestre' and sub_tipo == 'Estandar':
-				raise Exception('Fecha incorrecta')
+			if banderita:
+				if len(fecha) == 0:
+					raise Exception('Debe introducir una fecha')
+			else:
+				if fecha == None:
+					raise Exception('Debe introducir una fecha')
+
+			if precio == None or senha == None:
+				raise Exception('Debes completar todos los campos')
 
 			if precio == '':
 				raise Exception('Precio incorrecto')
