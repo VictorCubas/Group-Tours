@@ -319,6 +319,16 @@ class Model:
 			return paquetes
 		return
 
+	def	es_la_pre_venta_actual(self, pre_venta):
+		fecha_hoy = datetime.date.today()
+		fecha_inicio = pre_venta.get_fecha_inicio()
+		fecha_fin = pre_venta.get_fecha_fin()
+	
+		if fecha_hoy >= fecha_inicio and fecha_hoy <= fecha_fin:
+			return True
+
+		return False
+
 	def generar_lista_anhos(self):
 		date = datetime.date.today()
 
