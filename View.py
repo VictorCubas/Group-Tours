@@ -27,6 +27,7 @@ class View:
 		self.parent.resizable(width=False, height=False)
 		#self.parent.iconbitmap('imagenes/inicio.png')
 		self.parent.iconphoto(False, PhotoImage(file='imagenes/group_tours.png'))
+		#self.parent.winfo_name('Group Tours')
 
 		self.main_frame = Frame(self.parent, width='1300', height='800', bg='#F9F9F9')
 		self.main_frame.pack_propagate(0)
@@ -157,61 +158,7 @@ class View:
 		self.set_button_bold('paquetes')
 		self.anterior = 'paquetes'
 
-		if next_back_starting:
-			self.pila_anterior = []
-			self.pila_siguiente = []
-
-		#********************************************************
-		#				CREAMOS TODOS LOS BOTONES				*
-		#********************************************************
-		frame = Frame(self.main_frame, width='900', height='700', bg='#F9F9F9', relief=GROOVE, borderwidth=2)
-
-		button_anterior = Button(frame, width='33', height='30', relief=GROOVE, borderwidth=0)
-		button_anterior.config(bg='#F9F9F9', activebackground='#F9F9F9', highlightthickness=0)
-
-		button_siguiente = Button(frame, width='33', height='30', relief=GROOVE, borderwidth=0)
-		button_siguiente.config(bg='#F9F9F9', activebackground='#F9F9F9', highlightthickness=0)
-
-		button_search = Button(frame, text=' Buscar paquete', font=('tahoma', 15), bg='#F9F9F9', width='390', height='90', highlightthickness=0, borderwidth=2)
-		button_search.config(anchor=W)  #posicionamos el texto a la izquierda
-		button_search.config(fg='#48C2FA', activeforeground='#48C2FA')
-
-		button_create = Button(frame, text=' Registrar nuevo paquete', font=('tahoma', 15), bg='#F9F9F9', width='390', height='90', highlightthickness=0, borderwidth=2)
-		button_create.config(anchor=W)  #posicionamos el texto a la izquierda
-		button_create.config(fg='#48C2FA', activeforeground='#48C2FA')
-
-		#********************************************************
-		#			AGREGAMOS ICONOS A LOS BOTONES				*
-		#********************************************************
-		button_anterior.config(image=self.imagenes['back_not_available_icon'], compound=CENTER)
-		if len(self.pila_siguiente) == 0:
-			button_siguiente.config(image=self.imagenes['next_not_available_icon'], compound=CENTER)
-		else:
-			button_siguiente.config(image=self.imagenes['next_available_icon'], compound=CENTER)
-
-		button_search.config(image=self.imagenes['lupa_icon'], compound=LEFT)
-		button_create.config(image=self.imagenes['lupa_icon'], compound=LEFT)
-
-		#********************************************************
-		#				CONFIGURAMOS LOS EVENTOS				*
-		#********************************************************
-		button_search.config(command=lambda:self.view_buscar_paquete(True))
-		button_siguiente.config(command=lambda:self.pop_pila_siguiente())
-		button_create.config(command=lambda:self.controller.crear_paquete(True))
-
-		#********************************************************
-		#				PACK A TODOS LOS BOTONES				*
-		#********************************************************
-		#button_search.pack(side='left', padx=20, pady=20, anchor=NW)
-		#button_create.pack(side='right', padx=100, pady=20, anchor=NE)
-		button_anterior.place(relx=0.025, rely=0.00155)
-		button_siguiente.place(relx=0.08, rely=0)
-		button_create.place(relx=0.028, rely=0.06, anchor=NW)
-		button_search.place(relx=0.978,rely=0.06, anchor=NE)
-		frame.pack(padx=20, pady=50, anchor=NE)
-		frame.pack_propagate(0)
-
-		self.switch_frame(frame)
+		self.view_buscar_paquete(True)
 
 	def view_buscar_paquete(self, next_back_starting):
 		self.set_button_bold('paquetes')
@@ -254,12 +201,12 @@ class View:
 			button_siguiente.config(image=self.imagenes['next_available_icon'], compound=CENTER)
 		#********************************************************
 
-		label_nombre_paquete = Label(frame, text='Nombre/Destino:', font=('tahoma', 15), width=14, height=1, bg='#F9F9F9')
+		label_nombre_paquete = Label(frame, text='Nombre/Destino:', font=('tahoma', 14, 'bold'), width=14, height=1, bg='#F9F9F9')
 		label_nombre_paquete.config(fg='#48C2FA')
 		#declaramos una entreada para ingresar los datos
 		entry = Entry(frame, width='15', font=('tahoma', 15), textvariable=self.content_entry)
 		#insertamos RADIO BUTTON para la busqueda por vigencia
-		label_radio_button = Label(frame, text='Vigente', font=('tahoma', 15), width=7, height=3, relief=GROOVE, borderwidth=0)
+		label_radio_button = Label(frame, text='Vigente', font=('tahoma', 14, 'bold'), width=7, height=3, relief=GROOVE, borderwidth=0)
 		label_radio_button.config(bg='#F9F9F9', fg='#48C2FA')
 
 		radio_button_si = Radiobutton(frame, text='Si', font=('tahoma', 15), variable=self.radio_variable, value='si', width=2, height=2)
@@ -270,7 +217,7 @@ class View:
 		radio_button_ninguno.config(bg='#F9F9F9', activebackground='#F9F9F9', highlightthickness=0)
 
 		#insertamos un COMBOBOX para la busqueda por anho
-		label_anho = Label(frame, text='Año', font=('tahoma', 15), width=4, height=2, relief=GROOVE, borderwidth=0)
+		label_anho = Label(frame, text='Año', font=('tahoma', 14, 'bold'), width=4, height=2, relief=GROOVE, borderwidth=0)
 		label_anho.config(bg='#F9F9F9', fg='#48C2FA', highlightthickness=0)
 
 		lista_anhos = self.controller.generar_lista_anhos()
@@ -283,7 +230,7 @@ class View:
 		self.combobox_anhos.config(state='readonly', font=(15), width='7', height='6', background='#F9F9F9')
 
 		#insertamos un MENUBUTTON para la busqueda por tipo
-		label_tipo_paquete = Label(frame, text='Tipo', font=('tahoma', 15), width='4', height='2', relief=GROOVE, borderwidth=0)
+		label_tipo_paquete = Label(frame, text='Tipo', font=('tahoma', 14, 'bold'), width='4', height='2', relief=GROOVE, borderwidth=0)
 		label_tipo_paquete.config(bg='#F9F9F9', fg='#48C2FA')
 
 		#insertamos un COMBOBOX para la busqueda por tipo
@@ -301,6 +248,12 @@ class View:
 			self.combobox_sub_tipos.set(self.filtro_sub_tipo_value)
 
 		self.combobox_sub_tipos.config(state='readonly', font=(15), width='11', height='6', background='#F9F9F9')
+
+		#agregar paquete view
+		agregar_paquete_button = Button(frame, text='Agregar un paquete', width='210', height='27', relief=GROOVE, borderwidth=0)
+		agregar_paquete_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#27A221', activeforeground='#27A221', highlightthickness=0, anchor=W)
+
+		agregar_paquete_button.config(image=self.imagenes['add_icon'], compound=LEFT)
 
 		#mostramos los RESULTADOS DE LA BUSQUEDA
 		#creamos un frame, un canvas y un scrollbar para luego conectarlos
@@ -336,23 +289,28 @@ class View:
 		self.combobox_anhos.bind("<<ComboboxSelected>>", self.buscar_paquete_por_anho)
 		self.combobox_tipos.bind("<<ComboboxSelected>>", self.buscar_paquete_por_tipo)
 		self.combobox_sub_tipos.bind("<<ComboboxSelected>>", self.buscar_paquete_por_sub_tipo)
+		agregando = True
+		agregar_paquete_button.config(command=lambda: self.view_paquete_detalles_toplevel(None, None, None, agregando))
 
 		#********************************************************
 		#				PACK A TODOS LOS BOTONES				*
 		#********************************************************
 		button_anterior.place(relx=0.025, rely=0.001)
 		button_siguiente.place(relx=0.08, rely=0)
-		label_nombre_paquete.pack(side='left', padx=20, pady=42, anchor=NW)
-		entry.pack(pady=40, anchor=NW)
+		#label_nombre_paquete.pack(side='left', padx=25, pady=42, anchor=NW)
+		label_nombre_paquete.place(relx=0.028, rely=0.06)
+		#entry.pack(pady=40, anchor=NW)
+		entry.place(relx=0.237, rely=0.0525)
 		label_radio_button.place(relx=0.5, rely=0.027)
 		radio_button_si.place(relx=0.6, rely=0.042)
-		radio_button_no.place(relx=0.7, rely=0.042)
-		radio_button_ninguno.place(relx=0.8, rely=0.042)
-		label_anho.place(relx=0.025, rely=0.15)
-		self.combobox_anhos.place(relx=0.1, rely=0.165)
-		label_tipo_paquete.place(relx=0.25, rely=0.145)
-		self.combobox_tipos.place(relx=0.33, rely=0.165)
-		self.combobox_sub_tipos.place(relx=0.46, rely=0.165)
+		radio_button_no.place(relx=0.68, rely=0.042)
+		radio_button_ninguno.place(relx=0.76, rely=0.042)
+		label_anho.place(relx=0.025, rely=0.135)
+		self.combobox_anhos.place(relx=0.1, rely=0.152)
+		label_tipo_paquete.place(relx=0.25, rely=0.135)
+		self.combobox_tipos.place(relx=0.33, rely=0.152)
+		self.combobox_sub_tipos.place(relx=0.46, rely=0.152)
+		agregar_paquete_button.place(relx=0.03, rely=0.23)
 		frame.pack(padx=20, pady=20, anchor=NE)
 		frame.pack_propagate(0)
 
@@ -403,9 +361,10 @@ class View:
 		self.filtro_anho_value = self.combobox_anhos.get()
 		self.filtro_tipo_value = self.combobox_tipos.get()
 		self.filtro_sub_tipo_value = self.combobox_sub_tipos.get()
-		#print('content nombre: ' + self.content_entry.get())
 		result_busqueda_paquete = self.controller.buscar_paquete(content1=self.content_entry.get(), content2=self.radio_variable.get(),
 									content3=self.combobox_anhos.get(), content4=self.combobox_tipos.get(), content5=self.combobox_sub_tipos.get())
+
+		self.set_values_paquetes_posiciones(result_busqueda_paquete)
 		self.show_paquetes()
 
 	def on_frame_configure(self, event=None):
@@ -514,18 +473,23 @@ class View:
 			paquete_detalles_view.config(font=('tahoma', 13), bg='#27A221', fg='#FFFFFF', activeforeground='#FFFFFF',
 										activebackground='#20801B', highlightthickness=0, anchor=W)
 			paquete_detalles_view.place(relx=0.7, rely=0.75)
-			paquete_detalles_view.config(command=lambda paquete=paquete, pos_paquete=pos_paquete:self.view_paquete_detalles_toplevel(None, paquete, pos_paquete))
+			paquete_detalles_view.config(command=lambda paquete=paquete, pos_paquete=pos_paquete:
+									self.view_paquete_detalles_toplevel(None, paquete, pos_paquete, False))
 			#print(paquete_name_view.config("text")[-1])
 			#print(paquete_detalles_view.config("text")[-1])
 
 			self.view_result_busqueda_paquete.append(paquete_view)
 
-	def view_paquete_detalles_toplevel(self, frame, paquete, pos_paquete):
-		print('viendo detalles')
+	def view_paquete_detalles_toplevel(self, frame, paquete, pos_paquete, agregando):
+		print('preparando: Crear paquete/Viendo detalles')
 		self.paquete_detalles_top_level = Toplevel(self.parent, bg='#F9F9F9', relief=GROOVE, borderwidth=0)
 		self.paquete_detalles_top_level.geometry('1000x800+450+100')
 		self.paquete_detalles_top_level.resizable(width=False, height=False)
-		self.view_paquete_detalles(frame, paquete, pos_paquete)
+
+		if agregando:
+			self.view_agregar_paquete()
+		else:
+			self.view_paquete_detalles(frame, paquete, pos_paquete)
 
 	def view_paquete_detalles(self, frame_detalles, paquete, pos_paquete):
 		print('viendo detalles')
@@ -796,6 +760,176 @@ class View:
 		ok_button.place(relx=0.39, rely=0.85)
 		ok_button.config(command=lambda:self.widget_destroy(precio_parent))
 
+	def view_agregar_paquete(self):
+		print('View: creando paquete...')
+		#self.set_button_bold('paquetes')
+		#self.anterior = 'paquetes'
+
+		#DEFINIMOS EL FRAME
+		self.frame_pre_venta = None
+		self.paquete_detalles_top_level.title('Agregar paquete')
+		self.frame_agregar_paquete = Frame(self.paquete_detalles_top_level, width='1000', height='900', bg='#F9F9F9', relief=GROOVE, borderwidth=0)
+
+		#********************************************************
+		#  AGREGAMOS LAS ETIQUETAS CORRESPONDIENTE A LOS DATOS	*
+		#********************************************************
+
+		#view nombre paquete
+		label = Label(self.frame_agregar_paquete, text='Nombre:', width='10', height='2', relief=GROOVE, borderwidth=0)
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
+		label.place(relx=0.02, rely=0.06)
+
+		name_content_entry = StringVar()
+		name_entry = Entry(self.frame_agregar_paquete, width='25', font=('tahoma', 13), textvariable=name_content_entry)
+		name_entry.place(relx=0.17, rely=0.075)
+
+		#view tipo de paquete
+		label = Label(self.frame_agregar_paquete, text='Tipo:', width='10', height='2', relief=GROOVE, borderwidth=0)
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
+		label.place(relx=0.02, rely=0.132)
+
+		lista_tipos = ['Terrestre', 'Aereo']
+		combobox_tipos = ttk.Combobox(self.frame_agregar_paquete, values=lista_tipos)
+		combobox_tipos.config(state='readonly', font=(13), width='9', height='6', background='#F9F9F9')
+		combobox_tipos.place(relx=0.17, rely=0.149)
+
+		lista_sub_tipos = ['Estandar', 'Personalizado']
+		combobox_sub_tipos = ttk.Combobox(self.frame_agregar_paquete, values=lista_sub_tipos)
+		combobox_sub_tipos.config(state='readonly', font=(13), width='12', height='6', background='#F9F9F9')
+		combobox_sub_tipos.place(relx=0.3, rely=0.149)
+
+		#view vigente
+		label = Label(self.frame_agregar_paquete, text='Vigente:', width='10', height='2', relief=GROOVE, borderwidth=0)
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
+		label.place(relx=0.02, rely=0.204)
+
+		lista_vigencia = ['Si', 'No']
+		combobox_vigencia = ttk.Combobox(self.frame_agregar_paquete, values=lista_vigencia)
+		combobox_vigencia.config(state='readonly', font=(13), width='9', height='6', background='#F9F9F9')
+		combobox_vigencia.place(relx=0.17, rely=0.221)
+
+		#view fecha
+		label = Label(self.frame_agregar_paquete, text='Salida/as:', width='11', height='2', relief=GROOVE, borderwidth=0)
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
+		label.place(relx=0.02, rely=0.276)
+
+		self.lista_fecha = []
+		self.lista_fecha_combobox = []
+		self.combobox_add_fecha = ttk.Combobox(self.frame_agregar_paquete, values=self.lista_fecha_combobox)
+		self.combobox_add_fecha.config(state='readonly', font=(13), width='9', height='6', background='#F9F9F9')
+		self.combobox_add_fecha.set('-- / -- / --')
+		self.combobox_add_fecha.place(relx=0.17, rely=0.292)
+
+		button_fecha_de_viaje = Button(self.frame_agregar_paquete, width='25', height='25', relief=GROOVE, borderwidth=0)
+		button_fecha_de_viaje.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
+		button_fecha_de_viaje.config(image=self.imagenes['add_icon'])
+		button_fecha_de_viaje.place(relx=0.3, rely=0.289)
+
+		#view precio
+		label = Label(self.frame_agregar_paquete, text='Precio:', width='10', height='2', relief=GROOVE, borderwidth=0)
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
+		label.place(relx=0.02, rely=0.347)
+
+		self.price_content_entry = StringVar()
+		self.price_value = None
+		price_entry = Entry(self.frame_agregar_paquete, width='25', font=('tahoma', 13), textvariable=self.price_content_entry)
+		price_entry.place(relx=0.17, rely=0.36)
+
+		#view senha
+		label = Label(self.frame_agregar_paquete, text='Seña:', width='10', height='2', relief=GROOVE, borderwidth=0)
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
+		label.place(relx=0.02, rely=0.42)
+
+		self.senha_content_entry = StringVar()
+		self.senha_value = None
+		senha_entry = Entry(self.frame_agregar_paquete, width='25', font=('tahoma', 13), textvariable=self.senha_content_entry)
+		senha_entry.place(relx=0.17, rely=0.43)
+
+		#view pre venta
+		self.pre_ventas = []
+		self.si_pre_venta = False
+		#para almacenar las pre_ventas mostrados al usuario
+		self.view_result_pre_ventas = []
+		label = Label(self.frame_agregar_paquete, text='Pre venta:', width='13', height='2', relief=GROOVE, borderwidth=0)
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
+		label.place(relx=0.02, rely=0.492)
+
+		self.content_pre_venta_button = StringVar()
+		self.content_pre_venta_button.set('Agregar')
+		pre_venta_button = Button(self.frame_agregar_paquete, textvariable=self.content_pre_venta_button, width=10, height=1, relief=GROOVE, borderwidth=0)
+		pre_venta_button.config(font=('tahoma', 13), bg='#F9F9F9')
+		pre_venta_button.place(relx=0.17, rely=0.496)
+
+		width='480'
+		height='250'
+		relx=0.02
+		rely=0.544
+
+		self.view_result_pre_ventas = []
+		self.building_frame_where_to_show_lista_pre_venta(self.frame_agregar_paquete, width, height, relx, rely)
+
+		#view cantidad de pasajeros
+		label = Label(self.frame_agregar_paquete, text='Cant pasajeros:', width='13', height='2', relief=GROOVE, borderwidth=0)
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
+		label.place(relx=0.56, rely=0.06)
+
+		cant_pasajeros_content_entry = StringVar()
+		cant_pasajeros_entry = Entry(self.frame_agregar_paquete, width='15', font=('tahoma', 13), textvariable=cant_pasajeros_content_entry)
+		cant_pasajeros_entry.place(relx=0.742, rely=0.075)
+
+		#incluye view
+		label = Label(self.frame_agregar_paquete, text='Incluye:', width='10', height='2', relief=GROOVE, borderwidth=0)
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
+		label.place(relx=0.56, rely=0.132)
+
+		incluye_frame = Frame(self.frame_agregar_paquete, width='400', height='200', bg='#F9F9F9', relief=GROOVE, borderwidth=0)
+		incluye_frame.place(relx=0.561, rely=0.203)
+
+		scroll = Scrollbar(incluye_frame, orient=VERTICAL)
+		scroll.pack(side=RIGHT, fill=Y)
+
+		incluye_content = StringVar()
+		incluye_text_widget = Text(incluye_frame, height=7, width=30, relief=GROOVE, borderwidth=0)
+		incluye_text_widget.insert(END, '')
+		
+		incluye_text_widget.config(font=('tahoma', 12), bg='#FFFFFF', fg='#2F3030')
+		incluye_text_widget.pack(side=LEFT, fill=Y)
+
+		scroll.config(command=incluye_text_widget.yview)
+		incluye_text_widget.config(wrap=WORD, yscrollcommand=scroll.set)
+
+		#view ok and cancel
+		save_button = Button(self.frame_agregar_paquete, text='Guardar', width=110, height=30, relief=GROOVE, borderwidth=0)
+		save_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#343535')
+		save_button.config(image=self.imagenes['save_icon'], compound=LEFT)
+		save_button.place(relx=0.5, rely=0.90)
+
+		cancel_button = Button(self.frame_agregar_paquete, text='Cancelar', width=110, height=30, relief=GROOVE, borderwidth=0)
+		cancel_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#343535')
+		cancel_button.config(image=self.imagenes['not_ok_icon'], compound=LEFT)
+		cancel_button.place(relx=0.34, rely=0.90)
+
+		#********************************************************
+		#				CONFIGURAMOS LOS EVENTOS				*
+		#********************************************************
+		self.price_content_entry.trace("w", self.update_price_content_entry)
+		self.senha_content_entry.trace("w", self.update_senha_content_entry)
+		button_fecha_de_viaje.config(command=lambda:self.view_calendar(self.frame_agregar_paquete, None, 0, 0.17, 0.277))
+		agregando = True
+
+		pre_venta_button.config(command=lambda:self.controller.agregar_pre_venta(agregando))
+		save_button.config(command=lambda:self.controller.guardar_paquete(name_content_entry.get(), combobox_tipos.get(), combobox_sub_tipos.get(),
+				combobox_vigencia.get(), self.lista_fecha, self.price_value, self.senha_value, incluye_text_widget.get(1.0, END),
+				cant_pasajeros_content_entry.get(), self.pre_ventas, self.paquete_detalles_top_level))
+
+		cancel_button.config(command=lambda:self.widget_destroy(self.paquete_detalles_top_level))
+
+		#********************************************************
+		#				PACK A TODOS LOS BOTONES				*
+		#********************************************************
+		self.frame_agregar_paquete.pack(padx=20, pady=20, anchor=NE)
+		self.frame_agregar_paquete.pack_propagate(0)
+
 	def view_editar_paquete(self, frame_editar_paquete, paquete, pos_paquete):
 		print('editando paquete...')
 		self.paquete_detalles_top_level.title('Editar paquete')
@@ -987,8 +1121,8 @@ class View:
 		self.senha_content_entry.trace("w", self.update_senha_content_entry)
 		button_fecha_de_viaje.config(command=lambda:self.view_calendar(frame_detalles, content_button_fecha, 1, 0.17, 0.258))
 
-		agregando = True
-		pre_venta_button.config(command=lambda:self.controller.agregar_pre_venta(agregando))
+		agregando_pre_venta = True
+		pre_venta_button.config(command=lambda:self.controller.agregar_pre_venta(agregando_pre_venta))
 
 		save_button.config(command=lambda:self.controller.guardar_paquete_editado(pos_paquete, name_content_entry.get(),
 				combobox_tipos.get(), combobox_sub_tipos.get(), combobox_vigencia.get(), self.fecha_de_viaje, self.price_value, self.senha_value,
@@ -1293,203 +1427,6 @@ class View:
 		elif codigo == View.VIEW_CREAR_PAQUETE:
 			#self.view_crear_paquete(False)
 			self.controller.crear_paquete(False)
-
-	def view_crear_paquete(self, next_back_starting):
-		self.set_button_bold('paquetes')
-		self.anterior = 'paquetes'
-
-		#DEFINIMOS EL FRAME 
-		self.frame_pre_venta = None
-		self.frame_crear_paquete = Frame(self.main_frame, width='900', height='700', bg='#F9F9F9', relief=GROOVE, borderwidth=0)
-
-		#almacemamos los frame en una pila para los botones de 'anterior y siguiente'
-		self.add_pila_anterior(View.VIEW_PAQUETES_COD)
-
-		#********************************************************
-		#				CREAMOS TODOS LOS BOTONES				*
-		#********************************************************
-		button_anterior = Button(self.frame_crear_paquete, width='33', height='30', relief=GROOVE, borderwidth=0)
-		button_anterior.config(bg='#F9F9F9', activebackground='#F9F9F9', highlightthickness=0)
-
-		button_siguiente = Button(self.frame_crear_paquete, width='33', height='30', relief=GROOVE, borderwidth=0)
-		button_siguiente.config(bg='#F9F9F9', activebackground='#F9F9F9', highlightthickness=0)
-
-		#********************************************************
-		#			AGREGAMOS ICONOS A LOS BOTONES				*
-		#********************************************************
-		button_anterior.config(image=self.imagenes['back_available_icon'], compound=CENTER)
-		if len(self.pila_siguiente) == 0:
-			button_siguiente.config(image=self.imagenes['next_not_available_icon'], compound=CENTER)
-		else:
-			button_siguiente.config(image=self.imagenes['next_available_icon'], compound=CENTER)
-
-		#********************************************************
-		#  AGREGAMOS LAS ETIQUETAS CORRESPONDIENTE A LOS DATOS	*
-		#********************************************************
-
-		#view nombre paquete
-		label = Label(self.frame_crear_paquete, text='Nombre:', width='10', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
-		label.place(relx=0.02, rely=0.06)
-
-		name_content_entry = StringVar()
-		name_entry = Entry(self.frame_crear_paquete, width='25', font=('tahoma', 13), textvariable=name_content_entry)
-		name_entry.place(relx=0.17, rely=0.075)
-
-		#view tipo de paquete
-		label = Label(self.frame_crear_paquete, text='Tipo:', width='10', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
-		label.place(relx=0.02, rely=0.132)
-
-		lista_tipos = ['Terrestre', 'Aereo']
-		combobox_tipos = ttk.Combobox(self.frame_crear_paquete, values=lista_tipos)
-		combobox_tipos.config(state='readonly', font=(13), width='9', height='6', background='#F9F9F9')
-		combobox_tipos.place(relx=0.17, rely=0.149)
-
-		lista_sub_tipos = ['Estandar', 'Personalizado']
-		combobox_sub_tipos = ttk.Combobox(self.frame_crear_paquete, values=lista_sub_tipos)
-		combobox_sub_tipos.config(state='readonly', font=(13), width='12', height='6', background='#F9F9F9')
-		combobox_sub_tipos.place(relx=0.3, rely=0.149)
-
-		#view vigente
-		label = Label(self.frame_crear_paquete, text='Vigente:', width='10', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
-		label.place(relx=0.02, rely=0.204)
-
-		lista_vigencia = ['Si', 'No']
-		combobox_vigencia = ttk.Combobox(self.frame_crear_paquete, values=lista_vigencia)
-		combobox_vigencia.config(state='readonly', font=(13), width='9', height='6', background='#F9F9F9')
-		combobox_vigencia.place(relx=0.17, rely=0.221)
-
-		#view fecha
-		label = Label(self.frame_crear_paquete, text='Salida/as:', width='11', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
-		label.place(relx=0.02, rely=0.276)
-
-		self.lista_fecha = []
-		self.lista_fecha_combobox = []
-		self.combobox_add_fecha = ttk.Combobox(self.frame_crear_paquete, values=self.lista_fecha_combobox)
-		self.combobox_add_fecha.config(state='readonly', font=(13), width='9', height='6', background='#F9F9F9')
-		self.combobox_add_fecha.set('-- / -- / --')
-		self.combobox_add_fecha.place(relx=0.17, rely=0.292)
-
-		button_fecha_de_viaje = Button(self.frame_crear_paquete, width='25', height='25', relief=GROOVE, borderwidth=0)
-		button_fecha_de_viaje.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
-		button_fecha_de_viaje.config(image=self.imagenes['add_icon'])
-		button_fecha_de_viaje.place(relx=0.3, rely=0.289)
-
-		#view precio
-		label = Label(self.frame_crear_paquete, text='Precio:', width='10', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
-		label.place(relx=0.02, rely=0.347)
-
-		self.price_content_entry = StringVar()
-		self.price_value = None
-		price_entry = Entry(self.frame_crear_paquete, width='25', font=('tahoma', 13), textvariable=self.price_content_entry)
-		price_entry.place(relx=0.17, rely=0.36)
-
-		#view senha
-		label = Label(self.frame_crear_paquete, text='Seña:', width='10', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
-		label.place(relx=0.02, rely=0.42)
-
-		self.senha_content_entry = StringVar()
-		self.senha_value = None
-		senha_entry = Entry(self.frame_crear_paquete, width='25', font=('tahoma', 13), textvariable=self.senha_content_entry)
-		senha_entry.place(relx=0.17, rely=0.43)
-
-		#view pre venta
-		self.pre_ventas = []
-		self.si_pre_venta = False
-		#para almacenar las pre_ventas mostrados al usuario
-		self.view_result_pre_ventas = []
-		label = Label(self.frame_crear_paquete, text='Pre venta:', width='13', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
-		label.place(relx=0.02, rely=0.492)
-
-		self.content_pre_venta_button = StringVar()
-		self.content_pre_venta_button.set('Agregar')
-		pre_venta_button = Button(self.frame_crear_paquete, textvariable=self.content_pre_venta_button, width=10, height=1, relief=GROOVE, borderwidth=0)
-		pre_venta_button.config(font=('tahoma', 13), bg='#F9F9F9')
-		pre_venta_button.place(relx=0.17, rely=0.496)
-
-		width='480'
-		height='250'
-		relx=0.02
-		rely=0.544
-
-		self.view_result_pre_ventas = []
-		self.building_frame_where_to_show_lista_pre_venta(self.frame_crear_paquete, width, height, relx, rely)
-
-		#view cantidad de pasajeros
-		label = Label(self.frame_crear_paquete, text='Cant pasajeros:', width='13', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
-		label.place(relx=0.56, rely=0.06)
-
-		cant_pasajeros_content_entry = StringVar()
-		cant_pasajeros_entry = Entry(self.frame_crear_paquete, width='15', font=('tahoma', 13), textvariable=cant_pasajeros_content_entry)
-		cant_pasajeros_entry.place(relx=0.742, rely=0.075)
-
-		#incluye view
-		label = Label(self.frame_crear_paquete, text='Incluye:', width='10', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
-		#label.place(relx=0.02, rely=0.492)
-		label.place(relx=0.56, rely=0.132)
-
-		incluye_frame = Frame(self.frame_crear_paquete, width='400', height='200', bg='#F9F9F9', relief=GROOVE, borderwidth=0)
-		incluye_frame.place(relx=0.561, rely=0.203)
-
-		scroll = Scrollbar(incluye_frame, orient=VERTICAL)
-		scroll.pack(side=RIGHT, fill=Y)
-
-		incluye_content = StringVar()
-		incluye_text_widget = Text(incluye_frame, height=7, width=30, relief=GROOVE, borderwidth=0)
-		incluye_text_widget.insert(END, '')
-		
-		incluye_text_widget.config(font=('tahoma', 12), bg='#FFFFFF', fg='#2F3030')
-		incluye_text_widget.pack(side=LEFT, fill=Y)
-
-		scroll.config(command=incluye_text_widget.yview)
-		incluye_text_widget.config(wrap=WORD, yscrollcommand=scroll.set)
-
-		#view ok and cancel
-		save_button = Button(self.frame_crear_paquete, text='Guardar', width=110, height=30, relief=GROOVE, borderwidth=0)
-		save_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#343535')
-		save_button.config(image=self.imagenes['save_icon'], compound=LEFT)
-		save_button.place(relx=0.5, rely=0.90)
-
-		cancel_button = Button(self.frame_crear_paquete, text='Cancelar', width=110, height=30, relief=GROOVE, borderwidth=0)
-		cancel_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#343535')
-		cancel_button.config(image=self.imagenes['not_ok_icon'], compound=LEFT)
-		cancel_button.place(relx=0.34, rely=0.90)
-
-		#********************************************************
-
-		#********************************************************
-		#				CONFIGURAMOS LOS EVENTOS				*
-		#********************************************************
-		button_anterior.config(command=lambda:self.pop_pila_anterior(View.VIEW_CREAR_PAQUETE))
-		button_siguiente.config(command=lambda:self.pop_pila_siguiente())
-		self.price_content_entry.trace("w", self.update_price_content_entry)
-		self.senha_content_entry.trace("w", self.update_senha_content_entry)
-		button_fecha_de_viaje.config(command=lambda:self.view_calendar(self.frame_crear_paquete, None, 0, 0.17, 0.277))
-		agregando = True
-
-		pre_venta_button.config(command=lambda:self.controller.agregar_pre_venta(agregando))
-		save_button.config(command=lambda:self.controller.guardar_paquete(name_content_entry.get(), combobox_tipos.get(), combobox_sub_tipos.get(),
-				combobox_vigencia.get(), self.lista_fecha, self.price_value, self.senha_value, incluye_text_widget.get(1.0, END),
-				cant_pasajeros_content_entry.get(), self.pre_ventas))
-		cancel_button.config(command=lambda:self.controller.crear_paquete(True))
-
-		#********************************************************
-		#				PACK A TODOS LOS BOTONES				*
-		#********************************************************
-		button_anterior.place(relx=0.025, rely=0.001)
-		button_siguiente.place(relx=0.08, rely=0)
-		self.frame_crear_paquete.pack(padx=20, pady=20, anchor=NE)
-		self.frame_crear_paquete.pack_propagate(0)
-
-		self.switch_frame(self.frame_crear_paquete)
 
 	def show_pre_ventas(self):
 		#pre_venta_view = None
@@ -1829,7 +1766,7 @@ class View:
 		cod = 2 fecha de inicio de pre venta
 		cod = 3 fecha de fin de pre venta
 		'''
-		frame_calendar = Frame(frame, bg='#F9F9F9', width='260', height='270', relief=GROOVE, borderwidth=1)
+		frame_calendar = Frame(frame, bg='#F9F9F9', width='260', height='280', relief=GROOVE, borderwidth=1)
 		frame_calendar.place(relx=x, rely=y)
 		frame_calendar.pack_propagate(0)
 
@@ -1889,7 +1826,7 @@ class View:
 			self.combobox_add_fecha.destroy()
 			self.lista_fecha.append(date)
 			self.lista_fecha_combobox.append(day + '/' + month + '/' + str(date.year))
-			self.combobox_add_fecha = ttk.Combobox(self.frame_crear_paquete, values=self.lista_fecha_combobox)
+			self.combobox_add_fecha = ttk.Combobox(self.frame_agregar_paquete, values=self.lista_fecha_combobox)
 			self.combobox_add_fecha.config(state='readonly', font=(13), width='9', height='6', background='#F9F9F9')
 			self.combobox_add_fecha.set(day + '/' + month + '/' + str(date.year))
 			self.combobox_add_fecha.place(relx=0.17, rely=0.292)
