@@ -5,6 +5,7 @@ from tkinter import *
 from Usuario import Usuario
 from Calendar import Calendar
 from TemporizadorVigencia import TemporizadorVigencia
+import datetime
 
 import copy
 
@@ -1651,11 +1652,14 @@ class View:
 			self.pre_ventas[posicion_pre_venta] = pre_venta
 
 			if self.estoy_en_precio_detalles:
-				self.controller.guardar_paquete_background(self.paquete, self.pos_paquete)
-				texto = self.convert_amount_to_string(self.paquete.get_precio_pre_venta(), True)
-				self.precio_value_paquete_det.set(texto)
-				texto = self.convert_amount_to_string(self.paquete.get_senha_pre_venta(), True)
-				self.senha_value_paquete_det.set(texto)
+				es_la_pre_venta_actual = self.controller.es_la_pre_venta_actual(pre_venta)
+				self.controller.guardar_paquete_background(self.paquete, self.pos_paquete, es_la_pre_venta_actual)
+
+				if es_la_pre_venta_actual:
+					texto = self.convert_amount_to_string(self.paquete.get_precio_pre_venta(), True)
+					self.precio_value_paquete_det.set(texto)
+					texto = self.convert_amount_to_string(self.paquete.get_senha_pre_venta(), True)
+					self.senha_value_paquete_det.set(texto)
 
 				self.estoy_en_precio_detalles = False
 
