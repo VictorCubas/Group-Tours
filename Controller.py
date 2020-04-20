@@ -55,11 +55,6 @@ class Controller:
 				#print('5: ' + value)
 				result_encontrando = self.model.buscar_paquete_por_sub_tipo(value, cantidad_de_filtros)
 
-		#return result_encontrando[0]
-		#print('len: ' + str(len(result_encontrando[0])))
-		#for i in range(len(result_encontrando[0])):
-		#	print(result_encontrando[0][i].get_nombre())
-
 		return [result_encontrando[0], result_encontrando[2]]
 
 	def get_cantidad_de_filtros(self, kwargs):
@@ -93,7 +88,7 @@ class Controller:
 	def guardar_paquete_background(self, paquete, pos_paquete):
 		print('Controller: guardando en background...')
 		self.model.guardar_paquete_editado(paquete, pos_paquete)
-
+		self.view.update_buscar_paquete()
 
 	def guardar_paquete(self, nombre, tipo, sub_tipo, esta_vigente, lista_fecha, precio, senha, incluye, cant_pasajeros, pre_ventas, frame_agregar_paquete):
 		#print('{}, {}, {}, {}, {}, {}, {}, {}'.format(nombre, tipo, sub_tipo, fecha, esta_vigente, precio, senha, incluye))
