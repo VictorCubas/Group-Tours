@@ -85,10 +85,15 @@ class Controller:
 	def editar_paquete(self, frame, paquete, pos_paquete):
 		self.view.view_editar_paquete(frame, paquete, pos_paquete)
 
-	def guardar_paquete_background(self, paquete, pos_paquete):
+	def guardar_paquete_background(self, paquete, pos_paquete, es_la_pre_venta_actual):
 		print('Controller: guardando en background...')
 		self.model.guardar_paquete_editado(paquete, pos_paquete)
-		self.view.update_buscar_paquete()
+
+		if es_la_pre_venta_actual:
+			self.view.update_buscar_paquete()
+
+	def es_la_pre_venta_actual(self, pre_venta):
+		return self.model.es_la_pre_venta_actual(pre_venta)
 
 	def guardar_paquete(self, nombre, tipo, sub_tipo, esta_vigente, lista_fecha, precio, senha, incluye, cant_pasajeros, pre_ventas, frame_agregar_paquete):
 		#print('{}, {}, {}, {}, {}, {}, {}, {}'.format(nombre, tipo, sub_tipo, fecha, esta_vigente, precio, senha, incluye))
