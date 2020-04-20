@@ -127,17 +127,20 @@ class Paquete(metaclass=ABCMeta):
 	def get_precio(self):
 		return self.precio
 
-	#def set_precio_pre_venta(self, precio_pre_venta):
-	#	if self.si_pre_venta():
-	#		self.pre_venta.set_precio(precio_pre_venta)
-
-	#	return None
-
 	def get_precio_pre_venta(self):
-		#devolvemos la preventa mas actual que se adecue a la fehca
+		#devolvemos la preventa mas actual que se adecue a la fecha
+		pre_venta_actual = None
+
 		if self.si_pre_venta():
-			print('Paquete: falta editar aqui....')
-			return self.pre_ventas[0].get_precio()
+			fecha_hoy = datetime.date.today()
+			for pre_venta in self.pre_ventas:
+				fecha_inicio = pre_venta.get_fecha_inicio()
+				fecha_fin = pre_venta.get_fecha_fin()
+				if fecha_hoy >= fecha_inicio and fecha_hoy <= fecha_fin:
+					return pre_venta.get_precio()
+
+			#significa que tiene pre venta pero no se encuentra en la fecha de pre venta por tanto se retorna el precio de venta
+			return self.precio
 
 		return None
 
@@ -154,9 +157,17 @@ class Paquete(metaclass=ABCMeta):
 		return None
 
 	def get_senha_pre_venta(self):
+		pre_venta_actual = None
 		if self.si_pre_venta():
-			print('Paquete: falta editar aqui....')
-			return self.pre_ventas[0].get_senha()
+			fecha_hoy = datetime.date.today()
+			for pre_venta in self.pre_ventas:
+				fecha_inicio = pre_venta.get_fecha_inicio()
+				fecha_fin = pre_venta.get_fecha_fin()
+				if fecha_hoy >= fecha_inicio and fecha_hoy <= fecha_fin:
+					return pre_venta.get_senha()
+
+			#significa que tiene pre venta pero no se encuentra en la fecha de pre venta por tanto se retorna el senha de venta
+			return self.senha
 
 		return None
 
