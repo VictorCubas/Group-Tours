@@ -13,11 +13,6 @@ class View:
 	Implementando la vista de la app
 	'''
 
-	VIEW_PAQUETES_COD = 1
-	VIEW_BUSCAR_PAQUETE = 2
-	VIEW_CREAR_PAQUETE = 3
-	VIEW_USUARIOS_COD = 4
-
 	def __init__(self, controller, parent):
 		self.controller = controller
 		#self.parent = Tk()
@@ -66,12 +61,12 @@ class View:
 
 		self.buttons['paquetes'].config(image=self.imagenes['paquete_icon'], compound=LEFT)
 		self.buttons['paquetes'].config(anchor=W)
-		self.buttons['paquetes'].config(command=lambda:self.view_paquetes(True))
+		self.buttons['paquetes'].config(command=lambda:self.view_paquetes())
 		self.buttons['paquetes'].pack()
 
 		self.buttons['usuarios'].config(image=self.imagenes['usuario_icon'], compound=LEFT)
 		self.buttons['usuarios'].config(anchor=W)
-		self.buttons['usuarios'].config(command=lambda:self.view_usuarios(True))
+		self.buttons['usuarios'].config(command=lambda:self.view_usuarios())
 		self.buttons['usuarios'].pack()	
 
 		self.buttons['facturas'].config(image=self.imagenes['factura_icon'], compound=LEFT)
@@ -81,9 +76,6 @@ class View:
 
 		self.left_frame.pack(side='left', padx=20, pady=80, anchor=NW)
 		self.main_frame.pack()
-
-		self.pila_anterior = []
-		self.pila_siguiente = []
 		
 		self.view_inicio()
 
@@ -137,8 +129,8 @@ class View:
 		#********************************************************
 		#				CONFIGURAMOS LOS EVENTOS				*
 		#********************************************************
-		button_buscar_paquete.config(command=lambda:self.view_buscar_paquete(True))
-		button_buscar_usuario.config(command=lambda:self.view_usuarios(True))
+		button_buscar_paquete.config(command=lambda:self.view_buscar_paquete())
+		button_buscar_usuario.config(command=lambda:self.view_usuarios())
 
 		#********************************************************
 		#				PACK A TODOS LOS BOTONES				*
@@ -154,51 +146,30 @@ class View:
 
 		self.switch_frame(frame)
 
-	def view_paquetes(self, next_back_starting):
+	def view_paquetes(self):
 		self.set_button_bold('paquetes')
 		self.anterior = 'paquetes'
 
-		self.view_buscar_paquete(True)
+		self.view_buscar_paquete()
 
-	def view_buscar_paquete(self, next_back_starting):
+	def view_buscar_paquete(self):
 		self.set_button_bold('paquetes')
 		self.anterior = 'paquetes'
 
 		#DEFINIMOS EL FRAME 
 		frame = Frame(self.main_frame, width='900', height='700', bg='#F9F9F9', relief=GROOVE, borderwidth=0)
 
-		#almacemamos los frame en una pila para los botones de 'anterior y siguiente'
-		self.add_pila_anterior(View.VIEW_PAQUETES_COD)
+		#declaramos el un string que alamacena el contenido ingresado
+		self.content_entry = StringVar()
+		self.radio_variable = StringVar()
+		self.radio_variable.set('ninguno')
+		self.filtro_anho_value = None
+		self.filtro_tipo_value = None
+		self.filtro_sub_tipo_value = None
+		#result es una lista que almacena todos los paquetes como resultado de la busqueda
+		#RESETEAMOS LA LISTA DE RESULTADOS EN CASO DE ENTRAR POR PRIMERA VEZ A BUSCAR PAQUETE
+		self.paquetes = []
 
-		if next_back_starting:
-			#declaramos el un string que alamacena el contenido ingresado
-			self.content_entry = StringVar()
-			self.radio_variable = StringVar()
-			self.radio_variable.set('ninguno')
-			self.filtro_anho_value = None
-			self.filtro_tipo_value = None
-			self.filtro_sub_tipo_value = None
-			#result es una lista que almacena todos los paquetes como resultado de la busqueda
-			#RESETEAMOS LA LISTA DE RESULTADOS EN CASO DE ENTRAR POR PRIMERA VEZ A BUSCAR PAQUETE
-			self.result_busqueda_paquete = []
-
-		#********************************************************
-		#				CREAMOS TODOS LOS BOTONES				*
-		#********************************************************
-		button_anterior = Button(frame, width='33', height='30', relief=GROOVE, borderwidth=0)
-		button_anterior.config(bg='#F9F9F9', activebackground='#F9F9F9', highlightthickness=0)
-
-		button_siguiente = Button(frame, width='33', height='30', relief=GROOVE, borderwidth=0)
-		button_siguiente.config(bg='#F9F9F9', activebackground='#F9F9F9', highlightthickness=0)
-
-		#********************************************************
-		#			AGREGAMOS ICONOS A LOS BOTONES				*
-		#********************************************************
-		button_anterior.config(image=self.imagenes['back_available_icon'], compound=CENTER)
-		if len(self.pila_siguiente) == 0:
-			button_siguiente.config(image=self.imagenes['next_not_available_icon'], compound=CENTER)
-		else:
-			button_siguiente.config(image=self.imagenes['next_available_icon'], compound=CENTER)
 		#********************************************************
 
 		label_nombre_paquete = Label(frame, text='Nombre/Destino:', font=('tahoma', 14, 'bold'), width=14, height=1, bg='#F9F9F9')
@@ -274,13 +245,10 @@ class View:
 
 		#almacenamos los resultados en forma de botones (views)
 		self.view_result_busqueda_paquete = []
-		self.next_back_starting_aux = next_back_starting
 
 		#********************************************************
 		#				CONFIGURAMOS LOS EVENTOS				*
 		#********************************************************
-		button_anterior.config(command=lambda:self.pop_pila_anterior(View.VIEW_BUSCAR_PAQUETE))
-		button_siguiente.config(command=lambda:self.pop_pila_siguiente())
 		#detectamos los cambios cada vez que se escribe algo
 		self.content_entry.trace("w", self.buscar_paquete_por_nombre)
 		radio_button_si.config(command=lambda:self.buscar_paquete_por_vigencia(self.radio_variable.get()))
@@ -290,13 +258,11 @@ class View:
 		self.combobox_tipos.bind("<<ComboboxSelected>>", self.buscar_paquete_por_tipo)
 		self.combobox_sub_tipos.bind("<<ComboboxSelected>>", self.buscar_paquete_por_sub_tipo)
 		agregando = True
-		agregar_paquete_button.config(command=lambda: self.view_paquete_detalles_toplevel(None, None, None, agregando))
+		agregar_paquete_button.config(command=lambda: self.view_agregar_and_detalles_toplevel(None, None, None, agregando))
 
 		#********************************************************
 		#				PACK A TODOS LOS BOTONES				*
 		#********************************************************
-		button_anterior.place(relx=0.025, rely=0.001)
-		button_siguiente.place(relx=0.08, rely=0)
 		#label_nombre_paquete.pack(side='left', padx=25, pady=42, anchor=NW)
 		label_nombre_paquete.place(relx=0.028, rely=0.06)
 		#entry.pack(pady=40, anchor=NW)
@@ -314,9 +280,7 @@ class View:
 		frame.pack(padx=20, pady=20, anchor=NE)
 		frame.pack_propagate(0)
 
-		#REPONEMOS EL ESTADO DE LA BUSQUEDA EN CASO DE SE VUELVA ATRAS O ADELANTE CON LOS BOTONES
-		if next_back_starting == False:
-			self.show_paquetes()
+		self.show_paquetes()
 
 		self.switch_frame(frame)
 
@@ -377,18 +341,13 @@ class View:
 		paquete_view = None
 
 		#eliminamos los resultados anteriores a la busqueda actual (si elminamos la lista anterior tambien se elimina la lista actual, por ref)
-		#if self.next_back_starting_aux == False and len(self.view_result_busqueda_paquete) != 0:
-		#if len(self.view_result_busqueda_paquete) != 0:
 		for paquete_view in self.view_result_busqueda_paquete:
-			#print('index before destroy: ' + str(paquete_view[f][1]))
-			#paquete_view[f][0].destroy()
 			paquete_view.destroy()
 
 		self.view_result_busqueda_paquete = []
 
 		#aplicamos los nuevos resultados de la busqueda
 		paquete_view = None
-		#print(str(len(self.result_busqueda_paquete[0])))
 		aux = -1
 		for paquete in self.paquetes:
 			aux += 1
@@ -474,13 +433,13 @@ class View:
 										activebackground='#20801B', highlightthickness=0, anchor=W)
 			paquete_detalles_view.place(relx=0.7, rely=0.75)
 			paquete_detalles_view.config(command=lambda paquete=paquete, pos_paquete=pos_paquete:
-									self.view_paquete_detalles_toplevel(None, paquete, pos_paquete, False))
+									self.view_agregar_and_detalles_toplevel(None, paquete, pos_paquete, False))
 			#print(paquete_name_view.config("text")[-1])
 			#print(paquete_detalles_view.config("text")[-1])
 
 			self.view_result_busqueda_paquete.append(paquete_view)
 
-	def view_paquete_detalles_toplevel(self, frame, paquete, pos_paquete, agregando):
+	def view_agregar_and_detalles_toplevel(self, frame, paquete, pos_paquete, agregando):
 		print('preparando: Crear paquete/Viendo detalles')
 		self.paquete_detalles_top_level = Toplevel(self.parent, bg='#F9F9F9', relief=GROOVE, borderwidth=0)
 		self.paquete_detalles_top_level.geometry('1000x800+450+100')
@@ -571,7 +530,9 @@ class View:
 		else:
 			texto = self.convert_amount_to_string(paquete.get_precio(), True)
 
-		precio_value_label = Label(frame_detalles, text=texto, width='12', height='1', relief=GROOVE, borderwidth=0)
+		self.precio_value_paquete_det = StringVar()
+		self.precio_value_paquete_det.set(texto)
+		precio_value_label = Label(frame_detalles, textvariable=self.precio_value_paquete_det, width='12', height='1', relief=GROOVE, borderwidth=0)
 		precio_value_label.config(font=('tahoma', 14), bg='#F9F9F9', fg='#2F3030', anchor=W)
 		precio_value_label.place(relx=0.435, rely=0.11)
 
@@ -587,7 +548,9 @@ class View:
 			texto = self.convert_amount_to_string(paquete.get_senha(), True)
 
 
-		senha_value_label = Label(frame_detalles, text=texto, width='12', height='1', relief=GROOVE, borderwidth=0)
+		self.senha_value_paquete_det = StringVar()
+		self.senha_value_paquete_det.set(texto)
+		senha_value_label = Label(frame_detalles, textvariable=self.senha_value_paquete_det, width='12', height='1', relief=GROOVE, borderwidth=0)
 		senha_value_label.config(font=('tahoma', 14), bg='#F9F9F9', fg='#2F3030', anchor=W)
 		senha_value_label.place(relx=0.435, rely=0.155)
 
@@ -1388,46 +1351,6 @@ class View:
 
 		cancel_button.config(command=lambda:self.widget_destroy(self.toplevel_pre_venta))
 
-	def add_pila_anterior(self, clave):
-		self.pila_anterior.append(clave)
-
-		if len(self.pila_siguiente) != 0:
-			self.pila_siguiente = []
-
-	def pop_pila_anterior(self, codigo_actual):
-		if len(self.pila_anterior) == 0:	
-			return
-
-		#si no esta vacia
-		codigo = self.pila_anterior.pop()
-		self.pila_siguiente.append(codigo_actual)
-
-		if codigo == View.VIEW_PAQUETES_COD:
-			self.view_paquetes(False)
-		elif codigo == View.VIEW_BUSCAR_PAQUETE:
-			self.view_buscar_paquete(False)
-		elif codigo == View.VIEW_CREAR_PAQUETE:
-			#self.view_crear_paquete(False)
-			self.controller.crear_paquete(False)
-		elif codigo == View.VIEW_USUARIOS_COD:
-			self.controller.registrar_cliente(False)
-
-	def pop_pila_siguiente(self):
-		if len(self.pila_siguiente) == 0:
-			return
-
-		self.next_back_starting = False
-
-		#si no esta vacia
-		codigo = self.pila_siguiente.pop()
-		self.pila_anterior.append(codigo)
-
-		if codigo == View.VIEW_BUSCAR_PAQUETE:
-			self.view_buscar_paquete(False)
-		elif codigo == View.VIEW_CREAR_PAQUETE:
-			#self.view_crear_paquete(False)
-			self.controller.crear_paquete(False)
-
 	def show_pre_ventas(self):
 		#pre_venta_view = None
 
@@ -1729,6 +1652,11 @@ class View:
 
 			if self.estoy_en_precio_detalles:
 				self.controller.guardar_paquete_background(self.paquete, self.pos_paquete)
+				texto = self.convert_amount_to_string(self.paquete.get_precio_pre_venta(), True)
+				self.precio_value_paquete_det.set(texto)
+				texto = self.convert_amount_to_string(self.paquete.get_senha_pre_venta(), True)
+				self.senha_value_paquete_det.set(texto)
+
 				self.estoy_en_precio_detalles = False
 
 	def view_show_message(self, success, msj):
@@ -1833,24 +1761,14 @@ class View:
 		else:
 			content.set(day + '/' + month + '/' + str(date.year))
 
-	def view_usuarios(self, next_back_starting):
+	def view_usuarios(self):
 		self.set_button_bold('usuarios')
 		self.anterior = 'usuarios'
-
-		if next_back_starting:
-			self.pila_anterior = []
-			self.pila_siguiente = []
 
 		#********************************************************
 		#				CREAMOS TODOS LOS BOTONES				*
 		#********************************************************
 		frame = Frame(self.main_frame, width='900', height='700', bg='#F9F9F9', relief=GROOVE, borderwidth=2)
-
-		button_anterior = Button(frame, width='33', height='30', relief=GROOVE, borderwidth=0)
-		button_anterior.config(bg='#F9F9F9', activebackground='#F9F9F9', highlightthickness=0)
-
-		button_siguiente = Button(frame, width='33', height='30', relief=GROOVE, borderwidth=0)
-		button_siguiente.config(bg='#F9F9F9', activebackground='#F9F9F9', highlightthickness=0)
 
 		button_create = Button(frame, text=' Registrar nuevo cliente', font=('tahoma', 15), bg='#F9F9F9',
 											width='390', height='90', highlightthickness=0, borderwidth=2)
@@ -1865,11 +1783,6 @@ class View:
 		#********************************************************
 		#			AGREGAMOS ICONOS A LOS BOTONES				*
 		#********************************************************
-		button_anterior.config(image=self.imagenes['back_not_available_icon'], compound=CENTER)
-		if len(self.pila_siguiente) == 0:
-			button_siguiente.config(image=self.imagenes['next_not_available_icon'], compound=CENTER)
-		else:
-			button_siguiente.config(image=self.imagenes['next_available_icon'], compound=CENTER)
 
 		button_search.config(image=self.imagenes['lupa_icon'], compound=LEFT)
 		button_create.config(image=self.imagenes['lupa_icon'], compound=LEFT)
@@ -1878,7 +1791,7 @@ class View:
 		#				CONFIGURAMOS LOS EVENTOS				*
 		#********************************************************
 		#button_search.config(command=lambda:self.view_buscar_paquete(True))
-		button_siguiente.config(command=lambda:self.pop_pila_siguiente())
+		#button_siguiente.config(command=lambda:self.pop_pila_siguiente())
 		#button_create.config(command=lambda:self.view_crear_paquete(True))
 		button_create.config(command=lambda:self.controller.registrar_cliente(True))
 
@@ -1887,8 +1800,6 @@ class View:
 		#********************************************************
 		#button_search.pack(side='left', padx=20, pady=20, anchor=NW)
 		#button_create.pack(side='right', padx=100, pady=20, anchor=NE)
-		button_anterior.place(relx=0.025, rely=0.00155)
-		button_siguiente.place(relx=0.08, rely=0)
 		button_create.place(relx=0.028, rely=0.06, anchor=NW)
 		button_search.place(relx=0.978,rely=0.06, anchor=NE)
 		frame.pack(padx=20, pady=50, anchor=NE)
@@ -1904,8 +1815,6 @@ class View:
 		#DEFINIMOS EL FRAME 
 		frame = Frame(self.main_frame, width='900', height='700', bg='#F9F9F9', relief=GROOVE, borderwidth=2)
 
-		#almacemamos los frame en una pila para los botones de 'anterior y siguiente'
-		self.add_pila_anterior(View.VIEW_USUARIOS_COD)
 
 		#********************************************************
 		#				CREAMOS TODOS LOS BOTONES				*
@@ -1915,15 +1824,6 @@ class View:
 
 		button_siguiente = Button(frame, width='33', height='30', relief=GROOVE, borderwidth=0)
 		button_siguiente.config(bg='#F9F9F9', activebackground='#F9F9F9', highlightthickness=0)
-
-		#********************************************************
-		#			AGREGAMOS ICONOS A LOS BOTONES				*
-		#********************************************************
-		button_anterior.config(image=self.imagenes['back_available_icon'], compound=CENTER)
-		if len(self.pila_siguiente) == 0:
-			button_siguiente.config(image=self.imagenes['next_not_available_icon'], compound=CENTER)
-		else:
-			button_siguiente.config(image=self.imagenes['next_available_icon'], compound=CENTER)
 
 		#********************************************************
 		#  AGREGAMOS LAS ETIQUETAS CORRESPONDIENTE A LOS DATOS	*
@@ -2073,8 +1973,6 @@ class View:
 		#********************************************************
 		#				CONFIGURAMOS LOS EVENTOS				*
 		#********************************************************
-		button_anterior.config(command=lambda:self.pop_pila_anterior(View.VIEW_CREAR_PAQUETE))
-		button_siguiente.config(command=lambda:self.pop_pila_siguiente())
 		self.cedula_content_entry.trace("w", self.update_cedula_content_entry)
 		button_edad_de_viaje.config(command=lambda:self.view_calendar(frame, content_button_edad, 4, 0.17, 0.277))
 		#pre_venta_button.config(command=lambda:self.controller.agregar_pre_venta())
