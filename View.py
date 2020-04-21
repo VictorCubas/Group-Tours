@@ -5,6 +5,9 @@ from tkinter import *
 from Usuario import Usuario
 from Calendar import Calendar
 from TemporizadorVigencia import TemporizadorVigencia
+import PIL
+from PIL import Image
+from PIL import ImageTk
 import datetime
 
 import copy
@@ -350,41 +353,57 @@ class View:
 		#aplicamos los nuevos resultados de la busqueda
 		paquete_view = None
 		aux = -1
+
+		img = Image.open('imagenes/logo.png')
+		img = img.resize((170, 140), Image.ANTIALIAS)
+
 		for paquete in self.paquetes:
 			aux += 1
 
 			paquete_view = Frame(self.frame_result_aux, bg='#F9F9F9', width='770', height='150', relief=GROOVE, borderwidth=0)
 			paquete_view.pack(padx=10, pady=5)
 
-			paquete_name_view = Label(paquete_view, text=paquete.get_nombre(), width='20', height='1', relief=GROOVE, borderwidth=0)
-			paquete_name_view.config(font=('tahoma', 15, 'bold'), bg='#F9F9F9', fg='#343535',
+			image_frame = Frame(paquete_view, bg='#F9F9F9', width='120', height='140', relief=GROOVE, borderwidth=0)
+			image_frame.place(relx=0.02, rely=0.02)
+
+			logo = ImageTk.PhotoImage(img)
+			label_logo = Label(image_frame, width=230, height=140, relief=GROOVE, borderwidth=0)
+			label_logo.config(bg='#F9F9F9')
+			label_logo.config(image=logo)
+			label_logo.photo = logo
+			label_logo.pack()
+			label_logo.pack_propagate(0)
+
+
+			paquete_name_view = Label(paquete_view, text=paquete.get_nombre(), width='18', height='1', relief=GROOVE, borderwidth=0)
+			paquete_name_view.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535',
 											activeforeground='#343535', anchor=W) #posicionamos el texto a la izquierda
-			paquete_name_view.place(relx=0.315, rely=0.05)
+			paquete_name_view.place(relx=0.38, rely=0.05)
 
 			#fecha view
 			date = paquete.get_fecha_de_viaje()
 			texto = self.convert_date_to_string(date)
 
-			paquete_fecha_de_viaje_view = Button(paquete_view, text=texto, width='21', height='1', relief=GROOVE, borderwidth=0)
+			paquete_fecha_de_viaje_view = Label(paquete_view, text=texto, width='18', height='1', relief=GROOVE, borderwidth=0)
 			paquete_fecha_de_viaje_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030',
 									activeforeground='#2F3030', highlightthickness=0, anchor=W)
-			paquete_fecha_de_viaje_view.place(relx=0.3, rely=0.25)
+			paquete_fecha_de_viaje_view.place(relx=0.38, rely=0.29)
 
 			#vigente view
 			texto = 'Vigente'
 			if paquete.get_esta_vigente() == False:
 				texto = 'No vigente'
 
-			paquete_fecha_de_viaje_view = Button(paquete_view, text=texto, width='21', height='1', relief=GROOVE, borderwidth=0)
+			paquete_fecha_de_viaje_view = Label(paquete_view, text=texto, width='18', height='1', relief=GROOVE, borderwidth=0)
 			paquete_fecha_de_viaje_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030',
 											activeforeground='#2F3030', highlightthickness=0, anchor=W)
-			paquete_fecha_de_viaje_view.place(relx=0.3, rely=0.50)
+			paquete_fecha_de_viaje_view.place(relx=0.38, rely=0.52)
 
 			texto = 'Tipo: ' + paquete.TRASLADO
-			paquete_fecha_de_viaje_view = Button(paquete_view, text=texto, width='21', height='1', relief=GROOVE, borderwidth=0)
+			paquete_fecha_de_viaje_view = Label(paquete_view, text=texto, width='18', height='1', relief=GROOVE, borderwidth=0)
 			paquete_fecha_de_viaje_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030',
 												activeforeground='#2F3030', highlightthickness=0, anchor=W)
-			paquete_fecha_de_viaje_view.place(relx=0.3, rely=0.75)
+			paquete_fecha_de_viaje_view.place(relx=0.38, rely=0.75)
 
 			#SEGUNDA CULUMNA
 			#precio view
@@ -395,9 +414,9 @@ class View:
 			else:
 				texto = self.convert_amount_to_string(paquete.get_precio(), True)
 
-			paquete_precio_view = Button(paquete_view, text=texto, width='18', height='1', relief=GROOVE, borderwidth=0)
+			paquete_precio_view = Label(paquete_view, text=texto, width='18', height='1', relief=GROOVE, borderwidth=0)
 			paquete_precio_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
-			paquete_precio_view.place(relx=0.7, rely=0)
+			paquete_precio_view.place(relx=0.72, rely=0.07)
 
 			#pre venta view
 			if paquete.si_pre_venta():
@@ -405,9 +424,9 @@ class View:
 			else:
 				texto = 'Pre venta: no'
 
-			paquete_pre_venta_view = Button(paquete_view, text=texto, width='18', height='1', relief=GROOVE, borderwidth=0)
+			paquete_pre_venta_view = Label(paquete_view, text=texto, width='18', height='1', relief=GROOVE, borderwidth=0)
 			paquete_pre_venta_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
-			paquete_pre_venta_view.place(relx=0.7, rely=0.25)
+			paquete_pre_venta_view.place(relx=0.72, rely=0.29)
 
 			#lugares disponibles view
 			texto = 'Lugares disponible: '
@@ -421,18 +440,18 @@ class View:
 			else:
 				texto = texto + '--'
 
-			paquete_pre_venta_view = Button(paquete_view, text=texto, width='18', height='1', relief=GROOVE, borderwidth=0)
+			paquete_pre_venta_view = Label(paquete_view, text=texto, width='18', height='1', relief=GROOVE, borderwidth=0)
 			paquete_pre_venta_view.config(font=('tahoma', 13), bg='#F9F9F9', fg=color, activeforeground=color, highlightthickness=0, anchor=W)
-			paquete_pre_venta_view.place(relx=0.7, rely=0.5)
+			paquete_pre_venta_view.place(relx=0.72, rely=0.52)
 
 			pos_paquete = self.paquetes_posiciones[aux]
 
 			#detalles view
 			texto = 'Ver detalles      >'
-			paquete_detalles_view = Button(paquete_view, text=texto, width='18', height='1', relief=GROOVE, borderwidth=0)
+			paquete_detalles_view = Button(paquete_view, text=texto, width='16', height='1', relief=GROOVE, borderwidth=0)
 			paquete_detalles_view.config(font=('tahoma', 13), bg='#27A221', fg='#FFFFFF', activeforeground='#FFFFFF',
 										activebackground='#20801B', highlightthickness=0, anchor=W)
-			paquete_detalles_view.place(relx=0.7, rely=0.75)
+			paquete_detalles_view.place(relx=0.72, rely=0.75)
 			paquete_detalles_view.config(command=lambda paquete=paquete, pos_paquete=pos_paquete:
 									self.view_agregar_and_detalles_toplevel(None, paquete, pos_paquete, False))
 			#print(paquete_name_view.config("text")[-1])
@@ -1002,7 +1021,7 @@ class View:
 		texto = self.convert_amount_to_string(paquete.get_senha(), False)
 		self.senha_content_entry.set(texto)
 
-		senha_entry = Entry(frame_detalles, width='25', font=('tahoma', 13), textvariable=self.senha_content_entry)
+		senha_entry = Entry(frame_detalles, width='20', font=('tahoma', 13), textvariable=self.senha_content_entry)
 		senha_entry.place(relx=0.17, rely=0.378)
 
 		#view pre venta
