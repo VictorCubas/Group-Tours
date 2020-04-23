@@ -76,8 +76,14 @@ class Controller:
 
 		return filtros
 
+	def generar_lista_edades(self):
+		return self.model.generar_lista_edades()
+
 	def generar_lista_anhos(self):
 		return self.model.generar_lista_anhos()
+
+	def generar_lista_nacionalidades(self):
+		return self.model.generar_lista_nacionalidades()
 
 	def agregar_imagen(self, frame_parent, frame_imagen, label_logo, imagenes):
 		self.view.view_agregar_imagen(frame_parent, frame_imagen, label_logo, imagenes)
@@ -198,8 +204,8 @@ class Controller:
 			#volvemos a mostras las pre ventas
 			self.view.show_pre_ventas()
 
-	def registrar_cliente(self, next_back_starting):
-		self.view.view_registrar_cliente(next_back_starting)
+	def registrar_cliente(self):
+		self.view.view_registrar_cliente()
 
 	'''
 	def welcome(self):
