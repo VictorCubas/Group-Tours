@@ -356,28 +356,31 @@ class View:
 		paquete_view = None
 		aux = -1
 
-		img = Image.open('imagenes/logo.png')
-		img = img.resize((170, 140), Image.ANTIALIAS)
-		#filename = askopenfilename()
-		#print(filename)
-
 		for paquete in self.paquetes:
 			aux += 1
 
 			paquete_view = Frame(self.frame_result_aux, bg='#F9F9F9', width='770', height='150', relief=GROOVE, borderwidth=0)
 			paquete_view.pack(padx=10, pady=5)
 
+			#imagen view
 			image_frame = Frame(paquete_view, bg='#F9F9F9', width='120', height='140', relief=GROOVE, borderwidth=0)
 			image_frame.place(relx=0.02, rely=0.02)
 
-			logo = ImageTk.PhotoImage(img)
+			imagen_original = None
+			if paquete.get_cantidad_de_imagenes() == 0:
+				imagen_original = Image.open('imagenes/group_tours.png')
+			else:
+				imagen_original = paquete.get_imagenes()[0]
+
+			imagen_original = imagen_original.resize((170, 140), Image.ANTIALIAS)
+
+			logo = ImageTk.PhotoImage(imagen_original)
 			label_logo = Label(image_frame, width=230, height=140, relief=GROOVE, borderwidth=0)
 			label_logo.config(bg='#F9F9F9')
 			label_logo.config(image=logo)
 			label_logo.photo = logo
 			label_logo.pack()
 			label_logo.pack_propagate(0)
-
 
 			paquete_name_view = Label(paquete_view, text=paquete.get_nombre(), width='18', height='1', relief=GROOVE, borderwidth=0)
 			paquete_name_view.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535',
@@ -886,17 +889,31 @@ class View:
 		incluye_text_widget.config(wrap=WORD, yscrollcommand=scroll.set)
 
 		#agregar imagen view
+		imagenes = []
 		frame_imagen = Frame(self.frame_agregar_paquete, width='280', height='250', bg='#F9F9F9', relief=GROOVE, borderwidth=1)
 		frame_imagen.place(relx=0.6, rely=0.45)
 		frame_imagen.pack_propagate(0)
+
+		imagen_predeterminada = Image.open('imagenes/group_tours.png')
+		imagen_predeterminada = imagen_predeterminada.resize((270, 260), Image.ANTIALIAS)
+
+		logo = ImageTk.PhotoImage(imagen_predeterminada)
+		label_logo = Label(frame_imagen, width=270, height=260, relief=GROOVE, borderwidth=0)
+		label_logo.config(bg='#F9F9F9')
+		label_logo.config(image=logo)
+		label_logo.photo = logo
+		label_logo.pack()
+		label_logo.pack_propagate(0)
+
 		add_image_button = Button(self.frame_agregar_paquete, text='Agregar', width=110, height=30, relief=GROOVE, borderwidth=0)
 		add_image_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#343535', highlightthickness=0)
 		add_image_button.config(image=self.imagenes['camara_icon'], compound=LEFT)
-		self.ya_se_agrego_una_imagen = False
-		add_image_button.config(command=lambda:self.controller.agregar_imagen(self.frame_agregar_paquete, frame_imagen))
+
+		add_image_button.config(command=lambda:self.controller.agregar_imagen(self.frame_agregar_paquete, frame_imagen, label_logo, imagenes))
 		add_image_button.place(relx=0.675, rely=0.8)
 
-		#view ok and cancel
+
+		#view ok and cancel	
 		save_button = Button(self.frame_agregar_paquete, text='Guardar', width=110, height=30, relief=GROOVE, borderwidth=0)
 		save_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#343535')
 		save_button.config(image=self.imagenes['save_icon'], compound=LEFT)
@@ -918,7 +935,7 @@ class View:
 		pre_venta_button.config(command=lambda:self.controller.agregar_pre_venta(agregando))
 		save_button.config(command=lambda:self.controller.guardar_paquete(name_content_entry.get(), combobox_tipos.get(), combobox_sub_tipos.get(),
 				combobox_vigencia.get(), self.lista_fecha, self.price_value, self.senha_value, incluye_text_widget.get(1.0, END),
-				cant_pasajeros_content_entry.get(), self.pre_ventas, self.paquete_detalles_top_level))
+				cant_pasajeros_content_entry.get(), self.pre_ventas, self.paquete_detalles_top_level, imagenes))
 
 		cancel_button.config(command=lambda:self.widget_destroy(self.paquete_detalles_top_level))
 
@@ -928,24 +945,24 @@ class View:
 		self.frame_agregar_paquete.pack(padx=20, pady=20, anchor=NE)
 		self.frame_agregar_paquete.pack_propagate(0)
 
-	def view_agregar_imagen(self, frame_parent, frame_imagen):
+	def view_agregar_imagen(self, frame_parent, frame_imagen, label_logo, imagenes):
 		filepath = askopenfilename(parent=frame_parent, filetypes=[('Imagen','*.png'), ('Imagen','*.jpg'), ('Imagen','*.jpeg')])
 
 		#ESTO DEBERIA DE ESTA EN EL MODEL Y EN UN TRY-CATCH
 		if filepath:
-			if self.ya_se_agrego_una_imagen:
-				self.widget_destroy(self.label_logo)
-				
-			img = Image.open(filepath)
-			img = img.resize((270, 260), Image.ANTIALIAS)
-			logo = ImageTk.PhotoImage(img)
-			self.label_logo = Label(frame_imagen, width=270, height=260, relief=GROOVE, borderwidth=0)
-			self.label_logo.config(bg='#F9F9F9')
-			self.label_logo.config(image=logo)
-			self.label_logo.photo = logo
-			self.label_logo.pack(pady=10)
-			self.label_logo.pack_propagate(0)
-			self.ya_se_agrego_una_imagen = True
+			self.widget_destroy(label_logo)
+
+			imagen_original = Image.open(filepath)
+			imagen_original = imagen_original.resize((270, 260), Image.ANTIALIAS)
+			logo = ImageTk.PhotoImage(imagen_original)
+			label_logo = Label(frame_imagen, width=270, height=260, relief=GROOVE, borderwidth=0)
+			label_logo.config(bg='#F9F9F9')
+			label_logo.config(image=logo)
+			label_logo.photo = logo
+			label_logo.pack()
+			label_logo.pack_propagate(0)
+
+			imagenes.append(imagen_original)
 
 	def view_editar_paquete(self, frame_editar_paquete, paquete, pos_paquete):
 		print('editando paquete...')
@@ -1116,6 +1133,36 @@ class View:
 		cant_pasajeros_entry = Entry(frame_detalles, width='15', font=('tahoma', 13), textvariable=cant_pasajeros_content_entry)
 		cant_pasajeros_entry.place(relx=0.748, rely=0.078)
 
+
+		#agregar imagen view
+		imagenes = paquete.get_imagenes()
+		frame_imagen = Frame(frame_detalles, width='280', height='250', bg='#F9F9F9', relief=GROOVE, borderwidth=1)
+		frame_imagen.place(relx=0.6, rely=0.45)
+		frame_imagen.pack_propagate(0)
+
+		imagen_original = None
+		if paquete.get_cantidad_de_imagenes() == 0:
+			imagen_original = Image.open('imagenes/group_tours.png')
+		else:
+			imagen_original = paquete.get_imagenes()[0]
+
+		imagen_original = imagen_original.resize((270, 260), Image.ANTIALIAS)
+
+		logo = ImageTk.PhotoImage(imagen_original)
+		label_logo = Label(frame_imagen, width=270, height=260, relief=GROOVE, borderwidth=0)
+		label_logo.config(bg='#F9F9F9')
+		label_logo.config(image=logo)
+		label_logo.photo = logo
+		label_logo.pack()
+		label_logo.pack_propagate(0)
+
+		add_image_button = Button(frame_detalles, text='Agregar', width=110, height=30, relief=GROOVE, borderwidth=0)
+		add_image_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#343535', highlightthickness=0)
+		add_image_button.config(image=self.imagenes['camara_icon'], compound=LEFT)
+		self.ya_se_agrego_una_imagen = True
+		add_image_button.config(command=lambda:self.controller.agregar_imagen(frame_detalles, frame_imagen, label_logo, imagenes))
+		add_image_button.place(relx=0.675, rely=0.775)
+
 		#view ok and cancel
 		save_button = Button(frame_detalles, text='Guardar', width=110, height=30, relief=GROOVE, borderwidth=0)
 		save_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#343535')
@@ -1143,7 +1190,7 @@ class View:
 
 		save_button.config(command=lambda:self.controller.guardar_paquete_editado(pos_paquete, name_content_entry.get(),
 				combobox_tipos.get(), combobox_sub_tipos.get(), combobox_vigencia.get(), self.fecha_de_viaje, self.price_value, self.senha_value,
-				incluye_text_widget.get(1.0, END), cant_pasajeros_content_entry.get(), self.pre_ventas, frame_detalles))
+				incluye_text_widget.get(1.0, END), cant_pasajeros_content_entry.get(), self.pre_ventas, frame_detalles, imagenes))
 
 		cancel_button.config(command=lambda:self.view_paquete_detalles(frame_detalles, paquete, pos_paquete))
 		
