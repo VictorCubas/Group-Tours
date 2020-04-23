@@ -79,6 +79,9 @@ class Controller:
 	def generar_lista_anhos(self):
 		return self.model.generar_lista_anhos()
 
+	def agregar_imagen(self, frame_parent, frame_imagen):
+		self.view.view_agregar_imagen(frame_parent, frame_imagen)
+
 	def crear_paquete(self, value):
 		self.view.view_crear_paquete(value)
 
