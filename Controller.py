@@ -79,8 +79,8 @@ class Controller:
 	def generar_lista_anhos(self):
 		return self.model.generar_lista_anhos()
 
-	def agregar_imagen(self, frame_parent, frame_imagen):
-		self.view.view_agregar_imagen(frame_parent, frame_imagen)
+	def agregar_imagen(self, frame_parent, frame_imagen, label_logo, imagenes):
+		self.view.view_agregar_imagen(frame_parent, frame_imagen, label_logo, imagenes)
 
 	def crear_paquete(self, value):
 		self.view.view_crear_paquete(value)
@@ -98,7 +98,9 @@ class Controller:
 	def es_la_pre_venta_actual(self, pre_venta):
 		return self.model.es_la_pre_venta_actual(pre_venta)
 
-	def guardar_paquete(self, nombre, tipo, sub_tipo, esta_vigente, lista_fecha, precio, senha, incluye, cant_pasajeros, pre_ventas, frame_agregar_paquete):
+	def guardar_paquete(self, nombre, tipo, sub_tipo, esta_vigente, lista_fecha, precio, senha, incluye,
+											cant_pasajeros, pre_ventas, frame_agregar_paquete, imagenes):
+
 		try:
 			self.model.validar_datos_paquete(nombre, tipo, sub_tipo, esta_vigente, lista_fecha, precio, senha, incluye, cant_pasajeros, True)
 		except NombreException as e:
@@ -108,25 +110,41 @@ class Controller:
 		except ValueError as e:
 			self.view.view_show_message(False, e)
 		else:
+			tengo_fecha = False
 			for fecha in lista_fecha:
+				tengo_fecha = True
 				paquete = self.model.crear_paquete(nombre, tipo, sub_tipo, esta_vigente, fecha, precio, senha, incluye, cant_pasajeros)
 
 				if len(pre_ventas) is not 0:
 					paquete.set_pre_ventas(pre_ventas)
+
+				if len(imagenes) is not 0:
+					paquete.set_imagenes(imagenes)
+
+				print('que onda pio 1...')
+				self.model.guardar_paquete(paquete)
+
+			if tengo_fecha is False:
+				#en caso de que sea un paquete PERSONALIZADO y no se le haya introducido una fecha
+				fecha = None
+				paquete = self.model.crear_paquete(nombre, tipo, sub_tipo, esta_vigente, fecha, precio, senha, incluye, cant_pasajeros)
+				if len(pre_ventas) is not 0:
+					paquete.set_pre_ventas(pre_ventas)
+
+				if len(imagenes) is not 0:
+					paquete.set_imagenes(imagenes)
 
 				self.model.guardar_paquete(paquete)
 
 			self.view.view_show_message(True, 'Se ha guardado con exito')
 			self.view.widget_destroy(frame_agregar_paquete)
 			self.view.update_buscar_paquete()
-		#else:
-			self.view.view_show_message(False, 'Debe introducir una fecha')
 
 	def guardar_paquete_editado(self, pos_paquete, nombre, tipo, sub_tipo, esta_vigente, fecha, precio,
-								senha, incluye, cant_pasajeros, pre_ventas, parent_detalles):
+								senha, incluye, cant_pasajeros, pre_ventas, parent_detalles, imagenes):
 		success = None
 		try:
-			self.model.validar_datos_paquete(nombre, tipo, sub_tipo, esta_vigente, fecha, precio, senha, incluye, cant_pasajeros, False)
+			self.model.validar_datos_paquete_editado(nombre, tipo, sub_tipo, esta_vigente, fecha, precio, senha, incluye, cant_pasajeros, False)
 			success = True
 		except NombreException as e:
 			success = False
@@ -143,6 +161,9 @@ class Controller:
 
 			if len(pre_ventas) is not 0:
 				paquete.set_pre_ventas(pre_ventas)
+
+			if len(imagenes) is not 0:
+					paquete.set_imagenes(imagenes)
 
 			print('guardando paquete editado...')
 			self.model.guardar_paquete_editado(paquete, pos_paquete)
