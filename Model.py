@@ -323,6 +323,26 @@ class Model:
 
 		return False
 
+	def generar_lista_nacionalidades(self):
+		lista_nacionalidades = []
+		lista_nacionalidades.append('')
+
+		archivo = open('data_base_files/nacionalidades.txt', 'r')
+		for nacionalidad in archivo.readlines():
+			lista_nacionalidades.append(nacionalidad)
+	
+		archivo.close() 
+		return lista_nacionalidades
+
+	def generar_lista_edades(self):
+		lista_edades = []
+		lista_edades.append('')
+
+		for i in range(111):
+			lista_edades.append(i)
+
+		return lista_edades
+
 	def generar_lista_anhos(self):
 		date = datetime.date.today()
 
