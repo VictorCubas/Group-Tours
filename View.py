@@ -1,6 +1,7 @@
 #view.py
 from tkinter import ttk
 from tkinter import *
+from tkinter.filedialog import askopenfilename
 #import tkFont
 from Usuario import Usuario
 from Calendar import Calendar
@@ -53,7 +54,8 @@ class View:
 						'ok_icon': PhotoImage(file='imagenes/ok_icon.png'),
 						'not_ok_icon': PhotoImage(file='imagenes/not_ok_icon.png'),
 						'edit_icon': PhotoImage(file='imagenes/edit_icon.png'),
-						'add_icon': PhotoImage(file='imagenes/add_icon.png')}
+						'add_icon': PhotoImage(file='imagenes/add_icon.png'),
+						'camara_icon': PhotoImage(file='imagenes/camara_icon.png')}
 
 		#self.inicio_button = Button(self.left_frame, text=' Inicio', font=('tahoma', 17), bg='#F9F9F9', width='300', height='90')
 		#self.inicio_button.config(font=('arial', 19, "bold"))
@@ -356,6 +358,8 @@ class View:
 
 		img = Image.open('imagenes/logo.png')
 		img = img.resize((170, 140), Image.ANTIALIAS)
+		#filename = askopenfilename()
+		#print(filename)
 
 		for paquete in self.paquetes:
 			aux += 1
@@ -881,6 +885,17 @@ class View:
 		scroll.config(command=incluye_text_widget.yview)
 		incluye_text_widget.config(wrap=WORD, yscrollcommand=scroll.set)
 
+		#agregar imagen view
+		frame_imagen = Frame(self.frame_agregar_paquete, width='280', height='250', bg='#F9F9F9', relief=GROOVE, borderwidth=1)
+		frame_imagen.place(relx=0.6, rely=0.45)
+		frame_imagen.pack_propagate(0)
+		add_image_button = Button(self.frame_agregar_paquete, text='Agregar', width=110, height=30, relief=GROOVE, borderwidth=0)
+		add_image_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#343535', highlightthickness=0)
+		add_image_button.config(image=self.imagenes['camara_icon'], compound=LEFT)
+		self.ya_se_agrego_una_imagen = False
+		add_image_button.config(command=lambda:self.controller.agregar_imagen(self.frame_agregar_paquete, frame_imagen))
+		add_image_button.place(relx=0.675, rely=0.8)
+
 		#view ok and cancel
 		save_button = Button(self.frame_agregar_paquete, text='Guardar', width=110, height=30, relief=GROOVE, borderwidth=0)
 		save_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#343535')
@@ -912,6 +927,25 @@ class View:
 		#********************************************************
 		self.frame_agregar_paquete.pack(padx=20, pady=20, anchor=NE)
 		self.frame_agregar_paquete.pack_propagate(0)
+
+	def view_agregar_imagen(self, frame_parent, frame_imagen):
+		filepath = askopenfilename(parent=frame_parent, filetypes=[('Imagen','*.png'), ('Imagen','*.jpg'), ('Imagen','*.jpeg')])
+
+		#ESTO DEBERIA DE ESTA EN EL MODEL Y EN UN TRY-CATCH
+		if filepath:
+			if self.ya_se_agrego_una_imagen:
+				self.widget_destroy(self.label_logo)
+				
+			img = Image.open(filepath)
+			img = img.resize((270, 260), Image.ANTIALIAS)
+			logo = ImageTk.PhotoImage(img)
+			self.label_logo = Label(frame_imagen, width=270, height=260, relief=GROOVE, borderwidth=0)
+			self.label_logo.config(bg='#F9F9F9')
+			self.label_logo.config(image=logo)
+			self.label_logo.photo = logo
+			self.label_logo.pack(pady=10)
+			self.label_logo.pack_propagate(0)
+			self.ya_se_agrego_una_imagen = True
 
 	def view_editar_paquete(self, frame_editar_paquete, paquete, pos_paquete):
 		print('editando paquete...')
