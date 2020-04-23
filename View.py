@@ -1897,7 +1897,7 @@ class View:
 		#button_search.config(command=lambda:self.view_buscar_paquete(True))
 		#button_siguiente.config(command=lambda:self.pop_pila_siguiente())
 		#button_create.config(command=lambda:self.view_crear_paquete(True))
-		button_create.config(command=lambda:self.controller.registrar_cliente(True))
+		button_create.config(command=lambda:self.controller.registrar_cliente())
 
 		#********************************************************
 		#				PACK A TODOS LOS BOTONES				*
@@ -1911,7 +1911,7 @@ class View:
 
 		self.switch_frame(frame)
 
-	def view_registrar_cliente(self, next_back_starting):
+	def view_registrar_cliente(self):
 		self.set_button_bold('usuarios')
 		self.anterior = 'usuarios'
 		#print('wtf')
@@ -1966,18 +1966,36 @@ class View:
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=0.280)
 
-		content_button_edad = StringVar()
-		content_button_edad.set('-- / -- / --')
-		self.edad_de_viaje = None
-		button_edad_de_viaje = Button(frame, textvariable=content_button_edad, width='8', height='1', relief=GROOVE, borderwidth=0)
-		button_edad_de_viaje.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
-		button_edad_de_viaje.place(relx=0.17, rely=0.288)
+		content_button_fecha_nacimiento = StringVar()
+		content_button_fecha_nacimiento.set('-- / -- / --')
+		button_fecha_nacimiento = Button(frame, textvariable=content_button_fecha_nacimiento, width='8', height='1', relief=GROOVE, borderwidth=0)
+		button_fecha_nacimiento.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
+		button_fecha_nacimiento.place(relx=0.17, rely=0.288)
 
 		#view edad cliente
 		label = Label(frame, text='Edad:', width='10', height='2', relief=GROOVE, borderwidth=2)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=0.353)
 
+		#insertamos un COMBOBOX para listar la edad de las personas
+		lista_edades = self.controller.generar_lista_edades()
+		self.combobox_edad = ttk.Combobox(frame, values=lista_edades)
+
+		self.combobox_edad.config(state='readonly', font=(15), width='3', height='6', background='#F9F9F9')#insertamos un COMBOBOX para seleccionar la edad
+		self.combobox_edad.place(relx=0.17, rely=0.37)
+
+		#view nacionalidad
+		label = Label(frame, text='Nacionalidad:', width='11', height='2', relief=GROOVE, borderwidth=2)
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
+		label.place(relx=0.02, rely=0.43)
+
+		#insertamos un COMBOBOX para listar las nacionalidades de las personas
+		lista_nacionalidades = self.controller.generar_lista_nacionalidades()
+		self.combobox_nacionalidades = ttk.Combobox(frame, values=lista_nacionalidades)
+		self.combobox_nacionalidades.set('Paraguay')
+
+		self.combobox_nacionalidades.config(state='readonly', font=(15), width='15', height='6', background='#F9F9F9')#insertamos un COMBOBOX para seleccionar la edad
+		self.combobox_nacionalidades.place(relx=0.18, rely=0.45)
 		'''
 		#view vigente
 		label = Label(frame, text='Vigente:', width='10', height='2', relief=GROOVE, borderwidth=0)
@@ -2078,7 +2096,7 @@ class View:
 		#				CONFIGURAMOS LOS EVENTOS				*
 		#********************************************************
 		self.cedula_content_entry.trace("w", self.update_cedula_content_entry)
-		button_edad_de_viaje.config(command=lambda:self.view_calendar(frame, content_button_edad, 4, 0.17, 0.277))
+		button_fecha_nacimiento.config(command=lambda:self.view_calendar(frame, content_button_fecha_nacimiento, 4, 0.17, 0.277))
 		#pre_venta_button.config(command=lambda:self.controller.agregar_pre_venta())
 		#save_button.config(command=lambda:self.controller.guardar_paquete(name_content_entry.get(), combobox_tipos.get(), combobox_sub_tipos.get(),
 		#		combobox_vigencia.get(), self.fecha_de_viaje, price_content_entry.get(), senha_content_entry.get(), incluye_text_widget.get(1.0, END),
