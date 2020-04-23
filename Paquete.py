@@ -21,14 +21,29 @@ class Paquete(metaclass=ABCMeta):
 		self.usuarios = []
 		self.facturas = []
 		self.pre_ventas = []
+		self.imagenes = []
 		self.esta_vigente = None
 		self.codigo = None
 		self.cantidad_pagos_actual = 0
 		self.cantidad_de_usuarios_total = 0
 		self.cantidad_de_usuarios_actual = 0
 		self.cantidad_de_pre_ventas = 0
+		self.cantidad_de_imagenes = 0
 		#Incrementamos la cantidad de instancias
 		Paquete.cantidad_total_paquetes += 1
+
+	def agregar_imagen(self, imagen):
+		self.imagenes.append(imagen)
+
+	def set_imagenes(self, imagenes):
+		self.imagenes = imagenes
+		self.cantidad_de_imagenes = len(imagenes)
+
+	def get_cantidad_de_imagenes(self):
+		return self.cantidad_de_imagenes
+
+	def get_imagenes(self):
+		return self.imagenes
 
 	def agregar_usuario(self, usuario):
 		self.cantidad_de_usuarios_actual += 1
