@@ -78,20 +78,15 @@ class Model:
 						pos_result_busqueda_aux.append(self.pos_result_busqueda[i])
 
 					encontrando = True
-					print('encontrando: ' + str(encontrando))
+					#print('encontrando: ' + str(encontrando))
 
 		self.paquetes_result = paquetes_result_aux
 		self.pos_result_busqueda = pos_result_busqueda_aux
 
-		#print('len1: ' + str(len(self.paquetes_result)))
-		#print('len2: ' + str(len(self.pos_result_busqueda)))
-
-		#for i in range(len(self.pos_result_busqueda)):
-		#	print(str(self.pos_result_busqueda[i]))
-
 		return [self.paquetes_result, encontrando, self.pos_result_busqueda]
 
-	def buscar_paquete_por_vigencia(self, esta_vigente, cantidad_de_filtros, filtro_anho_seleccionado, filtro_tipo_seleccionado, filtro_sub_tipo_seleccionado, encontrando):
+	def buscar_paquete_por_vigencia(self, esta_vigente, cantidad_de_filtros, filtro_anho_seleccionado, filtro_tipo_seleccionado,
+																				filtro_sub_tipo_seleccionado, encontrando):
 		'''
 		Busca una lista de paquetes en base a si esta vigente o no el paquete, el cual es dado
 		como parametro y es almacenado como atributo de la clase
@@ -135,7 +130,6 @@ class Model:
 					if esta_vacio_el_vector:
 						pos_result_busqueda_aux.append(i)
 					else:
-						print('i: ' + str(i))
 						pos_result_busqueda_aux.append(self.pos_result_busqueda[i])
 
 					encontrando = True
@@ -356,15 +350,12 @@ class Model:
 			if esta_vigente == '':
 				raise Exception('Vigencia incorrecto')
 
-			if banderita:
+			if tipo == 'Terrestre' and sub_tipo == 'Estandar':
 				if len(fecha) == 0:
 					raise Exception('Debe introducir una fecha')
-			else:
-				if fecha == None:
-					raise Exception('Debe introducir una fecha')
 
-			if precio == None or senha == None:
-				raise Exception('Debes completar todos los campos')
+			#if precio == None or senha == None:
+			#	raise Exception('Debes completar todos los campos')
 
 			if precio == '':
 				raise Exception('Precio incorrecto')
@@ -384,6 +375,49 @@ class Model:
 			raise ValueError('Precio o Seña incorrecto')
 		except Exception:
 			raise
+
+	def validar_datos_paquete_editado(self, nombre, tipo, sub_tipo, esta_vigente, fecha, precio, senha, incluye, cant_pasajeros, banderita):
+		print('validando...')
+
+		try:
+			if nombre == '':
+				raise NombreException('Nombre incorrecto')
+
+			if tipo == '':
+				raise Exception('Tipo incorrecto')
+
+			if sub_tipo == '':
+				raise Exception('Sub-Tipo incorrecto')
+
+			if esta_vigente == '':
+				raise Exception('Vigencia incorrecto')
+
+			if tipo == 'Terrestre' and sub_tipo == 'Estandar':
+				if fecha == None:
+					raise Exception('Debe introducir una fecha')
+
+			#if precio == None or senha == None:
+			#	raise Exception('Debes completar todos los campos')
+
+			if precio == '':
+				raise Exception('Precio incorrecto')
+
+			precio = int(precio)
+			if senha == '':
+				raise Exception('Seña incorrecto')
+
+			senha = int(senha)
+			if senha > precio:
+				raise Exception('La seña es mayor al precio')
+
+			if cant_pasajeros != '' and cant_pasajeros != '--':
+				cant_pasajeros = int(cant_pasajeros)
+
+		except ValueError as e:
+			raise ValueError('Precio o Seña incorrecto')
+		except Exception:
+			raise
+
 
 	def validar_datos_pre_venta(self, precio, senha, monto_cuota, cant_cuotas, fecha_inicio, fecha_fin):
 		try:
