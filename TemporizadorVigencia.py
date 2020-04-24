@@ -143,8 +143,12 @@ class TemporizadorVigencia(Thread):
         print('estoy revisando la vigencia')
         for paquete in paquetes:
             if paquete.get_esta_vigente():
-                fecha_de_viaje = paquete.get_fecha_de_viaje().year*100 + paquete.get_fecha_de_viaje().month
-                fecha_de_viaje = fecha_de_viaje * 100 + paquete.get_fecha_de_viaje().day
+                fecha = paquete.get_fecha_de_viaje()
+                if fecha is None:
+                    continue
+
+                fecha_de_viaje = fecha.year*100 + fecha.month
+                fecha_de_viaje = fecha_de_viaje * 100 + fecha.day
                 #print('fecha de viaje: {}'.format(fecha_de_viaje))
                 hoy = (datetime.today().year * 100 + datetime.today().month) * 100 + datetime.today().day
                 #print('fecha de hoy: {}'.format(hoy))
