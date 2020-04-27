@@ -2,7 +2,7 @@
 
 from Contacto import Contacto
 
-class Telefono( Contacto ):
+class Correo( Contacto ):
     '''Clase telefono que hereda de Contacto'''
 
     def __init__( self, email, descripcion ):
@@ -20,4 +20,4 @@ class Telefono( Contacto ):
         return self.email
      
     def __str__( self ):
-        return super( ).__str__( ) + "{}".format( self.email )
+        return "{}".format( self.email )
