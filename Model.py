@@ -5,6 +5,10 @@ from Usuario import Usuario
 import datetime
 from time import sleep
 from exceptions.NombreException import NombreException
+from exceptions.ApellidoException import ApellidoException
+from exceptions.TelefonoIncorrectoException import TelefonoIncorrectoException
+from exceptions.CorreoIncorrectoException import CorreoIncorrectoException
+from exceptions.CedulaIncorrectaException import CedulaIncorrectaException
 from TerrestreEstandar import TerrestreEstandar
 from TerrestrePersonalizado import TerrestrePersonalizado
 from AereoEstandar import AereoEstandar
@@ -354,6 +358,64 @@ class Model:
 
 		return lista_anhos
 
+	def validar_datos_cliente(self, nombre, apellido, cedula, fecha_nacimiento, edad, nacionalidad, telefono1, telefono2, email):
+		print('validando los datos del cliente...')
+
+		try:
+			if nombre == '' or nombre == None:
+				print('asd')
+				raise NombreException('Nombre incorrecto')
+
+			if apellido == '' or apellido == None:
+				raise ApellidoException('Apellido incorrecto')
+
+			if cedula is None:
+				raise CedulaIncorrectaException('Debe introducir una cedula')
+
+			if fecha_nacimiento is None:
+				raise Exception('Debe introducir una fecha')
+
+			if edad is '':
+				raise Exception('Debe introducir una edad')
+
+			if nacionalidad is '':
+				raise Exception('Debe introducir la nacionalidad')
+
+			if telefono1 is not '':
+				try:
+					if len(telefono1) is not 10:
+						raise TelefonoIncorrectoException('Telefono 1 incorrecto')
+
+					telefono1 = int(telefono1)
+				except TelefonoIncorrectoException:
+						raise
+				except Exception:
+					raise TelefonoIncorrectoException('Telefono 1 incorrecto')
+
+			if telefono2 is not '':
+				try:
+					if len(telefono2) is not 10:
+						raise TelefonoIncorrectoException('Telefono 2 incorrecto')
+
+					telefono2 = int(telefono2)
+				except TelefonoIncorrectoException:
+						raise
+				except Exception:
+					raise TelefonoIncorrectoException('Telefono 2 incorrecto')
+
+			#************************************
+			#	Agregar validacion de correo	*
+			#************************************
+
+		except NombreException:
+			raise
+		except ApellidoException:
+			raise
+		except Exception:
+			raise
+		except TelefonoIncorrectoException:
+			raise
+
 	def validar_datos_paquete(self, nombre, tipo, sub_tipo, esta_vigente, fecha, precio, senha, incluye, cant_pasajeros, banderita):
 		print('validando...')
 
@@ -523,6 +585,25 @@ class Model:
 
 		pre_venta = PreVenta(precio, senha, monto_cuota, cant_cuotas, fecha_inicio, fecha_fin)
 		return pre_venta
+
+	def guardar_cliente(self, cliente):
+		result = []
+		print('Model: guardando cliente...')
+
+		try:
+			archivo = open('data_base_files/clientes.pickle', 'rb')
+			result = pickle.load(archivo)
+			archivo.close()
+			archivoNuevo = open('data_base_files/clientes.pickle', 'wb')
+			result.append(cliente)
+			pickle.dump(result, archivoNuevo)
+			archivoNuevo.close()
+		except IOError:
+			archivoNuevo = open('data_base_files/clientes.pickle', 'wb')
+			result.append(cliente)
+			pickle.dump(result, archivoNuevo)
+			archivoNuevo.close()
+		return
 
 	def guardar_paquete(self, paquete):
 		result = []
