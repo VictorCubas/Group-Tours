@@ -16,9 +16,6 @@ class Contacto( metaclass=ABCMeta ):
     def get_descripcion( self ):
         return self.descripcion
 
-    def __str__( self ):
-        return "Contacto: "
-
     @abstractmethod
     def accion(self):
         pass
