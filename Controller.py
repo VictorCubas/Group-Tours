@@ -4,7 +4,15 @@ from View import View
 from tkinter import ttk
 from tkinter import *
 from exceptions.NombreException import NombreException
+from exceptions.ApellidoException import ApellidoException
+from exceptions.TelefonoIncorrectoException import TelefonoIncorrectoException
+from exceptions.CorreoIncorrectoException import CorreoIncorrectoException
+from exceptions.CedulaIncorrectaException import CedulaIncorrectaException
 from Paquete import Paquete
+from Usuario import Usuario
+from Nacionalidad import Nacionalidad
+from Telefono import Telefono
+from Correo import Correo
 
 class Controller:
 
@@ -87,6 +95,35 @@ class Controller:
 
 	def agregar_imagen(self, frame_parent, frame_imagen, label_logo, imagenes):
 		self.view.view_agregar_imagen(frame_parent, frame_imagen, label_logo, imagenes)
+
+	def guardar_cliente(self, nombre, apellido, cedula, fecha_nacimiento, edad, nacionalidad, telefono1, telefono2, email, frame):
+		try:
+			self.model.validar_datos_cliente(nombre, apellido, cedula, fecha_nacimiento, edad, nacionalidad, telefono1, telefono2, email)
+		except NombreException as e:
+			self.view.view_show_message(False, e)
+		except ApellidoException as e:
+			self.view.view_show_message(False, e)
+		except Exception as e:
+			self.view.view_show_message(False, e)
+		except TelefonoIncorrectoException as e:
+			self.view.view_show_message(False, e)
+		else:
+			cliente = Usuario(nombre, apellido, cedula, fecha_nacimiento, edad, nacionalidad)
+
+			if telefono1 is not None:
+				cliente.set_telefono_primario(Telefono(telefono1, ''))
+
+			if telefono2 is not None:
+				cliente.set_telefono_secundario(Telefono(telefono2, ''))
+
+			if email is not None:
+				cliente.set_correo(Correo(email, ''))
+
+			print(cliente.__str__())
+			print('contacto1: {}'.format(cliente.get_telefono_primario()))
+			self.model.guardar_cliente(cliente)
+			self.view.view_show_message(True, 'Se ha guardado con exito')
+			self.view.widget_destroy(frame)
 
 	def crear_paquete(self, value):
 		self.view.view_crear_paquete(value)
