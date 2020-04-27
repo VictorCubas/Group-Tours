@@ -2023,7 +2023,7 @@ class View:
 		#********************************************************
 
 		#view nombre cliente
-		label = Label(self.frame_registrar_cliente, text='Nombre:', width='10', height='2', relief=GROOVE, borderwidth=2)
+		label = Label(self.frame_registrar_cliente, text='Nombre:', width='10', height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=0.06)
 
@@ -2032,40 +2032,40 @@ class View:
 		name_entry.place(relx=0.16, rely=0.075)
 
 		#view apellido cliente
-		label = Label(self.frame_registrar_cliente, text='Apellido:', width='10', height='2', relief=GROOVE, borderwidth=2)
+		label = Label(self.frame_registrar_cliente, text='Apellido:', width='10', height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
-		label.place(relx=0.02, rely=0.134)
+		label.place(relx=0.02, rely=0.128)
 
 		apellido_content_entry = StringVar()
 		apellido_entry = Entry(self.frame_registrar_cliente, width='20', font=('tahoma', 13), textvariable=apellido_content_entry)
-		apellido_entry.place(relx=0.16, rely=0.149)
+		apellido_entry.place(relx=0.16, rely=0.141)
 
 		#view cedula cliente
-		label = Label(self.frame_registrar_cliente, text='Cedula:', width='10', height='2', relief=GROOVE, borderwidth=2)
+		label = Label(self.frame_registrar_cliente, text='Cedula:', width='10', height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
-		label.place(relx=0.02, rely=0.207)
+		label.place(relx=0.02, rely=0.195)
 
 		self.cedula_content_entry = StringVar()
 		self.cedula_value = None
 		cedula_entry = Entry(self.frame_registrar_cliente, width='20', font=('tahoma', 13), textvariable=self.cedula_content_entry)
-		cedula_entry.place(relx=0.16, rely=0.223)
+		cedula_entry.place(relx=0.16, rely=0.207)
 
 		#view fecha de nacimiento cliente
-		label = Label(self.frame_registrar_cliente, text='Nacimiento:', width='10', height='2', relief=GROOVE, borderwidth=2)
+		label = Label(self.frame_registrar_cliente, text='Nacimiento:', width='10', height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
-		label.place(relx=0.02, rely=0.280)
+		label.place(relx=0.02, rely=0.262)
 
 		content_button_fecha_nacimiento = StringVar()
 		content_button_fecha_nacimiento.set('-- / -- / --')
 		self.fecha_nacimiento_value = None
 		button_fecha_nacimiento = Button(self.frame_registrar_cliente, textvariable=content_button_fecha_nacimiento, width='8', height='1', relief=GROOVE, borderwidth=0)
 		button_fecha_nacimiento.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
-		button_fecha_nacimiento.place(relx=0.16, rely=0.288)
+		button_fecha_nacimiento.place(relx=0.16, rely=0.272)
 
 		#view edad cliente
-		label = Label(self.frame_registrar_cliente, text='Edad:', width='10', height='2', relief=GROOVE, borderwidth=2)
+		label = Label(self.frame_registrar_cliente, text='Edad:', width='10', height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
-		label.place(relx=0.02, rely=0.353)
+		label.place(relx=0.02, rely=0.329)
 
 		#insertamos un COMBOBOX para listar la edad de las personas
 		lista_edades = self.controller.generar_lista_edades()
@@ -2073,12 +2073,12 @@ class View:
 
 		self.combobox_edad.set('')
 		self.combobox_edad.config(state='readonly', font=(15), width='3', height='6', background='#F9F9F9')#insertamos un COMBOBOX para seleccionar la edad
-		self.combobox_edad.place(relx=0.16, rely=0.37)
+		self.combobox_edad.place(relx=0.16, rely=0.345)
 
 		#view nacionalidad
-		label = Label(self.frame_registrar_cliente, text='Nacionalidad:', width='11', height='2', relief=GROOVE, borderwidth=2)
+		label = Label(self.frame_registrar_cliente, text='Nacionalidad:', width='11', height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
-		label.place(relx=0.02, rely=0.43)
+		label.place(relx=0.02, rely=0.396)
 
 		#insertamos un COMBOBOX para listar las nacionalidades de las personas
 		lista_nacionalidades = self.controller.generar_lista_nacionalidades()
@@ -2086,37 +2086,37 @@ class View:
 		self.combobox_nacionalidades.set('Paraguay')
 
 		self.combobox_nacionalidades.config(state='readonly', font=(15), width='15', height='6', background='#F9F9F9')#insertamos un COMBOBOX para seleccionar la edad
-		self.combobox_nacionalidades.place(relx=0.17, rely=0.45)
+		self.combobox_nacionalidades.place(relx=0.17, rely=0.413)
 
 		#view telefono 1
-		label = Label(self.frame_registrar_cliente, text='Telefono 1:', width='10', height='2', relief=GROOVE, borderwidth=2)
+		label = Label(self.frame_registrar_cliente, text='Telefono 1:', width='10', height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
-		label.place(relx=0.55, rely=0.075)
+		label.place(relx=0.55, rely=0.06)
 
 		self.telefono1_content_entry = StringVar()
 		self.telefono1_value = None
 		telefono1_entry = Entry(self.frame_registrar_cliente, width='20', font=('tahoma', 13), textvariable=self.telefono1_content_entry)
-		telefono1_entry.place(relx=0.68, rely=0.09)
+		telefono1_entry.place(relx=0.68, rely=0.075)
 
 		#view telefono 2
-		label = Label(self.frame_registrar_cliente, text='Telefono 2:', width='10', height='2', relief=GROOVE, borderwidth=2)
+		label = Label(self.frame_registrar_cliente, text='Telefono 2:', width='10', height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
-		label.place(relx=0.55, rely=0.142)
+		label.place(relx=0.55, rely=0.128)
 
 		self.telefono2_content_entry = StringVar()
 		self.telefono2_value = None
 		telefono2_entry = Entry(self.frame_registrar_cliente, width='20', font=('tahoma', 13), textvariable=self.telefono2_content_entry)
-		telefono2_entry.place(relx=0.68, rely=0.157)
+		telefono2_entry.place(relx=0.68, rely=0.141)
 
 		#view email
-		label = Label(self.frame_registrar_cliente, text='Email:', width='10', height='2', relief=GROOVE, borderwidth=2)
+		label = Label(self.frame_registrar_cliente, text='Email:', width='10', height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
-		label.place(relx=0.55, rely=0.209)
+		label.place(relx=0.55, rely=0.195)
 
 		self.email_content_entry = StringVar()
 		#self.email_value = None
 		email_entry = Entry(self.frame_registrar_cliente, width='20', font=('tahoma', 13), textvariable=self.email_content_entry)
-		email_entry.place(relx=0.68, rely=0.222)
+		email_entry.place(relx=0.68, rely=0.207)
 
 		#view ok and cancel
 		save_button = Button(self.frame_registrar_cliente, text='Guardar', width=110, height=30, relief=GROOVE, borderwidth=0)
@@ -2139,6 +2139,7 @@ class View:
 															self.fecha_nacimiento_value, self.combobox_edad.get(), self.combobox_nacionalidades.get(),
 															self.telefono1_content_entry.get(), self.telefono2_content_entry.get(), 
 															self.email_content_entry.get(), self.cliente_top_level))
+
 		cancel_button.config(command=lambda:self.widget_destroy(self.cliente_top_level))
 
 		self.frame_registrar_cliente.pack(padx=20, pady=20, anchor=NE)
