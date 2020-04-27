@@ -1815,6 +1815,9 @@ class View:
 		elif cod_fecha == 3:
 			#en caso de que vayemos a seleccionar la fecha de fin de la pre venta
 			fecha = self.pre_venta_fecha_fin
+		elif cod_fecha == 4:
+			#en caso de que selecciones una fecha de nacimiento
+			fecha = self.fecha_nacimiento_value
 
 		calendario = Calendar(frame_date, fecha)
 		ok = Button(frame_calendar, width=5, bg='#F9F9F9', text='OK', command=lambda:
@@ -1840,6 +1843,10 @@ class View:
 		elif cod_fecha == 3:
 			if date is not None:
 				self.pre_venta_fecha_fin = date
+		elif cod_fecha == 4:
+			#en caso de que selecciones una fecha de nacimiento
+			if date is not None:
+				self.fecha_nacimiento_value = date
 
 		if date is None:
 			return
@@ -1866,253 +1873,287 @@ class View:
 			content.set(day + '/' + month + '/' + str(date.year))
 
 	def view_usuarios(self):
+		self.view_buscar_cliente()
+
+	def view_buscar_cliente(self):
 		self.set_button_bold('usuarios')
 		self.anterior = 'usuarios'
 
-		#********************************************************
-		#				CREAMOS TODOS LOS BOTONES				*
-		#********************************************************
+		#DEFINIMOS EL FRAME 
 		frame = Frame(self.main_frame, width='900', height='700', bg='#F9F9F9', relief=GROOVE, borderwidth=2)
 
-		button_create = Button(frame, text=' Registrar nuevo cliente', font=('tahoma', 15), bg='#F9F9F9',
-											width='390', height='90', highlightthickness=0, borderwidth=2)
-		button_create.config(anchor=W)  #posicionamos el texto a la izquierda
-		button_create.config(fg='#48C2FA', activeforeground='#48C2FA')
-
-		button_search = Button(frame, text=' Buscar cliente', font=('tahoma', 15), bg='#F9F9F9',
-									width='390', height='90', highlightthickness=0, borderwidth=2)
-		button_search.config(anchor=W)  #posicionamos el texto a la izquierda
-		button_search.config(fg='#48C2FA', activeforeground='#48C2FA')
+		#declaramos el un string que alamacena el contenido ingresado
+		self.content_entry = StringVar()
+		self.radio_variable = StringVar()
+		self.radio_variable.set('ninguno')
+		self.filtro_anho_value = None
+		self.filtro_tipo_value = None
+		self.filtro_sub_tipo_value = None
+		#result es una lista que almacena todos los paquetes como resultado de la busqueda
+		#RESETEAMOS LA LISTA DE RESULTADOS EN CASO DE ENTRAR POR PRIMERA VEZ A BUSCAR PAQUETE
+		self.paquetes = []
 
 		#********************************************************
-		#			AGREGAMOS ICONOS A LOS BOTONES				*
-		#********************************************************
 
-		button_search.config(image=self.imagenes['lupa_icon'], compound=LEFT)
-		button_create.config(image=self.imagenes['lupa_icon'], compound=LEFT)
+		label_nombre_paquete = Label(frame, text='Nombre/Destino:', font=('tahoma', 14, 'bold'), width=14, height=1, bg='#F9F9F9')
+		label_nombre_paquete.config(fg='#48C2FA')
+		#declaramos una entreada para ingresar los datos
+		entry = Entry(frame, width='15', font=('tahoma', 15), textvariable=self.content_entry)
+		#insertamos RADIO BUTTON para la busqueda por vigencia
+		label_radio_button = Label(frame, text='Vigente', font=('tahoma', 14, 'bold'), width=7, height=3, relief=GROOVE, borderwidth=0)
+		label_radio_button.config(bg='#F9F9F9', fg='#48C2FA')
+
+		radio_button_si = Radiobutton(frame, text='Si', font=('tahoma', 15), variable=self.radio_variable, value='si', width=2, height=2)
+		radio_button_si.config(bg='#F9F9F9', activebackground='#F9F9F9', highlightthickness=0)
+		radio_button_no = Radiobutton(frame, text='No', font=('tahoma', 15), variable=self.radio_variable, value='no', width=2, height=2)
+		radio_button_no.config(bg='#F9F9F9', activebackground='#F9F9F9', highlightthickness=0)
+		radio_button_ninguno = Radiobutton(frame, text='Ninguno', font=('tahoma', 15), variable=self.radio_variable, value='ninguno', width=8, height=2)
+		radio_button_ninguno.config(bg='#F9F9F9', activebackground='#F9F9F9', highlightthickness=0)
+
+		#insertamos un COMBOBOX para la busqueda por anho
+		label_anho = Label(frame, text='Año', font=('tahoma', 14, 'bold'), width=4, height=2, relief=GROOVE, borderwidth=0)
+		label_anho.config(bg='#F9F9F9', fg='#48C2FA', highlightthickness=0)
+
+		lista_anhos = self.controller.generar_lista_anhos()
+		self.combobox_anhos = ttk.Combobox(frame, values=lista_anhos)
+		#seteamos el valor inicial de la busqueda por anho en caso de que se haya sellecionado algun valor
+		#y que se haya se haya sellecionado los botones de next o back
+		if self.filtro_anho_value != None:
+			self.combobox_anhos.set(self.filtro_anho_value)
+
+		self.combobox_anhos.config(state='readonly', font=(15), width='7', height='6', background='#F9F9F9')
+
+		#insertamos un MENUBUTTON para la busqueda por tipo
+		label_tipo_paquete = Label(frame, text='Tipo', font=('tahoma', 14, 'bold'), width='4', height='2', relief=GROOVE, borderwidth=0)
+		label_tipo_paquete.config(bg='#F9F9F9', fg='#48C2FA')
+
+		#insertamos un COMBOBOX para la busqueda por tipo
+		lista_tipos = ['', 'Terrestre', 'Aereo']
+		self.combobox_tipos = ttk.Combobox(frame, values=lista_tipos)
+		if self.filtro_tipo_value != None:
+			self.combobox_tipos.set(self.filtro_tipo_value)
+
+		self.combobox_tipos.config(state='readonly', font=(15), width='9', height='6', background='#F9F9F9')
+
+		#insertamos un COMBOBOX para la busqueda por sub-tipo
+		lista_sub_tipos = ['', 'Estandar', 'Personalizado']
+		self.combobox_sub_tipos = ttk.Combobox(frame, values=lista_sub_tipos)
+		if self.filtro_sub_tipo_value != None:
+			self.combobox_sub_tipos.set(self.filtro_sub_tipo_value)
+
+		self.combobox_sub_tipos.config(state='readonly', font=(15), width='11', height='6', background='#F9F9F9')
+
+		#agregar paquete view
+		agregar_paquete_button = Button(frame, text='Registrar un cliente', width='210', height='27', relief=GROOVE, borderwidth=0)
+		agregar_paquete_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#27A221', activeforeground='#27A221', highlightthickness=0, anchor=W)
+
+		agregar_paquete_button.config(image=self.imagenes['add_icon'], compound=LEFT)
+
+		#mostramos los RESULTADOS DE LA BUSQUEDA
+		#creamos un frame, un canvas y un scrollbar para luego conectarlos
+		frame_result = Frame(frame, width='800', height='450', bg='#FFFFFF', relief=GROOVE, borderwidth=1)
+		self.canvas=Canvas(frame_result,bg='#FFFFFF',width=800,height=450)
+		vbar=Scrollbar(frame_result,orient=VERTICAL)
+		vbar.pack(side=RIGHT,fill=Y)
+		vbar.config(command=self.canvas.yview)
+		self.canvas.config(yscrollcommand=vbar.set)
+		self.canvas.pack()
+		frame_result.pack(side='bottom', pady=20)
+		frame_result.pack_propagate(0)
+
+		#los botones estan dentro de un frame auxiliar
+		self.frame_result_aux = Frame(self.canvas, bg='#FFFFFF', borderwidth=0, relief=GROOVE)
+		self.canvas.create_window(0, 0, window=self.frame_result_aux, anchor=NW)
+		self.frame_result_aux.bind("<Configure>", self.on_frame_configure)
+
+		#almacenamos los resultados en forma de botones (views)
+		self.view_result_busqueda_paquete = []
 
 		#********************************************************
 		#				CONFIGURAMOS LOS EVENTOS				*
 		#********************************************************
-		#button_search.config(command=lambda:self.view_buscar_paquete(True))
-		#button_siguiente.config(command=lambda:self.pop_pila_siguiente())
-		#button_create.config(command=lambda:self.view_crear_paquete(True))
-		button_create.config(command=lambda:self.controller.registrar_cliente())
+		#detectamos los cambios cada vez que se escribe algo
+		self.content_entry.trace("w", self.buscar_paquete_por_nombre)
+		radio_button_si.config(command=lambda:self.buscar_paquete_por_vigencia(self.radio_variable.get()))
+		radio_button_no.config(command=lambda:self.buscar_paquete_por_vigencia(self.radio_variable.get()))
+		radio_button_ninguno.config(command=lambda:self.buscar_paquete_por_vigencia(self.radio_variable.get()))
+		self.combobox_anhos.bind("<<ComboboxSelected>>", self.buscar_paquete_por_anho)
+		self.combobox_tipos.bind("<<ComboboxSelected>>", self.buscar_paquete_por_tipo)
+		self.combobox_sub_tipos.bind("<<ComboboxSelected>>", self.buscar_paquete_por_sub_tipo)
+		agregando = True
+		agregar_paquete_button.config(command=lambda: self.view_cliente_toplevel(None, None, None, agregando))
 
 		#********************************************************
 		#				PACK A TODOS LOS BOTONES				*
 		#********************************************************
-		#button_search.pack(side='left', padx=20, pady=20, anchor=NW)
-		#button_create.pack(side='right', padx=100, pady=20, anchor=NE)
-		button_create.place(relx=0.028, rely=0.06, anchor=NW)
-		button_search.place(relx=0.978,rely=0.06, anchor=NE)
-		frame.pack(padx=20, pady=50, anchor=NE)
+		#label_nombre_paquete.pack(side='left', padx=25, pady=42, anchor=NW)
+		label_nombre_paquete.place(relx=0.028, rely=0.06)
+		#entry.pack(pady=40, anchor=NW)
+		entry.place(relx=0.237, rely=0.0525)
+		label_radio_button.place(relx=0.5, rely=0.027)
+		radio_button_si.place(relx=0.6, rely=0.042)
+		radio_button_no.place(relx=0.68, rely=0.042)
+		radio_button_ninguno.place(relx=0.76, rely=0.042)
+		label_anho.place(relx=0.025, rely=0.135)
+		self.combobox_anhos.place(relx=0.1, rely=0.152)
+		label_tipo_paquete.place(relx=0.25, rely=0.135)
+		self.combobox_tipos.place(relx=0.33, rely=0.152)
+		self.combobox_sub_tipos.place(relx=0.46, rely=0.152)
+		agregar_paquete_button.place(relx=0.03, rely=0.23)
+		frame.pack(padx=20, pady=20, anchor=NE)
 		frame.pack_propagate(0)
+
+		self.show_paquetes()
 
 		self.switch_frame(frame)
 
 	def view_registrar_cliente(self):
 		self.set_button_bold('usuarios')
 		self.anterior = 'usuarios'
-		#print('wtf')
 
-		#DEFINIMOS EL FRAME 
-		frame = Frame(self.main_frame, width='900', height='700', bg='#F9F9F9', relief=GROOVE, borderwidth=2)
+		print('View: creando cliente...')
 
-
-		#********************************************************
-		#				CREAMOS TODOS LOS BOTONES				*
-		#********************************************************
-		button_anterior = Button(frame, width='33', height='30', relief=GROOVE, borderwidth=0)
-		button_anterior.config(bg='#F9F9F9', activebackground='#F9F9F9', highlightthickness=0)
-
-		button_siguiente = Button(frame, width='33', height='30', relief=GROOVE, borderwidth=0)
-		button_siguiente.config(bg='#F9F9F9', activebackground='#F9F9F9', highlightthickness=0)
+		#DEFINIMOS EL FRAME
+		#self.frame_pre_venta = None
+		self.cliente_top_level.title('Registrar Cliente')
+		self.frame_registrar_cliente = Frame(self.cliente_top_level, width='1000', height='900', bg='#F9F9F9', relief=GROOVE, borderwidth=0)
 
 		#********************************************************
 		#  AGREGAMOS LAS ETIQUETAS CORRESPONDIENTE A LOS DATOS	*
 		#********************************************************
 
 		#view nombre cliente
-		label = Label(frame, text='Nombre:', width='10', height='2', relief=GROOVE, borderwidth=2)
+		label = Label(self.frame_registrar_cliente, text='Nombre:', width='10', height='2', relief=GROOVE, borderwidth=2)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=0.06)
 
 		name_content_entry = StringVar()
-		name_entry = Entry(frame, width='25', font=('tahoma', 13), textvariable=name_content_entry)
-		name_entry.place(relx=0.17, rely=0.075)
+		name_entry = Entry(self.frame_registrar_cliente, width='20', font=('tahoma', 13), textvariable=name_content_entry)
+		name_entry.place(relx=0.16, rely=0.075)
 
 		#view apellido cliente
-		label = Label(frame, text='Apellido:', width='10', height='2', relief=GROOVE, borderwidth=2)
+		label = Label(self.frame_registrar_cliente, text='Apellido:', width='10', height='2', relief=GROOVE, borderwidth=2)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=0.134)
 
 		apellido_content_entry = StringVar()
-		apellido_entry = Entry(frame, width='25', font=('tahoma', 13), textvariable=apellido_content_entry)
-		apellido_entry.place(relx=0.17, rely=0.149)
+		apellido_entry = Entry(self.frame_registrar_cliente, width='20', font=('tahoma', 13), textvariable=apellido_content_entry)
+		apellido_entry.place(relx=0.16, rely=0.149)
 
-		#view apellido cliente
-		label = Label(frame, text='Cedula:', width='10', height='2', relief=GROOVE, borderwidth=2)
+		#view cedula cliente
+		label = Label(self.frame_registrar_cliente, text='Cedula:', width='10', height='2', relief=GROOVE, borderwidth=2)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=0.207)
 
 		self.cedula_content_entry = StringVar()
 		self.cedula_value = None
-		apellido_entry = Entry(frame, width='25', font=('tahoma', 13), textvariable=self.cedula_content_entry)
-		apellido_entry.place(relx=0.17, rely=0.223)
+		cedula_entry = Entry(self.frame_registrar_cliente, width='20', font=('tahoma', 13), textvariable=self.cedula_content_entry)
+		cedula_entry.place(relx=0.16, rely=0.223)
 
 		#view fecha de nacimiento cliente
-		label = Label(frame, text='Nacimiento:', width='10', height='2', relief=GROOVE, borderwidth=2)
+		label = Label(self.frame_registrar_cliente, text='Nacimiento:', width='10', height='2', relief=GROOVE, borderwidth=2)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=0.280)
 
 		content_button_fecha_nacimiento = StringVar()
 		content_button_fecha_nacimiento.set('-- / -- / --')
-		button_fecha_nacimiento = Button(frame, textvariable=content_button_fecha_nacimiento, width='8', height='1', relief=GROOVE, borderwidth=0)
+		self.fecha_nacimiento_value = None
+		button_fecha_nacimiento = Button(self.frame_registrar_cliente, textvariable=content_button_fecha_nacimiento, width='8', height='1', relief=GROOVE, borderwidth=0)
 		button_fecha_nacimiento.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
-		button_fecha_nacimiento.place(relx=0.17, rely=0.288)
+		button_fecha_nacimiento.place(relx=0.16, rely=0.288)
 
 		#view edad cliente
-		label = Label(frame, text='Edad:', width='10', height='2', relief=GROOVE, borderwidth=2)
+		label = Label(self.frame_registrar_cliente, text='Edad:', width='10', height='2', relief=GROOVE, borderwidth=2)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=0.353)
 
 		#insertamos un COMBOBOX para listar la edad de las personas
 		lista_edades = self.controller.generar_lista_edades()
-		self.combobox_edad = ttk.Combobox(frame, values=lista_edades)
+		self.combobox_edad = ttk.Combobox(self.frame_registrar_cliente, values=lista_edades)
 
+		self.combobox_edad.set('')
 		self.combobox_edad.config(state='readonly', font=(15), width='3', height='6', background='#F9F9F9')#insertamos un COMBOBOX para seleccionar la edad
-		self.combobox_edad.place(relx=0.17, rely=0.37)
+		self.combobox_edad.place(relx=0.16, rely=0.37)
 
 		#view nacionalidad
-		label = Label(frame, text='Nacionalidad:', width='11', height='2', relief=GROOVE, borderwidth=2)
+		label = Label(self.frame_registrar_cliente, text='Nacionalidad:', width='11', height='2', relief=GROOVE, borderwidth=2)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=0.43)
 
 		#insertamos un COMBOBOX para listar las nacionalidades de las personas
 		lista_nacionalidades = self.controller.generar_lista_nacionalidades()
-		self.combobox_nacionalidades = ttk.Combobox(frame, values=lista_nacionalidades)
+		self.combobox_nacionalidades = ttk.Combobox(self.frame_registrar_cliente, values=lista_nacionalidades)
 		self.combobox_nacionalidades.set('Paraguay')
 
 		self.combobox_nacionalidades.config(state='readonly', font=(15), width='15', height='6', background='#F9F9F9')#insertamos un COMBOBOX para seleccionar la edad
-		self.combobox_nacionalidades.place(relx=0.18, rely=0.45)
-		'''
-		#view vigente
-		label = Label(frame, text='Vigente:', width='10', height='2', relief=GROOVE, borderwidth=0)
+		self.combobox_nacionalidades.place(relx=0.17, rely=0.45)
+
+		#view telefono 1
+		label = Label(self.frame_registrar_cliente, text='Telefono 1:', width='10', height='2', relief=GROOVE, borderwidth=2)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
-		label.place(relx=0.02, rely=0.204)
+		label.place(relx=0.55, rely=0.075)
 
-		lista_vigencia = ['Si', 'No']
-		combobox_vigencia = ttk.Combobox(frame, values=lista_vigencia)
-		combobox_vigencia.config(state='readonly', font=(13), width='9', height='6', background='#F9F9F9')
-		combobox_vigencia.place(relx=0.17, rely=0.221)
+		self.telefono1_content_entry = StringVar()
+		self.telefono1_value = None
+		telefono1_entry = Entry(self.frame_registrar_cliente, width='20', font=('tahoma', 13), textvariable=self.telefono1_content_entry)
+		telefono1_entry.place(relx=0.68, rely=0.09)
 
-		#view fecha
-		label = Label(frame, text='Fecha:', width='10', height='2', relief=GROOVE, borderwidth=0)
+		#view telefono 2
+		label = Label(self.frame_registrar_cliente, text='Telefono 2:', width='10', height='2', relief=GROOVE, borderwidth=2)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
-		label.place(relx=0.02, rely=0.276)
+		label.place(relx=0.55, rely=0.142)
 
-		content_button_fecha = StringVar()
-		content_button_fecha.set('-- / -- / --')
-		self.fecha_de_viaje = None
-		button_fecha_de_viaje = Button(frame, textvariable=content_button_fecha, width='8', height='1', relief=GROOVE, borderwidth=0)
-		button_fecha_de_viaje.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
-		button_fecha_de_viaje.place(relx=0.17, rely=0.288)
+		self.telefono2_content_entry = StringVar()
+		self.telefono2_value = None
+		telefono2_entry = Entry(self.frame_registrar_cliente, width='20', font=('tahoma', 13), textvariable=self.telefono2_content_entry)
+		telefono2_entry.place(relx=0.68, rely=0.157)
 
-		#view precio
-		label = Label(frame, text='Precio:', width='10', height='2', relief=GROOVE, borderwidth=0)
+		#view email
+		label = Label(self.frame_registrar_cliente, text='Email:', width='10', height='2', relief=GROOVE, borderwidth=2)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
-		label.place(relx=0.02, rely=0.347)
+		label.place(relx=0.55, rely=0.209)
 
-		price_content_entry = StringVar()
-		price_entry = Entry(frame, width='25', font=('tahoma', 13), textvariable=price_content_entry)
-		price_entry.place(relx=0.17, rely=0.36)
-
-		#view senha
-		label = Label(frame, text='Seña:', width='10', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
-		label.place(relx=0.02, rely=0.42)
-
-		senha_content_entry = StringVar()
-		senha_entry = Entry(frame, width='25', font=('tahoma', 13), textvariable=senha_content_entry)
-		senha_entry.place(relx=0.17, rely=0.43)
-
-		#incluye view
-		label = Label(frame, text='Incluye:', width='10', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
-		label.place(relx=0.02, rely=0.492)
-
-		incluye_frame = Frame(frame, width='400', height='200', bg='#F9F9F9', relief=GROOVE, borderwidth=0)
-		incluye_frame.place(relx=0.17, rely=0.492)
-
-		scroll = Scrollbar(incluye_frame, orient=VERTICAL)
-		scroll.pack(side=RIGHT, fill=Y)
-
-		incluye_content = StringVar()
-		incluye_text_widget = Text(incluye_frame, height=7, width=30, relief=GROOVE, borderwidth=0)
-		incluye_text_widget.insert(END, '')
-		
-		incluye_text_widget.config(font=('tahoma', 12), bg='#FFFFFF', fg='#2F3030')
-		incluye_text_widget.pack(side=LEFT, fill=Y)
-
-		scroll.config(command=incluye_text_widget.yview)
-		incluye_text_widget.config(wrap=WORD, yscrollcommand=scroll.set)
-
-		#view cantidad de pasajeros
-		label = Label(frame, text='Cant pasajeros:', width='13', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
-		label.place(relx=0.56, rely=0.06)
-
-		cant_pasajeros_content_entry = StringVar()
-		cant_pasajeros_entry = Entry(frame, width='15', font=('tahoma', 13), textvariable=cant_pasajeros_content_entry)
-		cant_pasajeros_entry.place(relx=0.742, rely=0.075)
-
-		#view pre venta
-		self.pre_venta = None
-		label = Label(frame, text='Pre venta:', width='13', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
-		label.place(relx=0.56, rely=0.132)
-
-		self.content_pre_venta_button = StringVar()
-		self.content_pre_venta_button.set('Agregar')
-		pre_venta_button = Button(frame, textvariable=self.content_pre_venta_button, width=10, height=1, relief=GROOVE, borderwidth=0)
-		pre_venta_button.config(font=('tahoma', 13), bg='#F9F9F9')
-		pre_venta_button.place(relx=0.742, rely=0.139)
+		self.email_content_entry = StringVar()
+		#self.email_value = None
+		email_entry = Entry(self.frame_registrar_cliente, width='20', font=('tahoma', 13), textvariable=self.email_content_entry)
+		email_entry.place(relx=0.68, rely=0.222)
 
 		#view ok and cancel
-		save_button = Button(frame, text='Guardar', width=110, height=30, relief=GROOVE, borderwidth=0)
+		save_button = Button(self.frame_registrar_cliente, text='Guardar', width=110, height=30, relief=GROOVE, borderwidth=0)
 		save_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#343535')
 		save_button.config(image=self.imagenes['save_icon'], compound=LEFT)
 		save_button.place(relx=0.5, rely=0.85)
 
-		cancel_button = Button(frame, text='Cancelar', width=110, height=30, relief=GROOVE, borderwidth=0)
+		cancel_button = Button(self.frame_registrar_cliente, text='Cancelar', width=110, height=30, relief=GROOVE, borderwidth=0)
 		cancel_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#343535')
 		cancel_button.config(image=self.imagenes['not_ok_icon'], compound=LEFT)
 		cancel_button.place(relx=0.34, rely=0.85)
 		#********************************************************
 
-		'''
 		#********************************************************
 		#				CONFIGURAMOS LOS EVENTOS				*
 		#********************************************************
 		self.cedula_content_entry.trace("w", self.update_cedula_content_entry)
-		button_fecha_nacimiento.config(command=lambda:self.view_calendar(frame, content_button_fecha_nacimiento, 4, 0.17, 0.277))
-		#pre_venta_button.config(command=lambda:self.controller.agregar_pre_venta())
-		#save_button.config(command=lambda:self.controller.guardar_paquete(name_content_entry.get(), combobox_tipos.get(), combobox_sub_tipos.get(),
-		#		combobox_vigencia.get(), self.fecha_de_viaje, price_content_entry.get(), senha_content_entry.get(), incluye_text_widget.get(1.0, END),
-		#		cant_pasajeros_content_entry.get(), self.pre_venta))
-		#cancel_button.config(command=lambda:self.controller.crear_paquete(True))
+		button_fecha_nacimiento.config(command=lambda:self.view_calendar(self.frame_registrar_cliente, content_button_fecha_nacimiento, 4, 0.17, 0.277))
+		save_button.config(command=lambda:self.controller.guardar_cliente(name_content_entry.get(), apellido_content_entry.get(), self.cedula_value,
+															self.fecha_nacimiento_value, self.combobox_edad.get(), self.combobox_nacionalidades.get(),
+															self.telefono1_content_entry.get(), self.telefono2_content_entry.get(), 
+															self.email_content_entry.get(), self.cliente_top_level))
+		cancel_button.config(command=lambda:self.widget_destroy(self.cliente_top_level))
 
-		#********************************************************
-		#				PACK A TODOS LOS BOTONES				*
-		#********************************************************
-		button_anterior.place(relx=0.025, rely=0.001)
-		button_siguiente.place(relx=0.08, rely=0)
+		self.frame_registrar_cliente.pack(padx=20, pady=20, anchor=NE)
+		self.frame_registrar_cliente.pack_propagate(0)
 
-		frame.pack(padx=20, pady=20, anchor=NE)
-		frame.pack_propagate(0)
+	def view_cliente_toplevel(self, frame, paquete, pos_paquete, agregando):
+		print('preparando: view_cliente_toplevel')
+		self.cliente_top_level = Toplevel(self.parent, bg='#F9F9F9', relief=GROOVE, borderwidth=0)
+		self.cliente_top_level.geometry('1000x800+450+100')
+		self.cliente_top_level.resizable(width=False, height=False)
 
-		self.switch_frame(frame)
+		if agregando:
+			self.view_registrar_cliente()
+		else:
+			self.view_paquete_detalles(frame, paquete, pos_paquete)
 
 	def update_cedula_content_entry(self, *args):
 		texto = ''
