@@ -24,6 +24,24 @@ class Usuario():
 	def agregar_contacto(self, contacto ):
 		self.persona.agregar_contacto( contacto )
 
+	def set_telefono_primario(self, telefono):
+		self.persona.set_telefono_primario(telefono)
+
+	def set_telefono_secundario(self, telefono):
+		self.persona.set_telefono_secundario(telefono)
+
+	def set_correo(self, correo):
+		self.persona.set_correo(correo)
+
+	def get_telefono_primario(self):
+		return self.persona.get_telefono_primario()
+
+	def get_telefono_secundario(self):
+		return self.persona.get_telefono_secundario()
+
+	def get_correo(self):
+		return self.persona.get_correo()
+
 	def agregar_factura(self, factura):
 		self.facturas.append(factura)
 
