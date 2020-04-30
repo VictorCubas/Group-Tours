@@ -822,8 +822,8 @@ class View:
 
 		self.price_content_entry = StringVar()
 		self.price_value = None
-		price_entry = Entry(self.frame_agregar_paquete, width='25', font=('tahoma', 13), textvariable=self.price_content_entry)
-		price_entry.place(relx=0.17, rely=0.36)
+		self.price_entry = Entry(self.frame_agregar_paquete, width='25', font=('tahoma', 13), textvariable=self.price_content_entry)
+		self.price_entry.place(relx=0.17, rely=0.36)
 
 		#view senha
 		label = Label(self.frame_agregar_paquete, text='Seña:', width='10', height='2', relief=GROOVE, borderwidth=0)
@@ -832,8 +832,8 @@ class View:
 
 		self.senha_content_entry = StringVar()
 		self.senha_value = None
-		senha_entry = Entry(self.frame_agregar_paquete, width='25', font=('tahoma', 13), textvariable=self.senha_content_entry)
-		senha_entry.place(relx=0.17, rely=0.43)
+		self.senha_entry = Entry(self.frame_agregar_paquete, width='25', font=('tahoma', 13), textvariable=self.senha_content_entry)
+		self.senha_entry.place(relx=0.17, rely=0.43)
 
 		#view pre venta
 		self.pre_ventas = []
@@ -1049,8 +1049,8 @@ class View:
 		texto = self.convert_amount_to_string(paquete.get_precio(), False)
 		self.price_content_entry.set(texto)
 
-		price_entry = Entry(frame_detalles, width='20', font=('tahoma', 13), textvariable=self.price_content_entry)
-		price_entry.place(relx=0.17, rely=0.318)
+		self.price_entry = Entry(frame_detalles, width='20', font=('tahoma', 13), textvariable=self.price_content_entry)
+		self.price_entry.place(relx=0.17, rely=0.318)
 
 		self.simbol_label = StringVar()
 		self.simbol_label.set('')
@@ -1072,8 +1072,8 @@ class View:
 		texto = self.convert_amount_to_string(paquete.get_senha(), False)
 		self.senha_content_entry.set(texto)
 
-		senha_entry = Entry(frame_detalles, width='20', font=('tahoma', 13), textvariable=self.senha_content_entry)
-		senha_entry.place(relx=0.17, rely=0.378)
+		self.senha_entry = Entry(frame_detalles, width='20', font=('tahoma', 13), textvariable=self.senha_content_entry)
+		self.senha_entry.place(relx=0.17, rely=0.378)
 
 		#view pre venta
 		self.pre_ventas = paquete.get_pre_ventas()
@@ -1241,8 +1241,8 @@ class View:
 		texto = self.convert_amount_to_string(self.price_pre_venta_value, False)
 		self.price_pre_venta_content_entry.set(texto)
 
-		price_entry = Entry(frame_pre_venta, width='10', font=('tahoma', 13), textvariable=self.price_pre_venta_content_entry)
-		price_entry.place(relx=0.25, rely=0.075)
+		self.price_entry = Entry(frame_pre_venta, width='10', font=('tahoma', 13), textvariable=self.price_pre_venta_content_entry)
+		self.price_entry.place(relx=0.25, rely=0.075)
 
 		#view senha
 		label = Label(frame_pre_venta, text='Seña:', width='11', height='2', relief=GROOVE, borderwidth=0)
@@ -1254,8 +1254,8 @@ class View:
 		texto = self.convert_amount_to_string(self.senha_pre_venta_value, False)
 		self.senha_pre_venta_content_entry.set(texto)
 
-		senha_entry = Entry(frame_pre_venta, width='10', font=('tahoma', 13), textvariable=self.senha_pre_venta_content_entry)
-		senha_entry.place(relx=0.25, rely=0.2)
+		self.senha_entry = Entry(frame_pre_venta, width='10', font=('tahoma', 13), textvariable=self.senha_pre_venta_content_entry)
+		self.senha_entry.place(relx=0.25, rely=0.2)
 
 		#view monto cuota
 		label = Label(frame_pre_venta, text='Monto cuota:', width='11', height='2', relief=GROOVE, borderwidth=0)
@@ -1267,8 +1267,8 @@ class View:
 		texto = self.convert_amount_to_string(self.monto_cuota_value, False)
 		self.monto_cuota_content_entry.set(texto)
 
-		monto_cuota_entry = Entry(frame_pre_venta, width='10', font=('tahoma', 13), textvariable=self.monto_cuota_content_entry)
-		monto_cuota_entry.place(relx=0.25, rely=0.325)
+		self.monto_cuota_entry = Entry(frame_pre_venta, width='10', font=('tahoma', 13), textvariable=self.monto_cuota_content_entry)
+		self.monto_cuota_entry.place(relx=0.25, rely=0.325)
 
 		#view cantidad de cuotas
 		label = Label(frame_pre_venta, text='Cant cuotas:', width='11', height='2', relief=GROOVE, borderwidth=0)
@@ -1360,8 +1360,8 @@ class View:
 		self.price_pre_venta_content_entry.set('')
 		self.price_pre_venta_value = None
 
-		price_entry = Entry(frame_pre_venta, width='10', font=('tahoma', 13), textvariable=self.price_pre_venta_content_entry)
-		price_entry.place(relx=0.25, rely=0.075)
+		self.price_entry = Entry(frame_pre_venta, width='10', font=('tahoma', 13), textvariable=self.price_pre_venta_content_entry)
+		self.price_entry.place(relx=0.25, rely=0.075)
 
 		#view senha
 		label = Label(frame_pre_venta, text='Seña:', width='11', height='2', relief=GROOVE, borderwidth=0)
@@ -1372,8 +1372,8 @@ class View:
 		self.senha_pre_venta_content_entry.set('')
 		self.senha_pre_venta_value = None
 
-		senha_entry = Entry(frame_pre_venta, width='10', font=('tahoma', 13), textvariable=self.senha_pre_venta_content_entry)
-		senha_entry.place(relx=0.25, rely=0.2)
+		self.senha_entry = Entry(frame_pre_venta, width='10', font=('tahoma', 13), textvariable=self.senha_pre_venta_content_entry)
+		self.senha_entry.place(relx=0.25, rely=0.2)
 
 		#view monto cuota
 		label = Label(frame_pre_venta, text='Monto cuota:', width='11', height='2', relief=GROOVE, borderwidth=0)
@@ -1384,8 +1384,8 @@ class View:
 		self.monto_cuota_content_entry.set('')
 		self.monto_cuota_value = None
 
-		monto_cuota_entry = Entry(frame_pre_venta, width='10', font=('tahoma', 13), textvariable=self.monto_cuota_content_entry)
-		monto_cuota_entry.place(relx=0.25, rely=0.325)
+		self.monto_cuota_entry = Entry(frame_pre_venta, width='10', font=('tahoma', 13), textvariable=self.monto_cuota_content_entry)
+		self.monto_cuota_entry.place(relx=0.25, rely=0.325)
 
 		#view cantidad de cuotas
 		label = Label(frame_pre_venta, text='Cant cuotas:', width='11', height='2', relief=GROOVE, borderwidth=0)
@@ -1623,6 +1623,9 @@ class View:
 			texto = precio_texto
 
 		self.price_pre_venta_content_entry.set(texto)
+		self.price_entry.delete(0, END)
+		self.price_entry.insert(0, texto)
+		self.price_entry.icursor(len(texto))
 
 	def update_senha_pre_venta_content_entry(self, *args):
 		texto = ''
@@ -1652,6 +1655,9 @@ class View:
 			texto = senha_texto
 
 		self.senha_pre_venta_content_entry.set(texto)
+		self.senha_entry.delete(0, END)
+		self.senha_entry.insert(0, texto)
+		self.senha_entry.icursor(len(texto))
 
 	def update_price_content_entry(self, *args):
 		texto = ''
@@ -1681,6 +1687,9 @@ class View:
 			texto = precio_texto
 
 		self.price_content_entry.set(texto)
+		self.price_entry.delete(0, END)
+		self.price_entry.insert(0, texto)
+		self.price_entry.icursor(len(texto))
 
 	def update_senha_content_entry(self, *args):
 		#self.price_value_int = self.price_content_entry.get()
@@ -1711,6 +1720,9 @@ class View:
 			texto = senha_texto
 
 		self.senha_content_entry.set(texto)
+		self.senha_entry.delete(0, END)
+		self.senha_entry.insert(0, texto)
+		self.senha_entry.icursor(len(texto))
 
 	def update_monto_cuota_content_entry(self, *args):
 		#self.price_value_int = self.price_content_entry.get()
@@ -1741,6 +1753,9 @@ class View:
 			texto = monto_cuota_texto
 
 		self.monto_cuota_content_entry.set(texto)
+		self.monto_cuota_entry.delete(0, END)
+		self.monto_cuota_entry.insert(0, texto)
+		self.monto_cuota_entry.icursor(len(texto))
 	
 	def set_value_pre_venta(self, pre_venta, posicion_pre_venta, agregando):
 		if agregando:
@@ -1905,7 +1920,7 @@ class View:
 
 		self.cedula_busqueda_content_entry = StringVar()
 		self.cedula_buscada_value = None
-		cedula_entry = Entry(frame, width='15', font=('tahoma', 15), textvariable=self.cedula_busqueda_content_entry)
+		self.cedula_buscada_entry = Entry(frame, width='15', font=('tahoma', 15), textvariable=self.cedula_busqueda_content_entry)
 		
 		#agregar paquete view
 		agregar_cliente_button = Button(frame, text='Registrar un cliente', width='210', height='27', relief=GROOVE, borderwidth=0)
@@ -1937,7 +1952,8 @@ class View:
 		#********************************************************
 		#detectamos los cambios cada vez que se escribe algo
 		self.nombre_buscado_content_entry.trace("w", self.buscar_cliente_por_nombre)
-		self.cedula_busqueda_content_entry.trace("w", self.update_cedula_buscada_content_entry)
+		self.apellido_buscado_content_entry.trace("w", self.buscar_cliente_por_apellido)
+		self.cedula_busqueda_content_entry.trace("w", self.buscar_cliente_por_cedula)
 		agregando = True
 		agregar_cliente_button.config(command=lambda: self.view_cliente_toplevel(None, None, None, agregando))
 
@@ -1950,7 +1966,7 @@ class View:
 		entry.place(relx=0.19, rely=0.0525)
 		apellido_entry.place(relx=0.55, rely=0.0525)
 		label_cedula.place(relx=0.08, rely=0.13)
-		cedula_entry.place(relx=0.19, rely=0.14)
+		self.cedula_buscada_entry.place(relx=0.19, rely=0.14)
 		agregar_cliente_button.place(relx=0.065, rely=0.23)
 		frame.pack(padx=20, pady=20, anchor=NE)
 		frame.pack_propagate(0)
@@ -1962,9 +1978,9 @@ class View:
 	def buscar_cliente_por_nombre(self, *args):
 		#result_busqueda_paquete = self.controller.buscar_paquete(content1=self.content_entry.get(), content2=self.radio_variable.get(),
 		#							content3=self.combobox_anhos.get(), content4=self.combobox_tipos.get(), content5=self.combobox_sub_tipos.get())
-		result_busqueda_cliente = self.controller.buscar_cliente(content1=self.nombre_buscado_content_entry.get(), content2=self.cedula_buscada_value)
+		result_busqueda_cliente = self.controller.buscar_cliente(content1=self.nombre_buscado_content_entry.get(),
+													content2=self.apellido_buscado_content_entry.get(), content3=self.cedula_buscada_value)
 		self.set_values_clientes_posiciones(result_busqueda_cliente)
-		print('Llegamos hasta aca')
 		for cliente in self.clientes:
 			print('Nombre:{} Cedula:{}'.format(cliente.get_nombre(), cliente.get_cedula()))
 		#self.show_paquetes()
@@ -1976,19 +1992,18 @@ class View:
 	def buscar_cliente_por_apellido(self, *args):
 		#result_busqueda_paquete = self.controller.buscar_paquete(content1=self.content_entry.get(), content2=self.radio_variable.get(),
 		#							content3=self.combobox_anhos.get(), content4=self.combobox_tipos.get(), content5=self.combobox_sub_tipos.get())
-		result_busqueda_cliente = self.controller.buscar_cliente(content1=self.nombre_buscado_content_entry.get(), content2=self.cedula_buscada_value)
+		result_busqueda_cliente = self.controller.buscar_cliente(content1=self.nombre_buscado_content_entry.get(),
+													content2=self.apellido_buscado_content_entry.get(), content3=self.cedula_buscada_value)
 		self.set_values_clientes_posiciones(result_busqueda_cliente)
-		print('Llegamos hasta aca')
 		for cliente in self.clientes:
 			print('Nombre:{} Cedula:{}'.format(cliente.get_nombre(), cliente.get_cedula()))
 		#self.show_paquetes()
 
 	def buscar_cliente_por_cedula(self, *args):
-		#result_busqueda_paquete = self.controller.buscar_paquete(content1=self.content_entry.get(), content2=self.radio_variable.get(),
-		#							content3=self.combobox_anhos.get(), content4=self.combobox_tipos.get(), content5=self.combobox_sub_tipos.get())
-		result_busqueda_cliente = self.controller.buscar_cliente(content1=self.nombre_buscado_content_entry.get(), content2=self.cedula_buscada_value)
+		self.update_cedula_buscada_content_entry()
+		result_busqueda_cliente = self.controller.buscar_cliente(content1=self.nombre_buscado_content_entry.get(),
+													content2=self.apellido_buscado_content_entry.get(), content3=self.cedula_buscada_value)
 		self.set_values_clientes_posiciones(result_busqueda_cliente)
-		print('Llegamos hasta aca')
 		for cliente in self.clientes:
 			print('Nombre:{} Cedula:{}'.format(cliente.get_nombre(), cliente.get_cedula()))
 
@@ -2032,8 +2047,8 @@ class View:
 
 		self.cedula_content_entry = StringVar()
 		self.cedula_value = None
-		cedula_entry = Entry(self.frame_registrar_cliente, width='20', font=('tahoma', 13), textvariable=self.cedula_content_entry)
-		cedula_entry.place(relx=0.16, rely=0.207)
+		self.cedula_entry_registrar_cliente = Entry(self.frame_registrar_cliente, width='20', font=('tahoma', 13), textvariable=self.cedula_content_entry)
+		self.cedula_entry_registrar_cliente.place(relx=0.16, rely=0.207)
 
 		#view fecha de nacimiento cliente
 		label = Label(self.frame_registrar_cliente, text='Nacimiento:', width='10', height='2', relief=GROOVE, borderwidth=0)
@@ -2141,7 +2156,7 @@ class View:
 		else:
 			self.view_paquete_detalles(frame, paquete, pos_paquete)
 
-	def update_cedula_buscada_content_entry(self, *args):
+	def update_cedula_buscada_content_entry(self):
 		texto = ''
 		cedula_texto = self.cedula_busqueda_content_entry.get()
 
@@ -2152,12 +2167,13 @@ class View:
 					texto += cedula_texto[i]
 
 			cedula_texto = texto
-			self.cedula_value = texto
+			self.cedula_buscada_value = texto
 			texto = ''
 		else:
-			self.cedula_value = cedula_texto
+			self.cedula_buscada_value= cedula_texto
 
 		j = 1
+		#agregamos los puntos
 		if len(cedula_texto) > 3:
 			for i in range(len(cedula_texto) -1, -1, -1):
 				texto = cedula_texto[i] + texto
@@ -2169,6 +2185,9 @@ class View:
 			texto = cedula_texto
 
 		self.cedula_busqueda_content_entry.set(texto)
+		self.cedula_buscada_entry.delete(0, END)
+		self.cedula_buscada_entry.insert(0, texto)
+		self.cedula_buscada_entry.icursor(len(texto))
 
 	def update_cedula_content_entry(self, *args):
 		texto = ''
@@ -2198,6 +2217,9 @@ class View:
 			texto = cedula_texto
 
 		self.cedula_content_entry.set(texto)
+		self.cedula_entry_registrar_cliente.delete(0, END)
+		self.cedula_entry_registrar_cliente.insert(0, texto)
+		self.cedula_entry_registrar_cliente.icursor(len(texto))
 
 	def view_facturas(self):
 		self.set_button_bold('facturas')
