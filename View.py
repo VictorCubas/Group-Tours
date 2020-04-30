@@ -1883,71 +1883,34 @@ class View:
 		frame = Frame(self.main_frame, width='900', height='700', bg='#F9F9F9', relief=GROOVE, borderwidth=2)
 
 		#declaramos el un string que alamacena el contenido ingresado
-		self.content_entry = StringVar()
-		self.radio_variable = StringVar()
-		self.radio_variable.set('ninguno')
-		self.filtro_anho_value = None
-		self.filtro_tipo_value = None
-		self.filtro_sub_tipo_value = None
-		#result es una lista que almacena todos los paquetes como resultado de la busqueda
-		#RESETEAMOS LA LISTA DE RESULTADOS EN CASO DE ENTRAR POR PRIMERA VEZ A BUSCAR PAQUETE
-		self.paquetes = []
+		self.clientes = []
 
 		#********************************************************
 
-		label_nombre_paquete = Label(frame, text='Nombre/Destino:', font=('tahoma', 14, 'bold'), width=14, height=1, bg='#F9F9F9')
-		label_nombre_paquete.config(fg='#48C2FA')
+		label_nombre_cliente = Label(frame, text='Nombre:', font=('tahoma', 14, 'bold'), width=14, height=2, bg='#F9F9F9')
+		label_nombre_cliente.config(fg='#48C2FA', relief=GROOVE, borderwidth=0)
 		#declaramos una entreada para ingresar los datos
-		entry = Entry(frame, width='15', font=('tahoma', 15), textvariable=self.content_entry)
-		#insertamos RADIO BUTTON para la busqueda por vigencia
-		label_radio_button = Label(frame, text='Vigente', font=('tahoma', 14, 'bold'), width=7, height=3, relief=GROOVE, borderwidth=0)
-		label_radio_button.config(bg='#F9F9F9', fg='#48C2FA')
+		self.nombre_buscado_content_entry = StringVar()
+		entry = Entry(frame, width='15', font=('tahoma', 15), textvariable=self.nombre_buscado_content_entry)
 
-		radio_button_si = Radiobutton(frame, text='Si', font=('tahoma', 15), variable=self.radio_variable, value='si', width=2, height=2)
-		radio_button_si.config(bg='#F9F9F9', activebackground='#F9F9F9', highlightthickness=0)
-		radio_button_no = Radiobutton(frame, text='No', font=('tahoma', 15), variable=self.radio_variable, value='no', width=2, height=2)
-		radio_button_no.config(bg='#F9F9F9', activebackground='#F9F9F9', highlightthickness=0)
-		radio_button_ninguno = Radiobutton(frame, text='Ninguno', font=('tahoma', 15), variable=self.radio_variable, value='ninguno', width=8, height=2)
-		radio_button_ninguno.config(bg='#F9F9F9', activebackground='#F9F9F9', highlightthickness=0)
+		label_apellido_cliente = Label(frame, text='Apellido:', font=('tahoma', 14, 'bold'), width=7, height=2, bg='#F9F9F9')
+		label_apellido_cliente.config(fg='#48C2FA', relief=GROOVE, borderwidth=0, anchor=W)
+		#declaramos una entreada para ingresar los datos
+		self.apellido_buscado_content_entry = StringVar()
+		apellido_entry = Entry(frame, width='15', font=('tahoma', 15), textvariable=self.apellido_buscado_content_entry)
 
-		#insertamos un COMBOBOX para la busqueda por anho
-		label_anho = Label(frame, text='Año', font=('tahoma', 14, 'bold'), width=4, height=2, relief=GROOVE, borderwidth=0)
-		label_anho.config(bg='#F9F9F9', fg='#48C2FA', highlightthickness=0)
+		#view cedula cliente
+		label_cedula = Label(frame, text='Cedula:', width='10', height='2', relief=GROOVE, borderwidth=0)
+		label_cedula.config(font=('tahoma', 14, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
 
-		lista_anhos = self.controller.generar_lista_anhos()
-		self.combobox_anhos = ttk.Combobox(frame, values=lista_anhos)
-		#seteamos el valor inicial de la busqueda por anho en caso de que se haya sellecionado algun valor
-		#y que se haya se haya sellecionado los botones de next o back
-		if self.filtro_anho_value != None:
-			self.combobox_anhos.set(self.filtro_anho_value)
-
-		self.combobox_anhos.config(state='readonly', font=(15), width='7', height='6', background='#F9F9F9')
-
-		#insertamos un MENUBUTTON para la busqueda por tipo
-		label_tipo_paquete = Label(frame, text='Tipo', font=('tahoma', 14, 'bold'), width='4', height='2', relief=GROOVE, borderwidth=0)
-		label_tipo_paquete.config(bg='#F9F9F9', fg='#48C2FA')
-
-		#insertamos un COMBOBOX para la busqueda por tipo
-		lista_tipos = ['', 'Terrestre', 'Aereo']
-		self.combobox_tipos = ttk.Combobox(frame, values=lista_tipos)
-		if self.filtro_tipo_value != None:
-			self.combobox_tipos.set(self.filtro_tipo_value)
-
-		self.combobox_tipos.config(state='readonly', font=(15), width='9', height='6', background='#F9F9F9')
-
-		#insertamos un COMBOBOX para la busqueda por sub-tipo
-		lista_sub_tipos = ['', 'Estandar', 'Personalizado']
-		self.combobox_sub_tipos = ttk.Combobox(frame, values=lista_sub_tipos)
-		if self.filtro_sub_tipo_value != None:
-			self.combobox_sub_tipos.set(self.filtro_sub_tipo_value)
-
-		self.combobox_sub_tipos.config(state='readonly', font=(15), width='11', height='6', background='#F9F9F9')
-
+		self.cedula_busqueda_content_entry = StringVar()
+		self.cedula_buscada_value = None
+		cedula_entry = Entry(frame, width='15', font=('tahoma', 15), textvariable=self.cedula_busqueda_content_entry)
+		
 		#agregar paquete view
-		agregar_paquete_button = Button(frame, text='Registrar un cliente', width='210', height='27', relief=GROOVE, borderwidth=0)
-		agregar_paquete_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#27A221', activeforeground='#27A221', highlightthickness=0, anchor=W)
-
-		agregar_paquete_button.config(image=self.imagenes['add_icon'], compound=LEFT)
+		agregar_cliente_button = Button(frame, text='Registrar un cliente', width='210', height='27', relief=GROOVE, borderwidth=0)
+		agregar_cliente_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#27A221', activeforeground='#27A221', highlightthickness=0, anchor=W)
+		agregar_cliente_button.config(image=self.imagenes['add_icon'], compound=LEFT)
 
 		#mostramos los RESULTADOS DE LA BUSQUEDA
 		#creamos un frame, un canvas y un scrollbar para luego conectarlos
@@ -1973,39 +1936,61 @@ class View:
 		#				CONFIGURAMOS LOS EVENTOS				*
 		#********************************************************
 		#detectamos los cambios cada vez que se escribe algo
-		self.content_entry.trace("w", self.buscar_paquete_por_nombre)
-		radio_button_si.config(command=lambda:self.buscar_paquete_por_vigencia(self.radio_variable.get()))
-		radio_button_no.config(command=lambda:self.buscar_paquete_por_vigencia(self.radio_variable.get()))
-		radio_button_ninguno.config(command=lambda:self.buscar_paquete_por_vigencia(self.radio_variable.get()))
-		self.combobox_anhos.bind("<<ComboboxSelected>>", self.buscar_paquete_por_anho)
-		self.combobox_tipos.bind("<<ComboboxSelected>>", self.buscar_paquete_por_tipo)
-		self.combobox_sub_tipos.bind("<<ComboboxSelected>>", self.buscar_paquete_por_sub_tipo)
+		self.nombre_buscado_content_entry.trace("w", self.buscar_cliente_por_nombre)
+		self.cedula_busqueda_content_entry.trace("w", self.update_cedula_buscada_content_entry)
 		agregando = True
-		agregar_paquete_button.config(command=lambda: self.view_cliente_toplevel(None, None, None, agregando))
+		agregar_cliente_button.config(command=lambda: self.view_cliente_toplevel(None, None, None, agregando))
 
 		#********************************************************
 		#				PACK A TODOS LOS BOTONES				*
 		#********************************************************
 		#label_nombre_paquete.pack(side='left', padx=25, pady=42, anchor=NW)
-		label_nombre_paquete.place(relx=0.028, rely=0.06)
-		#entry.pack(pady=40, anchor=NW)
-		entry.place(relx=0.237, rely=0.0525)
-		label_radio_button.place(relx=0.5, rely=0.027)
-		radio_button_si.place(relx=0.6, rely=0.042)
-		radio_button_no.place(relx=0.68, rely=0.042)
-		radio_button_ninguno.place(relx=0.76, rely=0.042)
-		label_anho.place(relx=0.025, rely=0.135)
-		self.combobox_anhos.place(relx=0.1, rely=0.152)
-		label_tipo_paquete.place(relx=0.25, rely=0.135)
-		self.combobox_tipos.place(relx=0.33, rely=0.152)
-		self.combobox_sub_tipos.place(relx=0.46, rely=0.152)
-		agregar_paquete_button.place(relx=0.03, rely=0.23)
+		label_nombre_cliente.place(relx=0.028, rely=0.04)
+		label_apellido_cliente.place(relx=0.43, rely=0.04)
+		entry.place(relx=0.19, rely=0.0525)
+		apellido_entry.place(relx=0.55, rely=0.0525)
+		label_cedula.place(relx=0.08, rely=0.13)
+		cedula_entry.place(relx=0.19, rely=0.14)
+		agregar_cliente_button.place(relx=0.065, rely=0.23)
 		frame.pack(padx=20, pady=20, anchor=NE)
 		frame.pack_propagate(0)
 
-		self.show_paquetes()
+		#self.show_paquetes()
 
 		self.switch_frame(frame)
+
+	def buscar_cliente_por_nombre(self, *args):
+		#result_busqueda_paquete = self.controller.buscar_paquete(content1=self.content_entry.get(), content2=self.radio_variable.get(),
+		#							content3=self.combobox_anhos.get(), content4=self.combobox_tipos.get(), content5=self.combobox_sub_tipos.get())
+		result_busqueda_cliente = self.controller.buscar_cliente(content1=self.nombre_buscado_content_entry.get(), content2=self.cedula_buscada_value)
+		self.set_values_clientes_posiciones(result_busqueda_cliente)
+		print('Llegamos hasta aca')
+		for cliente in self.clientes:
+			print('Nombre:{} Cedula:{}'.format(cliente.get_nombre(), cliente.get_cedula()))
+		#self.show_paquetes()
+
+	def set_values_clientes_posiciones(self, result_busqueda_clientes):
+		self.clientes = result_busqueda_clientes[0]
+		self.clientes_posiciones = result_busqueda_clientes[1]
+
+	def buscar_cliente_por_apellido(self, *args):
+		#result_busqueda_paquete = self.controller.buscar_paquete(content1=self.content_entry.get(), content2=self.radio_variable.get(),
+		#							content3=self.combobox_anhos.get(), content4=self.combobox_tipos.get(), content5=self.combobox_sub_tipos.get())
+		result_busqueda_cliente = self.controller.buscar_cliente(content1=self.nombre_buscado_content_entry.get(), content2=self.cedula_buscada_value)
+		self.set_values_clientes_posiciones(result_busqueda_cliente)
+		print('Llegamos hasta aca')
+		for cliente in self.clientes:
+			print('Nombre:{} Cedula:{}'.format(cliente.get_nombre(), cliente.get_cedula()))
+		#self.show_paquetes()
+
+	def buscar_cliente_por_cedula(self, *args):
+		#result_busqueda_paquete = self.controller.buscar_paquete(content1=self.content_entry.get(), content2=self.radio_variable.get(),
+		#							content3=self.combobox_anhos.get(), content4=self.combobox_tipos.get(), content5=self.combobox_sub_tipos.get())
+		result_busqueda_cliente = self.controller.buscar_cliente(content1=self.nombre_buscado_content_entry.get(), content2=self.cedula_buscada_value)
+		self.set_values_clientes_posiciones(result_busqueda_cliente)
+		print('Llegamos hasta aca')
+		for cliente in self.clientes:
+			print('Nombre:{} Cedula:{}'.format(cliente.get_nombre(), cliente.get_cedula()))
 
 	def view_registrar_cliente(self):
 		self.set_button_bold('usuarios')
@@ -2155,6 +2140,35 @@ class View:
 			self.view_registrar_cliente()
 		else:
 			self.view_paquete_detalles(frame, paquete, pos_paquete)
+
+	def update_cedula_buscada_content_entry(self, *args):
+		texto = ''
+		cedula_texto = self.cedula_busqueda_content_entry.get()
+
+		#eliminamos los puntos '.'
+		if len(cedula_texto) > 3:
+			for i in range(len(cedula_texto)):
+				if cedula_texto[i] != '.':
+					texto += cedula_texto[i]
+
+			cedula_texto = texto
+			self.cedula_value = texto
+			texto = ''
+		else:
+			self.cedula_value = cedula_texto
+
+		j = 1
+		if len(cedula_texto) > 3:
+			for i in range(len(cedula_texto) -1, -1, -1):
+				texto = cedula_texto[i] + texto
+				if j % 3 == 0 and i != 0:
+					texto = '.' + texto
+
+				j += 1
+		else:
+			texto = cedula_texto
+
+		self.cedula_busqueda_content_entry.set(texto)
 
 	def update_cedula_content_entry(self, *args):
 		texto = ''
