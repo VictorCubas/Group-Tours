@@ -31,6 +31,35 @@ class Controller:
 	def stop_hilos(self):
 		self.model.stop_hilos()
 
+	def buscar_cliente(self, **kwargs):
+		result = []
+		encontrando = True
+		result_encontrando = [result, encontrando, []]
+
+		cantidad_de_filtros = self.get_cantidad_de_filtros_busqueda_cliente(kwargs)
+		for key, value in kwargs.items():
+			if result_encontrando[1] and key == 'content1' and value != '':
+				#print('1')
+				result_encontrando = self.model.buscar_cliente_por_nombre(value, cantidad_de_filtros, result_encontrando[1])
+				#print(str(result_encontrando[1]))
+			#elif result_encontrando[1] and key == 'content2':
+				#print('2')
+				#result_encontrando = self.model.buscar_paquete_por_vigencia(value, cantidad_de_filtros, self.filtro_anho_seleccionado,
+				#						self.filtro_tipo_seleccionado, self.filtro_sub_tipo_seleccionado, result_encontrando[1])
+
+		return [result_encontrando[0], result_encontrando[2]]
+
+	def get_cantidad_de_filtros_busqueda_cliente(self, kwargs):
+		filtros = 0
+
+		for key, value in kwargs.items():
+			if key == 'content1' and value != '':
+				filtros += 1
+			elif key == 'content2' and value != '':
+				filtros += 1
+
+		return filtros
+
 	def buscar_paquete(self, **kwargs):
 		#Busca el paquete por nombre, vigencia o por anho (de acuerdo al filtro selccionado)
 		result = []
