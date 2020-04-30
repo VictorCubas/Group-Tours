@@ -18,6 +18,15 @@ class Usuario():
 		#Incrementamos la cantidad de instancias
 		Usuario.cantidad_total_usuarios += 1
 
+	def get_nombre(self):
+		return self.persona.get_nombre()
+
+	def get_apellido(self):
+		return self.persona.get_apellido()
+
+	def get_cedula(self):
+		return self.persona.get_ci()
+
 	def agregar_paquete(self, paquete):
 		self.paquetes.append(paquete)
 
