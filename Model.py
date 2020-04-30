@@ -49,6 +49,93 @@ class Model:
 		self.t_existe_archivo.stop()
 		self.t.stop()
 
+	def buscar_cliente_por_apellido(self, apellido_cliente, cantidad_de_filtros, encontrando):
+		'''
+		Busca una lista de paquetes en base al nombre dado como parametro y es almacenado
+		como atributo de la clase
+		'''
+		print('buscando por apellido...')
+
+		encontrando = False
+		apellido_cliente = apellido_cliente.lower()
+		clientes_result_aux = []
+
+		pos_result_busqueda_aux = []
+		esta_vacio_el_vector = False
+
+		#el patron debe teber por lo menos 3 caracteres
+		if len(apellido_cliente) > 2:
+			if len(self.clientes_result) == 0 or cantidad_de_filtros == 1:
+				clientes = Model.abrir_archivo_clientes()
+				self.pos_result_busqueda_cliente = []
+			else:
+				clientes = self.clientes_result
+
+			if len(self.pos_result_busqueda_cliente) == 0:
+				esta_vacio_el_vector = True
+
+			i = -1
+			for cliente in clientes:
+				i += 1
+				if Model.boyer_moore_busqueda_patron(apellido_cliente, cliente.get_apellido().lower()):
+					clientes_result_aux.append(cliente)
+
+					if esta_vacio_el_vector:
+						pos_result_busqueda_aux.append(i)
+					else:
+						pos_result_busqueda_aux.append(self.pos_result_busqueda_cliente[i])
+
+					encontrando = True
+
+		self.clientes_result = clientes_result_aux
+		self.pos_result_busqueda_cliente = pos_result_busqueda_aux
+
+		return [self.clientes_result, encontrando, self.pos_result_busqueda_cliente]
+
+	def buscar_cliente_por_cedula(self, cedula_cliente, cantidad_de_filtros, encontrando):
+		'''
+		Busca una lista de paquetes en base al nombre dado como parametro y es almacenado
+		como atributo de la clase
+		'''
+		print('buscando por cedula...')
+
+		encontrando = False
+		cedula_cliente = cedula_cliente.lower()
+		clientes_result_aux = []
+
+		pos_result_busqueda_aux = []
+		esta_vacio_el_vector = False
+
+		#el patron debe teber por lo menos 3 caracteres
+		if len(cedula_cliente) > 2:
+			if len(self.clientes_result) == 0 or cantidad_de_filtros == 1:
+				clientes = Model.abrir_archivo_clientes()
+				self.pos_result_busqueda_cliente = []
+			else:
+				clientes = self.clientes_result
+
+			if len(self.pos_result_busqueda_cliente) == 0:
+				esta_vacio_el_vector = True
+
+			i = -1
+			for cliente in clientes:
+				i += 1
+				if Model.boyer_moore_busqueda_patron(str(cedula_cliente), str(cliente.get_cedula())):
+				#if cedula_cliente == cliente.get_cedula():
+					clientes_result_aux.append(cliente)
+
+					if esta_vacio_el_vector:
+						pos_result_busqueda_aux.append(i)
+					else:
+						pos_result_busqueda_aux.append(self.pos_result_busqueda_cliente[i])
+
+					encontrando = True
+
+		self.clientes_result = clientes_result_aux
+		self.pos_result_busqueda_cliente = pos_result_busqueda_aux
+
+		return [self.clientes_result, encontrando, self.pos_result_busqueda_cliente]
+
 	def buscar_cliente_por_nombre(self, nombre_cliente, cantidad_de_filtros, encontrando):
 		'''
 		Busca una lista de paquetes en base al nombre dado como parametro y es almacenado
