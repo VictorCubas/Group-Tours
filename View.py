@@ -1599,11 +1599,14 @@ class View:
 		texto = ''
 		precio_texto = self.price_pre_venta_content_entry.get()
 
+		cantidad_puntos_antes = 0
 		#eliminamos los puntos '.'
 		if len(precio_texto) > 3:
 			for i in range(len(precio_texto)):
 				if precio_texto[i] != '.':
 					texto += precio_texto[i]
+				else:
+					cantidad_puntos_antes += 1
 
 			precio_texto = texto
 			self.price_pre_venta_value = texto
@@ -1611,31 +1614,55 @@ class View:
 		else:
 			self.price_pre_venta_value = precio_texto
 
+		#agregamos los puntitos
+		cantidad_puntos_despues = 0
 		j = 1
 		if len(precio_texto) > 3:
 			for i in range(len(precio_texto) -1, -1, -1):
 				texto = precio_texto[i] + texto
 				if j % 3 == 0 and i != 0:
 					texto = '.' + texto
+					cantidad_puntos_despues += 1
 
 				j += 1
 		else:
 			texto = precio_texto
 
 		self.price_pre_venta_content_entry.set(texto)
-		self.price_entry.delete(0, END)
-		self.price_entry.insert(0, texto)
-		self.price_entry.icursor(len(texto))
+		posicion_cursor = self.price_entry.index(INSERT)
+		posicion_final = len(texto)
+
+		#reajustamos la posicion del cursor de texto		
+		if posicion_cursor == posicion_final or posicion_cursor + 1 == posicion_final:
+			self.price_entry.delete(0, END)
+			self.price_entry.insert(0, texto)
+
+			if cantidad_puntos_despues < cantidad_puntos_antes:
+				self.price_entry.icursor(posicion_cursor-1)
+			elif cantidad_puntos_despues > cantidad_puntos_antes:
+				self.price_entry.icursor(posicion_final)
+			elif posicion_cursor + 1 == posicion_final:
+				self.price_entry.icursor(posicion_cursor)
+			else:
+				self.price_entry.icursor(posicion_final)
+		else:
+			if cantidad_puntos_despues > cantidad_puntos_antes:
+				self.price_entry.icursor(posicion_cursor+1)
+			elif cantidad_puntos_despues < cantidad_puntos_antes:
+				self.price_entry.icursor(posicion_cursor-1)
 
 	def update_senha_pre_venta_content_entry(self, *args):
 		texto = ''
 		senha_texto = self.senha_pre_venta_content_entry.get()
 
+		cantidad_puntos_antes = 0
 		#eliminamos los puntos '.'
 		if len(senha_texto) > 3:
 			for i in range(len(senha_texto)):
 				if senha_texto[i] != '.':
 					texto += senha_texto[i]
+				else:
+					cantidad_puntos_antes += 1
 
 			senha_texto = texto
 			self.senha_pre_venta_value = texto
@@ -1644,30 +1671,53 @@ class View:
 			self.senha_pre_venta_value = senha_texto
 
 		j = 1
+		cantidad_puntos_despues = 0
 		if len(senha_texto) > 3:
 			for i in range(len(senha_texto) -1, -1, -1):
 				texto = senha_texto[i] + texto
 				if j % 3 == 0 and i != 0:
 					texto = '.' + texto
+					cantidad_puntos_despues += 1
 
 				j += 1
 		else:
 			texto = senha_texto
 
 		self.senha_pre_venta_content_entry.set(texto)
-		self.senha_entry.delete(0, END)
-		self.senha_entry.insert(0, texto)
-		self.senha_entry.icursor(len(texto))
+		posicion_cursor = self.senha_entry.index(INSERT)
+		posicion_final = len(texto)
+
+		#reajustamos la posicion del cursor de texto		
+		if posicion_cursor == posicion_final or posicion_cursor + 1 == posicion_final:
+			self.senha_entry.delete(0, END)
+			self.senha_entry.insert(0, texto)
+
+			if cantidad_puntos_despues < cantidad_puntos_antes:
+				self.senha_entry.icursor(posicion_cursor-1)
+			elif cantidad_puntos_despues > cantidad_puntos_antes:
+				self.senha_entry.icursor(posicion_final)
+			elif posicion_cursor + 1 == posicion_final:
+				self.senha_entry.icursor(posicion_cursor)
+			else:
+				self.senha_entry.icursor(posicion_final)
+		else:
+			if cantidad_puntos_despues > cantidad_puntos_antes:
+				self.senha_entry.icursor(posicion_cursor+1)
+			elif cantidad_puntos_despues < cantidad_puntos_antes:
+				self.senha_entry.icursor(posicion_cursor-1)
 
 	def update_price_content_entry(self, *args):
 		texto = ''
 		precio_texto = self.price_content_entry.get()
 
+		cantidad_puntos_antes = 0
 		#eliminamos los puntos '.'
 		if len(precio_texto) > 3:
 			for i in range(len(precio_texto)):
 				if precio_texto[i] != '.':
 					texto += precio_texto[i]
+				else:
+					cantidad_puntos_antes += 1
 
 			precio_texto = texto
 			self.price_value = texto
@@ -1675,32 +1725,55 @@ class View:
 		else:
 			self.price_value = precio_texto
 
+		cantidad_puntos_despues = 0
 		j = 1
 		if len(precio_texto) > 3:
 			for i in range(len(precio_texto) -1, -1, -1):
 				texto = precio_texto[i] + texto
 				if j % 3 == 0 and i != 0:
 					texto = '.' + texto
+					cantidad_puntos_despues += 1
 
 				j += 1
 		else:
 			texto = precio_texto
 
 		self.price_content_entry.set(texto)
-		self.price_entry.delete(0, END)
-		self.price_entry.insert(0, texto)
-		self.price_entry.icursor(len(texto))
+		posicion_cursor = self.price_entry.index(INSERT)
+		posicion_final = len(texto)
+
+		#reajustamos la posicion del cursor de texto		
+		if posicion_cursor == posicion_final or posicion_cursor + 1 == posicion_final:
+			self.price_entry.delete(0, END)
+			self.price_entry.insert(0, texto)
+
+			if cantidad_puntos_despues < cantidad_puntos_antes:
+				self.price_entry.icursor(posicion_cursor-1)
+			elif cantidad_puntos_despues > cantidad_puntos_antes:
+				self.price_entry.icursor(posicion_final)
+			elif posicion_cursor + 1 == posicion_final:
+				self.price_entry.icursor(posicion_cursor)
+			else:
+				self.price_entry.icursor(posicion_final)
+		else:
+			if cantidad_puntos_despues > cantidad_puntos_antes:
+				self.price_entry.icursor(posicion_cursor+1)
+			elif cantidad_puntos_despues < cantidad_puntos_antes:
+				self.price_entry.icursor(posicion_cursor-1)
 
 	def update_senha_content_entry(self, *args):
 		#self.price_value_int = self.price_content_entry.get()
 		texto = ''
 		senha_texto = self.senha_content_entry.get()
 
+		cantidad_puntos_antes = 0
 		#eliminamos los puntos '.'
 		if len(senha_texto) > 3:
 			for i in range(len(senha_texto)):
 				if senha_texto[i] != '.':
 					texto += senha_texto[i]
+				else:
+					cantidad_puntos_antes += 1
 
 			senha_texto = texto
 			self.senha_value = texto
@@ -1709,20 +1782,41 @@ class View:
 			self.senha_value = senha_texto
 
 		j = 1
+		cantidad_puntos_despues = 0
 		if len(senha_texto) > 3:
 			for i in range(len(senha_texto) -1, -1, -1):
 				texto = senha_texto[i] + texto
 				if j % 3 == 0 and i != 0:
 					texto = '.' + texto
+					cantidad_puntos_despues += 1
 
 				j += 1
 		else:
 			texto = senha_texto
 
 		self.senha_content_entry.set(texto)
-		self.senha_entry.delete(0, END)
-		self.senha_entry.insert(0, texto)
-		self.senha_entry.icursor(len(texto))
+		posicion_cursor = self.senha_entry.index(INSERT)
+		posicion_final = len(texto)
+
+		#reajustamos la posicion del cursor de texto		
+		if posicion_cursor == posicion_final or posicion_cursor + 1 == posicion_final:
+			self.senha_entry.delete(0, END)
+			self.senha_entry.insert(0, texto)
+
+			if cantidad_puntos_despues < cantidad_puntos_antes:
+				self.senha_entry.icursor(posicion_cursor-1)
+			elif cantidad_puntos_despues > cantidad_puntos_antes:
+				self.senha_entry.icursor(posicion_final)
+			elif posicion_cursor + 1 == posicion_final:
+				self.senha_entry.icursor(posicion_cursor)
+			else:
+				self.senha_entry.icursor(posicion_final)
+		else:
+			if cantidad_puntos_despues > cantidad_puntos_antes:
+				self.senha_entry.icursor(posicion_cursor+1)
+			elif cantidad_puntos_despues < cantidad_puntos_antes:
+				self.senha_entry.icursor(posicion_cursor-1)
+
 
 	def update_monto_cuota_content_entry(self, *args):
 		#self.price_value_int = self.price_content_entry.get()
@@ -1744,8 +1838,6 @@ class View:
 		else:
 			self.monto_cuota_value = monto_cuota_texto
 
-		se_agrego_pontito = False
-
 		j = 1
 		cantidad_puntos_despues = 0
 		if len(monto_cuota_texto) > 3:
@@ -1754,7 +1846,6 @@ class View:
 				if j % 3 == 0 and i != 0:
 					texto = '.' + texto
 					cantidad_puntos_despues += 1
-					se_agrego_pontito = True
 
 				j += 1
 		else:
@@ -1763,10 +1854,6 @@ class View:
 		self.monto_cuota_content_entry.set(texto)
 		posicion_cursor = self.monto_cuota_entry.index(INSERT)
 		posicion_final = len(texto)
-
-		#print('posicion 2: {}'.format(self.monto_cuota_entry.index(INSERT)))
-		print('posicion cursor: {}'.format(posicion_cursor))
-		print('posicion final: {}'.format(posicion_final))
 
 		#reajustamos la posicion del cursor de texto		
 		if posicion_cursor == posicion_final or posicion_cursor + 1 == posicion_final:
@@ -2189,11 +2276,14 @@ class View:
 		texto = ''
 		cedula_texto = self.cedula_busqueda_content_entry.get()
 
+		cantidad_puntos_antes = 0
 		#eliminamos los puntos '.'
 		if len(cedula_texto) > 3:
 			for i in range(len(cedula_texto)):
 				if cedula_texto[i] != '.':
 					texto += cedula_texto[i]
+				else:
+					cantidad_puntos_antes += 1
 
 			cedula_texto = texto
 			self.cedula_buscada_value = texto
@@ -2201,6 +2291,7 @@ class View:
 		else:
 			self.cedula_buscada_value= cedula_texto
 
+		cantidad_puntos_despues = 0
 		j = 1
 		#agregamos los puntos
 		if len(cedula_texto) > 3:
@@ -2208,25 +2299,47 @@ class View:
 				texto = cedula_texto[i] + texto
 				if j % 3 == 0 and i != 0:
 					texto = '.' + texto
+					cantidad_puntos_despues += 1
 
 				j += 1
 		else:
 			texto = cedula_texto
 
 		self.cedula_busqueda_content_entry.set(texto)
-		self.cedula_buscada_entry.delete(0, END)
-		self.cedula_buscada_entry.insert(0, texto)
-		self.cedula_buscada_entry.icursor(len(texto))
+		posicion_cursor = self.cedula_buscada_entry.index(INSERT)
+		posicion_final = len(texto)
+
+		#reajustamos la posicion del cursor de texto		
+		if posicion_cursor == posicion_final or posicion_cursor + 1 == posicion_final:
+			self.cedula_buscada_entry.delete(0, END)
+			self.cedula_buscada_entry.insert(0, texto)
+
+			if cantidad_puntos_despues < cantidad_puntos_antes:
+				self.cedula_buscada_entry.icursor(posicion_cursor-1)
+			elif cantidad_puntos_despues > cantidad_puntos_antes:
+				self.cedula_buscada_entry.icursor(posicion_final)
+			elif posicion_cursor + 1 == posicion_final:
+				self.cedula_buscada_entry.icursor(posicion_cursor)
+			else:
+				self.cedula_buscada_entry.icursor(posicion_final)
+		else:
+			if cantidad_puntos_despues > cantidad_puntos_antes:
+				self.cedula_buscada_entry.icursor(posicion_cursor+1)
+			elif cantidad_puntos_despues < cantidad_puntos_antes:
+				self.cedula_buscada_entry.icursor(posicion_cursor-1)
 
 	def update_cedula_content_entry(self, *args):
 		texto = ''
 		cedula_texto = self.cedula_content_entry.get()
 
+		cantidad_puntos_antes = 0
 		#eliminamos los puntos '.'
 		if len(cedula_texto) > 3:
 			for i in range(len(cedula_texto)):
 				if cedula_texto[i] != '.':
 					texto += cedula_texto[i]
+				else:
+					cantidad_puntos_antes += 1
 
 			cedula_texto = texto
 			self.cedula_value = texto
@@ -2234,21 +2347,41 @@ class View:
 		else:
 			self.cedula_value = cedula_texto
 
+		cantidad_puntos_despues = 0
 		j = 1
 		if len(cedula_texto) > 3:
 			for i in range(len(cedula_texto) -1, -1, -1):
 				texto = cedula_texto[i] + texto
 				if j % 3 == 0 and i != 0:
 					texto = '.' + texto
+					cantidad_puntos_despues += 1
 
 				j += 1
 		else:
 			texto = cedula_texto
 
 		self.cedula_content_entry.set(texto)
-		self.cedula_entry_registrar_cliente.delete(0, END)
-		self.cedula_entry_registrar_cliente.insert(0, texto)
-		self.cedula_entry_registrar_cliente.icursor(len(texto))
+		posicion_cursor = self.cedula_entry_registrar_cliente.index(INSERT)
+		posicion_final = len(texto)
+
+		#reajustamos la posicion del cursor de texto		
+		if posicion_cursor == posicion_final or posicion_cursor + 1 == posicion_final:
+			self.cedula_entry_registrar_cliente.delete(0, END)
+			self.cedula_entry_registrar_cliente.insert(0, texto)
+
+			if cantidad_puntos_despues < cantidad_puntos_antes:
+				self.cedula_entry_registrar_cliente.icursor(posicion_cursor-1)
+			elif cantidad_puntos_despues > cantidad_puntos_antes:
+				self.cedula_entry_registrar_cliente.icursor(posicion_final)
+			elif posicion_cursor + 1 == posicion_final:
+				self.cedula_entry_registrar_cliente.icursor(posicion_cursor)
+			else:
+				self.cedula_entry_registrar_cliente.icursor(posicion_final)
+		else:
+			if cantidad_puntos_despues > cantidad_puntos_antes:
+				self.cedula_entry_registrar_cliente.icursor(posicion_cursor+1)
+			elif cantidad_puntos_despues < cantidad_puntos_antes:
+				self.cedula_entry_registrar_cliente.icursor(posicion_cursor-1)
 
 	def view_facturas(self):
 		self.set_button_bold('facturas')
