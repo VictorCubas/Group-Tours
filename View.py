@@ -1730,10 +1730,13 @@ class View:
 		monto_cuota_texto = self.monto_cuota_content_entry.get()
 
 		#eliminamos los puntos '.'
+		cantidad_puntos_antes = 0
 		if len(monto_cuota_texto) > 3:
 			for i in range(len(monto_cuota_texto)):
 				if monto_cuota_texto[i] != '.':
 					texto += monto_cuota_texto[i]
+				else:
+					cantidad_puntos_antes += 1
 
 			monto_cuota_texto = texto
 			self.monto_cuota_value = texto
@@ -1741,21 +1744,47 @@ class View:
 		else:
 			self.monto_cuota_value = monto_cuota_texto
 
+		se_agrego_pontito = False
+
 		j = 1
+		cantidad_puntos_despues = 0
 		if len(monto_cuota_texto) > 3:
 			for i in range(len(monto_cuota_texto) -1, -1, -1):
 				texto = monto_cuota_texto[i] + texto
 				if j % 3 == 0 and i != 0:
 					texto = '.' + texto
+					cantidad_puntos_despues += 1
+					se_agrego_pontito = True
 
 				j += 1
 		else:
 			texto = monto_cuota_texto
 
 		self.monto_cuota_content_entry.set(texto)
-		self.monto_cuota_entry.delete(0, END)
-		self.monto_cuota_entry.insert(0, texto)
-		self.monto_cuota_entry.icursor(len(texto))
+		posicion_cursor = self.monto_cuota_entry.index(INSERT)
+		posicion_final = len(texto)
+
+		#print('posicion 2: {}'.format(self.monto_cuota_entry.index(INSERT)))
+		print('posicion cursor: {}'.format(posicion_cursor))
+		print('posicion final: {}'.format(posicion_final))
+
+		#reajustamos la posicion del cursor de texto		
+		if posicion_cursor == posicion_final or posicion_cursor + 1 == posicion_final:
+			self.monto_cuota_entry.delete(0, END)
+			self.monto_cuota_entry.insert(0, texto)
+			if cantidad_puntos_despues < cantidad_puntos_antes:
+				self.monto_cuota_entry.icursor(posicion_cursor-1)
+			elif cantidad_puntos_despues > cantidad_puntos_antes:
+				self.monto_cuota_entry.icursor(posicion_final)
+			elif posicion_cursor + 1 == posicion_final:
+				self.monto_cuota_entry.icursor(posicion_cursor)
+			else:
+				self.monto_cuota_entry.icursor(posicion_final)
+		else:
+			if cantidad_puntos_despues > cantidad_puntos_antes:
+				self.monto_cuota_entry.icursor(posicion_cursor+1)
+			elif cantidad_puntos_despues < cantidad_puntos_antes:
+				self.monto_cuota_entry.icursor(posicion_cursor-1)
 	
 	def set_value_pre_venta(self, pre_venta, posicion_pre_venta, agregando):
 		if agregando:
