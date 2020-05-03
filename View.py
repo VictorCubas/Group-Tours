@@ -2045,6 +2045,7 @@ class View:
 
 		#mostramos los RESULTADOS DE LA BUSQUEDA
 		#creamos un frame, un canvas y un scrollbar para luego conectarlos
+		self.view_result_busqueda_cliente = []
 		frame_result = Frame(frame, width='800', height='450', bg='#FFFFFF', relief=GROOVE, borderwidth=1)
 		self.canvas=Canvas(frame_result,bg='#FFFFFF',width=800,height=450)
 		vbar=Scrollbar(frame_result,orient=VERTICAL)
@@ -2087,7 +2088,7 @@ class View:
 		frame.pack(padx=20, pady=20, anchor=NE)
 		frame.pack_propagate(0)
 
-		#self.show_paquetes()
+		self.show_clientes()
 
 		self.switch_frame(frame)
 
@@ -2099,7 +2100,7 @@ class View:
 		self.set_values_clientes_posiciones(result_busqueda_cliente)
 		for cliente in self.clientes:
 			print('Nombre:{} Cedula:{}'.format(cliente.get_nombre(), cliente.get_cedula()))
-		#self.show_paquetes()
+		self.show_clientes()
 
 	def set_values_clientes_posiciones(self, result_busqueda_clientes):
 		self.clientes = result_busqueda_clientes[0]
@@ -2113,7 +2114,7 @@ class View:
 		self.set_values_clientes_posiciones(result_busqueda_cliente)
 		for cliente in self.clientes:
 			print('Nombre:{} Cedula:{}'.format(cliente.get_nombre(), cliente.get_cedula()))
-		#self.show_paquetes()
+		self.show_clientes()
 
 	def buscar_cliente_por_cedula(self, *args):
 		self.update_cedula_buscada_content_entry()
@@ -2122,6 +2123,8 @@ class View:
 		self.set_values_clientes_posiciones(result_busqueda_cliente)
 		for cliente in self.clientes:
 			print('Nombre:{} Cedula:{}'.format(cliente.get_nombre(), cliente.get_cedula()))
+
+		self.show_clientes()
 
 	def view_registrar_cliente(self):
 		self.set_button_bold('usuarios')
@@ -2382,6 +2385,134 @@ class View:
 				self.cedula_entry_registrar_cliente.icursor(posicion_cursor+1)
 			elif cantidad_puntos_despues < cantidad_puntos_antes:
 				self.cedula_entry_registrar_cliente.icursor(posicion_cursor-1)
+
+	def show_clientes(self):
+		cliente_view = None
+
+		#eliminamos los resultados anteriores a la busqueda actual (si elminamos la lista anterior tambien se elimina la lista actual, por ref)
+		print('len: ' + str(len(self.view_result_busqueda_cliente)))
+		for cliente_view in self.view_result_busqueda_cliente:
+			print('a ver...')
+			cliente_view.destroy()
+
+		self.view_result_busqueda_cliente = []
+
+		#aplicamos los nuevos resultados de la busqueda
+		cliente_view = None
+		aux = -1
+
+		for cliente in self.clientes:
+			print('.')
+			aux += 1
+
+			cliente_view = Frame(self.frame_result_aux, bg='#F9F9F9', width='770', height='150', relief=GROOVE, borderwidth=0)
+			cliente_view.pack(padx=10, pady=5)
+
+			'''
+			#imagen view
+			image_frame = Frame(cliente_view, bg='#F9F9F9', width='120', height='140', relief=GROOVE, borderwidth=0)
+			image_frame.place(relx=0.02, rely=0.02)
+
+			imagen_original = None
+			if paquete.get_cantidad_de_imagenes() == 0:
+				imagen_original = Image.open('imagenes/group_tours.png')
+			else:
+				imagen_original = paquete.get_imagenes()[0]
+
+			imagen_original = imagen_original.resize((170, 140), Image.ANTIALIAS)
+
+			logo = ImageTk.PhotoImage(imagen_original)
+			label_logo = Label(image_frame, width=230, height=140, relief=GROOVE, borderwidth=0)
+			label_logo.config(bg='#F9F9F9')
+			label_logo.config(image=logo)
+			label_logo.photo = logo
+			label_logo.pack()
+			label_logo.pack_propagate(0)
+			'''
+			cliente_name_view = Label(cliente_view, text=cliente.get_nombre(), width='18', height='1', relief=GROOVE, borderwidth=0)
+			cliente_name_view.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535',
+											activeforeground='#343535', anchor=W) #posicionamos el texto a la izquierda
+			cliente_name_view.place(relx=0.38, rely=0.05)
+			'''
+			#fecha view
+			date = paquete.get_fecha_de_viaje()
+			texto = self.convert_date_to_string(date)
+
+			paquete_fecha_de_viaje_view = Label(cliente_view, text=texto, width='18', height='1', relief=GROOVE, borderwidth=0)
+			paquete_fecha_de_viaje_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030',
+									activeforeground='#2F3030', highlightthickness=0, anchor=W)
+			paquete_fecha_de_viaje_view.place(relx=0.38, rely=0.29)
+
+			#vigente view
+			texto = 'Vigente'
+			if paquete.get_esta_vigente() == False:
+				texto = 'No vigente'
+
+			paquete_fecha_de_viaje_view = Label(cliente_view, text=texto, width='18', height='1', relief=GROOVE, borderwidth=0)
+			paquete_fecha_de_viaje_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030',
+											activeforeground='#2F3030', highlightthickness=0, anchor=W)
+			paquete_fecha_de_viaje_view.place(relx=0.38, rely=0.52)
+
+			texto = 'Tipo: ' + paquete.TRASLADO
+			paquete_fecha_de_viaje_view = Label(cliente_view, text=texto, width='18', height='1', relief=GROOVE, borderwidth=0)
+			paquete_fecha_de_viaje_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030',
+												activeforeground='#2F3030', highlightthickness=0, anchor=W)
+			paquete_fecha_de_viaje_view.place(relx=0.38, rely=0.75)
+
+			#SEGUNDA CULUMNA
+			#precio view
+			texto = ''
+
+			if paquete.si_pre_venta():
+				texto = self.convert_amount_to_string(paquete.get_precio_pre_venta(), True)
+			else:
+				texto = self.convert_amount_to_string(paquete.get_precio(), True)
+
+			paquete_precio_view = Label(cliente_view, text=texto, width='18', height='1', relief=GROOVE, borderwidth=0)
+			paquete_precio_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
+			paquete_precio_view.place(relx=0.72, rely=0.07)
+
+			#pre venta view
+			if paquete.si_pre_venta():
+				texto = 'Pre venta: si'
+			else:
+				texto = 'Pre venta: no'
+
+			paquete_pre_venta_view = Label(cliente_view, text=texto, width='18', height='1', relief=GROOVE, borderwidth=0)
+			paquete_pre_venta_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
+			paquete_pre_venta_view.place(relx=0.72, rely=0.29)
+
+			#lugares disponibles view
+			texto = 'Lugares disponible: '
+			lugares_disponibles = paquete.get_lugares_disponibles()
+			color = '#2F3030'
+			if lugares_disponibles > 0:
+				texto = texto + str(lugares_disponibles)
+			elif lugares_disponibles == 0:
+				texto = 'SOLD OUT'
+				color = '#E60700'
+			else:
+				texto = texto + '--'
+
+			paquete_pre_venta_view = Label(cliente_view, text=texto, width='18', height='1', relief=GROOVE, borderwidth=0)
+			paquete_pre_venta_view.config(font=('tahoma', 13), bg='#F9F9F9', fg=color, activeforeground=color, highlightthickness=0, anchor=W)
+			paquete_pre_venta_view.place(relx=0.72, rely=0.52)
+
+			pos_paquete = self.paquetes_posiciones[aux]
+
+			#detalles view
+			texto = 'Ver detalles      >'
+			paquete_detalles_view = Button(cliente_view, text=texto, width='16', height='1', relief=GROOVE, borderwidth=0)
+			paquete_detalles_view.config(font=('tahoma', 13), bg='#27A221', fg='#FFFFFF', activeforeground='#FFFFFF',
+										activebackground='#20801B', highlightthickness=0, anchor=W)
+			paquete_detalles_view.place(relx=0.72, rely=0.75)
+			paquete_detalles_view.config(command=lambda paquete=paquete, pos_paquete=pos_paquete:
+									self.view_agregar_and_detalles_toplevel(None, paquete, pos_paquete, False))
+			#print(paquete_name_view.config("text")[-1])
+			#print(paquete_detalles_view.config("text")[-1])
+
+		'''
+			self.view_result_busqueda_cliente.append(cliente_view)
 
 	def view_facturas(self):
 		self.set_button_bold('facturas')
