@@ -17,6 +17,7 @@ class View:
 	'''
 	Implementando la vista de la app
 	'''
+	CANTIDAD_CARACTERES = 23
 
 	def __init__(self, controller, parent):
 		self.controller = controller
@@ -2011,7 +2012,7 @@ class View:
 		self.anterior = 'usuarios'
 
 		#DEFINIMOS EL FRAME 
-		frame = Frame(self.main_frame, width='900', height='700', bg='#F9F9F9', relief=GROOVE, borderwidth=2)
+		frame = Frame(self.main_frame, width='900', height='700', bg='#F9F9F9', relief=GROOVE, borderwidth=0)
 
 		#declaramos el un string que alamacena el contenido ingresado
 		self.clientes = []
@@ -2390,9 +2391,7 @@ class View:
 		cliente_view = None
 
 		#eliminamos los resultados anteriores a la busqueda actual (si elminamos la lista anterior tambien se elimina la lista actual, por ref)
-		print('len: ' + str(len(self.view_result_busqueda_cliente)))
 		for cliente_view in self.view_result_busqueda_cliente:
-			print('a ver...')
 			cliente_view.destroy()
 
 		self.view_result_busqueda_cliente = []
@@ -2402,7 +2401,6 @@ class View:
 		aux = -1
 
 		for cliente in self.clientes:
-			print('.')
 			aux += 1
 
 			cliente_view = Frame(self.frame_result_aux, bg='#F9F9F9', width='770', height='150', relief=GROOVE, borderwidth=0)
@@ -2429,10 +2427,52 @@ class View:
 			label_logo.pack()
 			label_logo.pack_propagate(0)
 			'''
-			cliente_name_view = Label(cliente_view, text=cliente.get_nombre(), width='18', height='1', relief=GROOVE, borderwidth=0)
+			#view nombre
+			cliente_name_view = Label(cliente_view, text=cliente.get_nombre(), width='18', height='1', relief=GROOVE, borderwidth=1)
 			cliente_name_view.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535',
 											activeforeground='#343535', anchor=W) #posicionamos el texto a la izquierda
-			cliente_name_view.place(relx=0.38, rely=0.05)
+			#cliente_name_view.place(relx=0.05, rely=0.05)
+
+			#view apellido
+			cliente_lastname_view = Label(cliente_view, text=cliente.get_apellido(), width='18', height='1', relief=GROOVE, borderwidth=1)
+			cliente_lastname_view.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535',
+											activeforeground='#343535', anchor=W) #posicionamos el texto a la izquierda
+			#cliente_lastname_view.place(relx=0.05, rely=0.25)
+
+			cliente_nombre_apellido_view = Label(cliente_view, width='20', height='1', relief=GROOVE, borderwidth=1)
+			cliente_nombre_apellido_view.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535',
+											activeforeground='#343535', anchor=W) #posicionamos el texto a la izquierda
+			cliente_nombre_apellido_view.place(relx=0.05, rely=0.05)
+			texto = cliente.get_nombre() + ' ' + cliente.get_apellido()
+			nombre_apellido1 = ''
+			nombre_apellido2 = ''
+			pos_y = 0.25
+			if len(texto) <= View.CANTIDAD_CARACTERES:
+				cliente_nombre_apellido_view.config(text=texto)
+			else:
+				[nombre_apellido1, nombre_apellido2] = self.dividir_nombre_apellido(texto, nombre_apellido1, nombre_apellido2)
+				cliente_nombre_apellido_view.config(text=nombre_apellido1)
+
+				cliente_nombre_apellido_view_aux = Label(cliente_view, width='20', height='1', relief=GROOVE, borderwidth=1)
+				cliente_nombre_apellido_view_aux.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535',
+												activeforeground='#343535', anchor=W) #posicionamos el texto a la izquierda
+				cliente_nombre_apellido_view_aux.config(text=nombre_apellido2)
+				cliente_nombre_apellido_view_aux.place(relx=0.05, rely=pos_y)
+				pos_y += 0.2
+
+			#view cedula
+			texto = self.convert_amount_to_string(cliente.get_cedula(), False)
+			cliente_cedula_view = Label(cliente_view, text=texto, width='20', height='1', relief=GROOVE, borderwidth=1)
+			cliente_cedula_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#343535',
+											activeforeground='#343535', anchor=W) #posicionamos el texto a la izquierda
+			cliente_cedula_view.place(relx=0.05, rely=pos_y)
+			pos_y += 0.2
+
+			#view nacionalidad
+			cliente_nacionalidad_view = Label(cliente_view, text=cliente.get_nacionalidad(), width='20', height='1', relief=GROOVE, borderwidth=1)
+			cliente_nacionalidad_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#343535',
+											activeforeground='#343535', anchor=W) #posicionamos el texto a la izquierda
+			cliente_nacionalidad_view.place(relx=0.05, rely=pos_y)
 			'''
 			#fecha view
 			date = paquete.get_fecha_de_viaje()
@@ -2513,6 +2553,25 @@ class View:
 
 		'''
 			self.view_result_busqueda_cliente.append(cliente_view)
+
+	def dividir_nombre_apellido(self, nombre_completo, nombre_apellido1, nombre_apellido2):
+		#separamos el nombre completo en dos partes
+
+		marcador = 0
+		for i in reversed(range(View.CANTIDAD_CARACTERES)):
+			if nombre_completo[i] == ' ':
+				marcador = i
+				break
+		i = 0
+		for i in range(marcador+1):
+			nombre_apellido1 += nombre_completo[i]
+
+		i = marcador + 1
+		while i < len(nombre_completo):
+			nombre_apellido2 += nombre_completo[i]
+			i += 1
+
+		return [nombre_apellido1, nombre_apellido2]
 
 	def view_facturas(self):
 		self.set_button_bold('facturas')
