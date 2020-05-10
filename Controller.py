@@ -42,7 +42,7 @@ class Controller:
 				result_encontrando = self.model.buscar_cliente_por_nombre(value, cantidad_de_filtros, result_encontrando[1])
 			elif result_encontrando[1] and key == 'content2' and value != '':
 				result_encontrando = self.model.buscar_cliente_por_apellido(value, cantidad_de_filtros, result_encontrando[1])
-			elif result_encontrando[1] and key == 'content3' and value != '':
+			elif result_encontrando[1] and key == 'content3' and value != '' and value != None:
 				result_encontrando = self.model.buscar_cliente_por_cedula(value, cantidad_de_filtros, result_encontrando[1])
 
 		return [result_encontrando[0], result_encontrando[2]]
@@ -157,8 +157,8 @@ class Controller:
 	def crear_paquete(self, value):
 		self.view.view_crear_paquete(value)
 
-	def editar_paquete(self, frame, paquete, pos_paquete):
-		self.view.view_editar_paquete(frame, paquete, pos_paquete)
+	def editar_paquete(self, paquete_detalles_top_level, frame, paquete, pos_paquete):
+		self.view.view_editar_paquete(paquete_detalles_top_level, frame, paquete, pos_paquete)
 
 	def guardar_paquete_background(self, paquete, pos_paquete, es_la_pre_venta_actual):
 		print('Controller: guardando en background...')
@@ -213,7 +213,7 @@ class Controller:
 			self.view.update_buscar_paquete()
 
 	def guardar_paquete_editado(self, pos_paquete, nombre, tipo, sub_tipo, esta_vigente, fecha, precio,
-								senha, incluye, cant_pasajeros, pre_ventas, parent_detalles, imagenes):
+								senha, incluye, cant_pasajeros, pre_ventas, paquete_detalles_top_level, frame, imagenes):
 		success = None
 		try:
 			self.model.validar_datos_paquete_editado(nombre, tipo, sub_tipo, esta_vigente, fecha, precio, senha, incluye, cant_pasajeros, False)
@@ -239,7 +239,7 @@ class Controller:
 
 			print('guardando paquete editado...')
 			self.model.guardar_paquete_editado(paquete, pos_paquete)
-			self.view.view_paquete_detalles(parent_detalles, paquete, pos_paquete)
+			self.view.view_paquete_detalles(paquete_detalles_top_level, frame, paquete, pos_paquete)
 			self.view.update_buscar_paquete()
 
 	def agregar_pre_venta(self, flujo):
