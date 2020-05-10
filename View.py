@@ -469,23 +469,24 @@ class View:
 
 	def view_agregar_and_detalles_toplevel(self, frame, paquete, pos_paquete, agregando):
 		print('preparando: Crear paquete/Viendo detalles')
-		self.paquete_detalles_top_level = Toplevel(self.parent, bg='#F9F9F9', relief=GROOVE, borderwidth=0)
-		self.paquete_detalles_top_level.geometry('1000x800+450+100')
-		self.paquete_detalles_top_level.resizable(width=False, height=False)
+
+		paquete_detalles_top_level = Toplevel(self.parent, bg='#F9F9F9', relief=GROOVE, borderwidth=0)
+		paquete_detalles_top_level.geometry('1000x800+450+100')
+		paquete_detalles_top_level.resizable(width=False, height=False)
 
 		if agregando:
-			self.view_agregar_paquete()
+			self.view_agregar_paquete(paquete_detalles_top_level)
 		else:
-			self.view_paquete_detalles(frame, paquete, pos_paquete)
+			self.view_paquete_detalles(paquete_detalles_top_level, frame, paquete, pos_paquete)
 
-	def view_paquete_detalles(self, frame_detalles, paquete, pos_paquete):
+	def view_paquete_detalles(self,paquete_detalles_top_level, frame_detalles, paquete, pos_paquete):
 		print('viendo detalles')
-		self.paquete_detalles_top_level.title('Paquete Detalles')
+		paquete_detalles_top_level.title('Paquete Detalles')
 
 		if frame_detalles is not None:
 			self.widget_destroy(frame_detalles)
 
-		frame_detalles = Frame(self.paquete_detalles_top_level, width='1000', height='900', bg='#F9F9F9', relief=GROOVE, borderwidth=0)
+		frame_detalles = Frame(paquete_detalles_top_level, width='1000', height='900', bg='#F9F9F9', relief=GROOVE, borderwidth=0)
 		frame_detalles.pack()
 		frame_detalles.pack_propagate(0)
 		paquete_name_label = Label(frame_detalles, text=paquete.get_nombre(), width='20', height='2', relief=GROOVE, borderwidth=0)
@@ -678,8 +679,9 @@ class View:
 		#********************************************************
 		#				CONFIGURAMOS LOS EVENTOS				*
 		#********************************************************
-		salir_button.config(command=lambda:self.widget_destroy(self.paquete_detalles_top_level))
-		editar_button.config(command=lambda:self.controller.editar_paquete(frame_detalles, paquete, pos_paquete))
+		salir_button.config(command=lambda:self.widget_destroy(paquete_detalles_top_level))
+		editar_button.config(command=lambda frame_detalles=frame_detalles:self.controller.editar_paquete(paquete_detalles_top_level,
+																				frame_detalles, paquete, pos_paquete))
 		#editar_button.config(command=lambda:self.widget_destroy(frame_detalles))
 
 	def view_precio_detalles(self, precio, senha, pre_ventas):
@@ -751,15 +753,15 @@ class View:
 		ok_button.place(relx=0.39, rely=0.85)
 		ok_button.config(command=lambda:self.widget_destroy(precio_parent))
 
-	def view_agregar_paquete(self):
+	def view_agregar_paquete(self, paquete_detalles_top_level):
 		print('View: creando paquete...')
 		#self.set_button_bold('paquetes')
 		#self.anterior = 'paquetes'
 
 		#DEFINIMOS EL FRAME
 		self.frame_pre_venta = None
-		self.paquete_detalles_top_level.title('Agregar paquete')
-		self.frame_agregar_paquete = Frame(self.paquete_detalles_top_level, width='1000', height='900', bg='#F9F9F9', relief=GROOVE, borderwidth=0)
+		paquete_detalles_top_level.title('Agregar paquete')
+		self.frame_agregar_paquete = Frame(paquete_detalles_top_level, width='1000', height='900', bg='#F9F9F9', relief=GROOVE, borderwidth=0)
 
 		#********************************************************
 		#  AGREGAMOS LAS ETIQUETAS CORRESPONDIENTE A LOS DATOS	*
@@ -936,9 +938,9 @@ class View:
 		pre_venta_button.config(command=lambda:self.controller.agregar_pre_venta(agregando))
 		save_button.config(command=lambda:self.controller.guardar_paquete(name_content_entry.get(), combobox_tipos.get(), combobox_sub_tipos.get(),
 				combobox_vigencia.get(), self.lista_fecha, self.price_value, self.senha_value, incluye_text_widget.get(1.0, END),
-				cant_pasajeros_content_entry.get(), self.pre_ventas, self.paquete_detalles_top_level, imagenes))
+				cant_pasajeros_content_entry.get(), self.pre_ventas, paquete_detalles_top_level, imagenes))
 
-		cancel_button.config(command=lambda:self.widget_destroy(self.paquete_detalles_top_level))
+		cancel_button.config(command=lambda:self.widget_destroy(paquete_detalles_top_level))
 
 		#********************************************************
 		#				PACK A TODOS LOS BOTONES				*
@@ -965,56 +967,57 @@ class View:
 
 			imagenes.append(imagen_original)
 
-	def view_editar_paquete(self, frame_editar_paquete, paquete, pos_paquete):
+	def view_editar_paquete(self, paquete_detalles_top_level, frame, paquete, pos_paquete):
 		print('editando paquete...')
-		self.paquete_detalles_top_level.title('Editar paquete')
+		paquete_detalles_top_level.title('Editar paquete')
 		#DEFINIMOS EL FRAME 
-		self.widget_destroy(frame_editar_paquete)
+		self.widget_destroy(frame)
 
 		self.frame_pre_venta = None
-		frame_detalles = Frame(self.paquete_detalles_top_level, width='1000', height='900', bg='#F9F9F9', relief=GROOVE, borderwidth=0)
+		#print('frame value:'.format(frame_edicion))
+		frame_edicion = Frame(paquete_detalles_top_level, width='1000', height='900', bg='#F9F9F9', relief=GROOVE, borderwidth=0)
 		#frame_detalles.place(relx=0, rely=0)
-		frame_detalles.pack()
-		frame_detalles.pack_propagate(0)
+		frame_edicion.pack()
+		frame_edicion.pack_propagate(0)
 
 		#********************************************************
 		#  AGREGAMOS LAS ETIQUETAS CORRESPONDIENTE A LOS DATOS	*
 		#********************************************************
 
 		#view nombre paquete
-		label = Label(frame_detalles, text='Nombre:', width='10', height='2', relief=GROOVE, borderwidth=0)
+		label = Label(frame_edicion, text='Nombre:', width='10', height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 15, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=0.065)
 
 		name_content_entry = StringVar()
 		name_content_entry.set(paquete.get_nombre())
-		name_entry = Entry(frame_detalles, width='25', font=('tahoma', 13), textvariable=name_content_entry)
+		name_entry = Entry(frame_edicion, width='25', font=('tahoma', 13), textvariable=name_content_entry)
 		name_entry.place(relx=0.17, rely=0.078)
 
 		#view tipo de paquete
-		label = Label(frame_detalles, text='Tipo:', width='10', height='2', relief=GROOVE, borderwidth=0)
+		label = Label(frame_edicion, text='Tipo:', width='10', height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 15, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=0.125)
 
 		lista_tipos = ['Terrestre', 'Aereo']
-		combobox_tipos = ttk.Combobox(frame_detalles, values=lista_tipos)
+		combobox_tipos = ttk.Combobox(frame_edicion, values=lista_tipos)
 		combobox_tipos.config(state='readonly', font=(13), width='9', height='6', background='#F9F9F9')
 		combobox_tipos.set(paquete.TRASLADO)
 		combobox_tipos.place(relx=0.17, rely=0.142)
 
 		lista_sub_tipos = ['Estandar', 'Personalizado']
-		combobox_sub_tipos = ttk.Combobox(frame_detalles, values=lista_sub_tipos)
+		combobox_sub_tipos = ttk.Combobox(frame_edicion, values=lista_sub_tipos)
 		combobox_sub_tipos.config(state='readonly', font=(13), width='12', height='6', background='#F9F9F9')
 		combobox_sub_tipos.set(paquete.TIPO)
 		combobox_sub_tipos.place(relx=0.3, rely=0.142)
 
 		#view vigente
-		label = Label(frame_detalles, text='Vigente:', width='10', height='2', relief=GROOVE, borderwidth=0)
+		label = Label(frame_edicion, text='Vigente:', width='10', height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 15, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=0.185)
 
 		lista_vigencia = ['Si', 'No']
-		combobox_vigencia = ttk.Combobox(frame_detalles, values=lista_vigencia)
+		combobox_vigencia = ttk.Combobox(frame_edicion, values=lista_vigencia)
 		combobox_vigencia.config(state='readonly', font=(13), width='9', height='6', background='#F9F9F9')
 		esta_vigente = paquete.get_esta_vigente()
 		if esta_vigente:
@@ -1025,7 +1028,7 @@ class View:
 		combobox_vigencia.place(relx=0.17, rely=0.2)
 
 		#view fecha
-		label = Label(frame_detalles, text='Fecha:', width='10', height='2', relief=GROOVE, borderwidth=0)
+		label = Label(frame_edicion, text='Fecha:', width='10', height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 15, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=0.245)
 
@@ -1035,12 +1038,12 @@ class View:
 		self.fecha_de_viaje = date
 		date_texto = self.convert_date_to_string(date)
 		content_button_fecha.set(date_texto)
-		button_fecha_de_viaje = Button(frame_detalles, textvariable=content_button_fecha, width='8', height='1', relief=GROOVE, borderwidth=0)
+		button_fecha_de_viaje = Button(frame_edicion, textvariable=content_button_fecha, width='8', height='1', relief=GROOVE, borderwidth=0)
 		button_fecha_de_viaje.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
 		button_fecha_de_viaje.place(relx=0.17, rely=0.258)
 
 		#view precio
-		label = Label(frame_detalles, text='Precio:', width='10', height='2', relief=GROOVE, borderwidth=0)
+		label = Label(frame_edicion, text='Precio:', width='10', height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 15, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=0.305)
 
@@ -1050,17 +1053,17 @@ class View:
 		texto = self.convert_amount_to_string(paquete.get_precio(), False)
 		self.price_content_entry.set(texto)
 
-		self.price_entry = Entry(frame_detalles, width='20', font=('tahoma', 13), textvariable=self.price_content_entry)
+		self.price_entry = Entry(frame_edicion, width='20', font=('tahoma', 13), textvariable=self.price_content_entry)
 		self.price_entry.place(relx=0.17, rely=0.318)
 
 		self.simbol_label = StringVar()
 		self.simbol_label.set('')
-		label = Label(frame_detalles, textvariable=self.simbol_label, width='2', height='1', relief=GROOVE, borderwidth=2)
+		label = Label(frame_edicion, textvariable=self.simbol_label, width='2', height='1', relief=GROOVE, borderwidth=2)
 		label.config(font=('tahoma', 15, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.4, rely=0.317)
 
 		#view senha
-		label = Label(frame_detalles, text='Seña:', width='10', height='2', relief=GROOVE, borderwidth=0)
+		label = Label(frame_edicion, text='Seña:', width='10', height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 15, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=0.365)
 
@@ -1073,12 +1076,12 @@ class View:
 		texto = self.convert_amount_to_string(paquete.get_senha(), False)
 		self.senha_content_entry.set(texto)
 
-		self.senha_entry = Entry(frame_detalles, width='20', font=('tahoma', 13), textvariable=self.senha_content_entry)
+		self.senha_entry = Entry(frame_edicion, width='20', font=('tahoma', 13), textvariable=self.senha_content_entry)
 		self.senha_entry.place(relx=0.17, rely=0.378)
 
 		#view pre venta
 		self.pre_ventas = paquete.get_pre_ventas()
-		label = Label(frame_detalles, text='Pre venta:', width='13', height='2', relief=GROOVE, borderwidth=0)
+		label = Label(frame_edicion, text='Pre venta:', width='13', height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 15, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
 		#label.place(relx=0.56, rely=0.125)
 		label.place(relx=0.02, rely=0.425)
@@ -1087,7 +1090,7 @@ class View:
 		self.si_pre_venta = paquete.si_pre_venta()
 		self.content_pre_venta_button.set('Agregar')
 
-		pre_venta_button = Button(frame_detalles, textvariable=self.content_pre_venta_button, width=10, height=1, relief=GROOVE, borderwidth=0)
+		pre_venta_button = Button(frame_edicion, textvariable=self.content_pre_venta_button, width=10, height=1, relief=GROOVE, borderwidth=0)
 		pre_venta_button.config(font=('tahoma', 13), bg='#F9F9F9')
 		pre_venta_button.place(relx=0.17, rely=0.432)
 
@@ -1097,15 +1100,15 @@ class View:
 		rely=0.485
 
 		self.view_result_pre_ventas = []
-		self.building_frame_where_to_show_lista_pre_venta(frame_detalles, width, height, relx, rely)
+		self.building_frame_where_to_show_lista_pre_venta(frame_edicion, width, height, relx, rely)
 		self.show_pre_ventas()
 
 		#incluye view
-		label = Label(frame_detalles, text='Incluye:', width='10', height='2', relief=GROOVE, borderwidth=0)
+		label = Label(frame_edicion, text='Incluye:', width='10', height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 15, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
 		label.place(relx=0.56, rely=0.125)
 
-		incluye_frame = Frame(frame_detalles, width='400', height='200', bg='#F9F9F9', relief=GROOVE, borderwidth=0)
+		incluye_frame = Frame(frame_edicion, width='400', height='200', bg='#F9F9F9', relief=GROOVE, borderwidth=0)
 		incluye_frame.place(relx=0.56, rely=0.185)
 
 		scroll = Scrollbar(incluye_frame, orient=VERTICAL)
@@ -1122,7 +1125,7 @@ class View:
 		incluye_text_widget.config(wrap=WORD, yscrollcommand=scroll.set)
 
 		#view cantidad de pasajeros
-		label = Label(frame_detalles, text='Total pasajeros:', width='13', height='2', relief=GROOVE, borderwidth=0)
+		label = Label(frame_edicion, text='Total pasajeros:', width='13', height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 15, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
 		label.place(relx=0.56, rely=0.065)
 
@@ -1131,13 +1134,13 @@ class View:
 		if texto == -1:
 			texto = '--'
 		cant_pasajeros_content_entry.set(texto)
-		cant_pasajeros_entry = Entry(frame_detalles, width='15', font=('tahoma', 13), textvariable=cant_pasajeros_content_entry)
+		cant_pasajeros_entry = Entry(frame_edicion, width='15', font=('tahoma', 13), textvariable=cant_pasajeros_content_entry)
 		cant_pasajeros_entry.place(relx=0.748, rely=0.078)
 
 
 		#agregar imagen view
 		imagenes = paquete.get_imagenes()
-		frame_imagen = Frame(frame_detalles, width='280', height='250', bg='#F9F9F9', relief=GROOVE, borderwidth=1)
+		frame_imagen = Frame(frame_edicion, width='280', height='250', bg='#F9F9F9', relief=GROOVE, borderwidth=1)
 		frame_imagen.place(relx=0.6, rely=0.45)
 		frame_imagen.pack_propagate(0)
 
@@ -1157,20 +1160,20 @@ class View:
 		label_logo.pack()
 		label_logo.pack_propagate(0)
 
-		add_image_button = Button(frame_detalles, text='Agregar', width=110, height=30, relief=GROOVE, borderwidth=0)
+		add_image_button = Button(frame_edicion, text='Agregar', width=110, height=30, relief=GROOVE, borderwidth=0)
 		add_image_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#343535', highlightthickness=0)
 		add_image_button.config(image=self.imagenes['camara_icon'], compound=LEFT)
 		self.ya_se_agrego_una_imagen = True
-		add_image_button.config(command=lambda:self.controller.agregar_imagen(frame_detalles, frame_imagen, label_logo, imagenes))
+		add_image_button.config(command=lambda:self.controller.agregar_imagen(frame_edicion, frame_imagen, label_logo, imagenes))
 		add_image_button.place(relx=0.675, rely=0.775)
 
 		#view ok and cancel
-		save_button = Button(frame_detalles, text='Guardar', width=110, height=30, relief=GROOVE, borderwidth=0)
+		save_button = Button(frame_edicion, text='Guardar', width=110, height=30, relief=GROOVE, borderwidth=0)
 		save_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#343535')
 		save_button.config(image=self.imagenes['save_icon'], compound=LEFT)
 		save_button.place(relx=0.5, rely=0.85)
 
-		cancel_button = Button(frame_detalles, text='Salir', width=110, height=30, relief=GROOVE, borderwidth=0)
+		cancel_button = Button(frame_edicion, text='Salir', width=110, height=30, relief=GROOVE, borderwidth=0)
 		cancel_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#343535')
 		cancel_button.config(image=self.imagenes['not_ok_icon'], compound=LEFT)
 		cancel_button.place(relx=0.34, rely=0.85)
@@ -1184,16 +1187,16 @@ class View:
 		#button_siguiente.config(command=lambda:self.pop_pila_siguiente())
 		self.price_content_entry.trace("w", self.update_price_content_entry)
 		self.senha_content_entry.trace("w", self.update_senha_content_entry)
-		button_fecha_de_viaje.config(command=lambda:self.view_calendar(frame_detalles, content_button_fecha, 1, 0.17, 0.258))
+		button_fecha_de_viaje.config(command=lambda:self.view_calendar(frame_edicion, content_button_fecha, 1, 0.17, 0.258))
 
 		agregando_pre_venta = True
 		pre_venta_button.config(command=lambda:self.controller.agregar_pre_venta(agregando_pre_venta))
 
 		save_button.config(command=lambda:self.controller.guardar_paquete_editado(pos_paquete, name_content_entry.get(),
 				combobox_tipos.get(), combobox_sub_tipos.get(), combobox_vigencia.get(), self.fecha_de_viaje, self.price_value, self.senha_value,
-				incluye_text_widget.get(1.0, END), cant_pasajeros_content_entry.get(), self.pre_ventas, frame_detalles, imagenes))
+				incluye_text_widget.get(1.0, END), cant_pasajeros_content_entry.get(), self.pre_ventas, paquete_detalles_top_level, frame_edicion, imagenes))
 
-		cancel_button.config(command=lambda:self.view_paquete_detalles(frame_detalles, paquete, pos_paquete))
+		cancel_button.config(command=lambda:self.view_paquete_detalles(paquete_detalles_top_level, frame_edicion, paquete, pos_paquete))
 		
 	def building_frame_where_to_show_lista_pre_venta(self, frame_container, width, height, relx, rely):
 		#crearmos una seccion para mostrar la lista de pre ventas que se van creando
