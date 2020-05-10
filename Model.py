@@ -100,7 +100,6 @@ class Model:
 		print('buscando por cedula...')
 
 		encontrando = False
-		cedula_cliente = cedula_cliente.lower()
 		clientes_result_aux = []
 
 		pos_result_busqueda_aux = []
