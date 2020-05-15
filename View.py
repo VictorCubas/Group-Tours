@@ -470,17 +470,29 @@ class View:
 	def view_agregar_and_detalles_toplevel(self, frame, paquete, pos_paquete, agregando):
 		print('preparando: Crear paquete/Viendo detalles')
 
-		paquete_detalles_top_level = Toplevel(self.parent, bg='#F9F9F9', relief=GROOVE, borderwidth=0)
-		paquete_detalles_top_level.geometry('1000x800+450+100')
-		paquete_detalles_top_level.resizable(width=False, height=False)
+		if self.controller.si_ventana_abierta(pos_paquete) is False:
+			paquete_detalles_top_level = Toplevel(self.parent, bg='#F9F9F9', relief=GROOVE, borderwidth=0)
+			paquete_detalles_top_level.geometry('1000x800+450+100')
+			paquete_detalles_top_level.resizable(width=False, height=False)
+		else:
+			paquete_detalles_top_level = self.paquete_detalles_win
 
 		if agregando:
 			self.view_agregar_paquete(paquete_detalles_top_level)
 		else:
 			self.view_paquete_detalles(paquete_detalles_top_level, frame, paquete, pos_paquete)
 
-	def view_paquete_detalles(self,paquete_detalles_top_level, frame_detalles, paquete, pos_paquete):
+	def view_paquete_detalles(self, paquete_detalles_top_level, frame_detalles, paquete, pos_paquete):
 		print('viendo detalles')
+
+		#self.paquete_detalles_win = ya_esta_abierta_una_ventana():
+		if self.controller.si_ventana_abierta(pos_paquete):
+			print('la ventana ya esta abierta pero no puedo hacer focus a la misma ventana')
+			paquete_detalles_top_level.withdraw()
+			#paquete_detalles_top_level.transient()
+			paquete_detalles_top_level.deiconify()
+			return
+
 		paquete_detalles_top_level.title('Paquete Detalles')
 
 		if frame_detalles is not None:
@@ -492,6 +504,8 @@ class View:
 		paquete_name_label = Label(frame_detalles, text=paquete.get_nombre(), width='20', height='2', relief=GROOVE, borderwidth=0)
 		paquete_name_label.config(font=('tahoma', 25, 'bold'), bg='#F9F9F9', fg='#48C2FA') #posicionamos el texto a la izquierda
 		paquete_name_label.pack()
+
+		self.paquete_detalles_win = paquete_detalles_top_level
 
 		#fecha view
 		fecha_label = Label(frame_detalles, text='Fecha:', width='6', height='1', relief=GROOVE, borderwidth=0)
@@ -682,7 +696,8 @@ class View:
 		salir_button.config(command=lambda:self.widget_destroy(paquete_detalles_top_level))
 		editar_button.config(command=lambda frame_detalles=frame_detalles:self.controller.editar_paquete(paquete_detalles_top_level,
 																				frame_detalles, paquete, pos_paquete))
-		#editar_button.config(command=lambda:self.widget_destroy(frame_detalles))
+		
+		self.controller.generar_archivo_ventana(pos_paquete)
 
 	def view_precio_detalles(self, precio, senha, pre_ventas):
 		print('viendo precio en detalles....')
