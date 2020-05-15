@@ -270,6 +270,12 @@ class Controller:
 			#volvemos a mostras las pre ventas
 			self.view.show_pre_ventas()
 
+	def generar_archivo_ventana(self, pos_paquete):
+		self.model.generar_archivo_ventana(pos_paquete)
+
+	def si_ventana_abierta(self, pos_paquete):
+		return self.model.si_ventana_abierta(pos_paquete)
+
 	def registrar_cliente(self):
 		self.view.view_registrar_cliente()
 

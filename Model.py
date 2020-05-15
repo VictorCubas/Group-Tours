@@ -812,6 +812,44 @@ class Model:
 			return result
 		return
 
+	def generar_archivo_ventana(self, pos_paquete):
+		#confirmacion = self.buscar_repetido(pos_paquete)
+
+		#if confirmacion is False: return
+
+		result = []
+		print('Model: guardando info de la ventana abierta...')
+		try:
+			archivo = open('data_base_files/ventanas_abiertas.pickle', 'rb')
+			result = pickle.load(archivo)
+			archivo.close()
+			archivoNuevo = open('data_base_files/ventanas_abiertas.pickle', 'wb')
+			result.append(pos_paquete)
+			pickle.dump(result, archivoNuevo)
+			archivoNuevo.close()
+		except IOError:
+			archivoNuevo = open('data_base_files/ventanas_abiertas.pickle', 'wb')
+			result.append(pos_paquete)
+			pickle.dump(result, archivoNuevo)
+			archivoNuevo.close()
+		return
+
+	def si_ventana_abierta(self, pos_paquete):
+		result = []
+		try:
+			archivo = open('data_base_files/ventanas_abiertas.pickle', 'rb')
+			result = pickle.load(archivo)
+			archivo.close()
+
+			for pos in result:
+				if pos == pos_paquete:
+					return True
+
+			return False
+		except IOError:
+			return False
+		return
+
 	'''def listar_usuarios(self):
 		result = []
 		try:
