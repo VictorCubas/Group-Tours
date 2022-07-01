@@ -1,6 +1,7 @@
 #view.py
 from tkinter import ttk
 from tkinter import *
+from PIL import Image
 #import tkFont
 from Usuario import Usuario
 from Calendar import Calendar
@@ -429,6 +430,35 @@ class View:
 
 				paquete_view = Frame(self.frame_result_aux, bg='#F9F9F9', width='770', height='150', relief=GROOVE, borderwidth=0)
 				paquete_view.pack(padx=10, pady=5)
+
+
+				#********************************************************
+				#	CREAMOS UNA ETIQUETA Y LE COLOCAMOS UN ICONO		*
+				#********************************************************
+				'''
+				label_logo = Label(paquete_view, width=225, height=142, relief=GROOVE, borderwidth=1)
+				label_logo.config(bg='#F9F9F9')
+				logo = PhotoImage(file='imagenes/logo.png')
+				label_logo.config(image=logo)
+				label_logo.photo = logo
+				label_logo.place(relx=0.01, rely=0.02)
+				'''
+				
+				
+				img = Image.open('imagenes/logo.png')
+				img = img.resize((100,100), Image.ANTIALIAS)
+				logo = PhotoImage(img)
+				
+				label_logo = Label(paquete_view, width=225, height=142, relief=GROOVE, borderwidth=1)
+				label_logo.config(bg='#F9F9F9')
+				label_logo.config(image=logo)
+				label_logo.photo = logo
+				label_logo.place(relx=0.01, rely=0.02)
+
+				#lab_im = Label(image=my_image)
+				#lab_im.pack()
+				
+				
 
 				paquete_name_view = Label(paquete_view, text=paquete.get_nombre(), width='20', height='1', relief=GROOVE, borderwidth=0)
 				paquete_name_view.config(font=('tahoma', 15, 'bold'), bg='#F9F9F9', fg='#343535', activeforeground='#343535', anchor=W) #posicionamos el texto a la izquierda
