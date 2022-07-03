@@ -89,7 +89,7 @@ class TemporizadorVigencia(Thread):
             #print('a...')
             result = pickle.load(archivo)
             #print('b...')
-            if int(result) is not 0:
+            if int(result) != 0:
                 #la fecha del dia es valida
                 result_returnt = True
             else:
