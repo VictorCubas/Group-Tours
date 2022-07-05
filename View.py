@@ -1,7 +1,7 @@
 #view.py
 from tkinter import ttk
 from tkinter import *
-from PIL import Image
+from PIL import Image, ImageTk
 #import tkFont
 from Usuario import Usuario
 from Calendar import Calendar
@@ -444,10 +444,11 @@ class View:
 				label_logo.place(relx=0.01, rely=0.02)
 				'''
 				
-				
+				#falta corregir aqui
+				#para agregar dinamicamente las imagenes
 				img = Image.open('imagenes/logo.png')
-				img = img.resize((100,100), Image.ANTIALIAS)
-				logo = PhotoImage(img)
+				img = img.resize((190,142), Image.ANTIALIAS)
+				logo = ImageTk.PhotoImage(img)
 				
 				label_logo = Label(paquete_view, width=225, height=142, relief=GROOVE, borderwidth=1)
 				label_logo.config(bg='#F9F9F9')
