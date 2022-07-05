@@ -106,7 +106,7 @@ class View:
 		frame = Frame(self.main_frame, width='900', height='700', bg='#F9F9F9', relief=GROOVE, borderwidth=0)
 		frame.pack(padx=20, pady=50, anchor=NE)
 
-		label_welcome = Label(frame, text='Bienvenido', font=('tahoma', 55, 'bold'), width=9, height=3, relief=GROOVE, borderwidth=0)
+		label_welcome = Label(frame, text='Bienvenido', font=('tahoma', 55, 'bold'), width=10, height=3, relief=GROOVE, borderwidth=0)
 		label_welcome.config(bg='#F9F9F9')
 
 		#********************************************************
