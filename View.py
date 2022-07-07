@@ -1,7 +1,9 @@
 #view.py
-from tkinter import ttk
+from tkinter import ttk, filedialog
 from tkinter import *
 from PIL import Image, ImageTk
+import cv2
+import imutils
 #import tkFont
 from Usuario import Usuario
 from Calendar import Calendar
@@ -1624,6 +1626,23 @@ class View:
 		pre_venta_button.config(font=('tahoma', 13), bg='#F9F9F9')
 		pre_venta_button.place(relx=0.742, rely=0.139)
 
+		#view seleccionar imagen
+		label = Label(self.frame_crear_paquete, text='Agregar imagen:',
+					  width='13', height='2', relief=GROOVE, borderwidth=0)
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
+		label.place(relx=0.56, rely=0.2)
+
+		select_button = Button(self.frame_crear_paquete, text='Elegir imagen', width=11, height=1, relief=GROOVE, borderwidth=1)
+		select_button.config(font=('tahoma', 13), bg='#F9F9F9')
+		select_button.place(relx=0.742, rely=0.21)
+
+		select_image_view = Frame(self.frame_crear_paquete, bg='#F9F9F9', width='380', height='500', relief=GROOVE, borderwidth=0)
+		select_image_view.pack(padx=30, pady=190, anchor=SE)
+		select_image_view.pack_propagate(0)
+
+		label_aux = Label(select_image_view, width='380', height='400', borderwidth=1)
+		label_aux.pack()
+
 		#view ok and cancel
 		save_button = Button(self.frame_crear_paquete, text='Guardar', width=110, height=30, relief=GROOVE, borderwidth=0)
 		save_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#343535')
@@ -1645,6 +1664,7 @@ class View:
 		self.senha_content_entry.trace("w", self.update_senha_content_entry)
 		button_fecha_de_viaje.config(command=lambda:self.view_calendar(self.frame_crear_paquete, None, 1, 0.17, 0.277))
 		pre_venta_button.config(command=lambda:self.controller.agregar_editar_pre_venta())
+		select_button.config(command=lambda:self.elegir_imagen(label_aux))
 		save_button.config(command=lambda:self.controller.guardar_paquete(name_content_entry.get(), combobox_tipos.get(), combobox_sub_tipos.get(),
 				combobox_vigencia.get(), self.lista_fecha, self.price_value, self.senha_value, incluye_text_widget.get(1.0, END),
 				cant_pasajeros_content_entry.get(), self.pre_venta))
@@ -1659,6 +1679,24 @@ class View:
 		self.frame_crear_paquete.pack_propagate(0)
 
 		self.switch_frame(self.frame_crear_paquete)
+
+	def elegir_imagen(self, label):
+		path_name = filedialog.askopenfilename(initialdir="/home/", filetypes=[
+			("image", ".png"),
+			("image", ".jpeg"),
+			("image", ".jpg")
+		])
+
+		if len(path_name) > 0:
+			image = cv2.imread(path_name)
+			image = imutils.resize(image, height=380)
+
+			imageToShow = imutils.resize(image, width=380)
+			imageToShow = cv2.cvtColor(imageToShow, cv2.COLOR_BGR2RGB)
+			im = Image.fromarray(imageToShow)
+			img = ImageTk.PhotoImage(image=im)
+			label.configure(image=img)
+			label.image = img
 
 	def update_price_pre_venta_content_entry(self, *args):
 		texto = ''
