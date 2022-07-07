@@ -450,7 +450,7 @@ class View:
 				img = img.resize((190,142), Image.ANTIALIAS)
 				logo = ImageTk.PhotoImage(img)
 				
-				label_logo = Label(paquete_view, width=225, height=142, relief=GROOVE, borderwidth=1)
+				label_logo = Label(paquete_view, width=225, height=142, relief=GROOVE, borderwidth=0)
 				label_logo.config(bg='#F9F9F9')
 				label_logo.config(image=logo)
 				label_logo.photo = logo
