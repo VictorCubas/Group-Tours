@@ -1627,6 +1627,9 @@ class View:
 		pre_venta_button.place(relx=0.742, rely=0.139)
 
 		#view seleccionar imagen
+		#global image_to_see
+		self.image_to_see = None
+		
 		label = Label(self.frame_crear_paquete, text='Agregar imagen:',
 					  width='13', height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
@@ -1636,12 +1639,13 @@ class View:
 		select_button.config(font=('tahoma', 13), bg='#F9F9F9')
 		select_button.place(relx=0.742, rely=0.21)
 
-		select_image_view = Frame(self.frame_crear_paquete, bg='#F9F9F9', width='380', height='500', relief=GROOVE, borderwidth=0)
-		select_image_view.pack(padx=30, pady=190, anchor=SE)
-		select_image_view.pack_propagate(0)
+		select_image_view = Frame(self.frame_crear_paquete, bg='#F9F9F9', width='380', height='380', relief=GROOVE, borderwidth=0)
+		select_image_view.place(relx=0.56, rely=0.3)
+		#select_image_view.pack(padx=30, pady=190, anchor=SE)
+		#select_image_view.pack_propagate(0)
 
-		label_aux = Label(select_image_view, width='380', height='400', borderwidth=1)
-		label_aux.pack()
+		label_aux = Label(select_image_view, bg='#F9F9F9', fg='#48C2FA', width='380', height='380', borderwidth=0)
+		label_aux.grid(column=0,row=2)
 
 		#view ok and cancel
 		save_button = Button(self.frame_crear_paquete, text='Guardar', width=110, height=30, relief=GROOVE, borderwidth=0)
@@ -1667,7 +1671,7 @@ class View:
 		select_button.config(command=lambda:self.elegir_imagen(label_aux))
 		save_button.config(command=lambda:self.controller.guardar_paquete(name_content_entry.get(), combobox_tipos.get(), combobox_sub_tipos.get(),
 				combobox_vigencia.get(), self.lista_fecha, self.price_value, self.senha_value, incluye_text_widget.get(1.0, END),
-				cant_pasajeros_content_entry.get(), self.pre_venta))
+				cant_pasajeros_content_entry.get(), self.pre_venta, self.image_to_see))
 		cancel_button.config(command=lambda:self.controller.crear_paquete(True))
 
 		#********************************************************
@@ -1687,16 +1691,24 @@ class View:
 			("image", ".jpg")
 		])
 
+		print(path_name)
+
 		if len(path_name) > 0:
 			image = cv2.imread(path_name)
 			image = imutils.resize(image, height=380)
 
-			imageToShow = imutils.resize(image, width=380)
+			imageToShow = imutils.resize(image, width=360)
 			imageToShow = cv2.cvtColor(imageToShow, cv2.COLOR_BGR2RGB)
 			im = Image.fromarray(imageToShow)
 			img = ImageTk.PhotoImage(image=im)
 			label.configure(image=img)
+			label.config(bg='#F9F9F9')
 			label.image = img
+			self.image_to_see = img
+			print('Preparando imagen: {}'.format(img))
+			print('Preparando imagen: {}'.format(self.image_to_see))
+			
+			self.controller.copy_image_to_bd(path_name)
 
 	def update_price_pre_venta_content_entry(self, *args):
 		texto = ''
