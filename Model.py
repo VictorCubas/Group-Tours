@@ -1,6 +1,8 @@
 #model.py
 
 import pickle
+import cv2
+import os
 from Usuario import Usuario
 import datetime
 from time import sleep
@@ -17,6 +19,7 @@ from TemporizadorDeleteFile import TemporizadorDeleteFile
 class Model:
 	HORA = '05:00:00'
 	HORA_COMPROBACION = '00:00:00'
+	image_counter = 0
 
 	def __init__(self):
 		self.paquetes_result = []
@@ -403,7 +406,7 @@ class Model:
 		except Exception:
 			raise
 
-	def crear_paquete(self, nombre, tipo, sub_tipo, esta_vigente, fecha, precio, senha, incluye, cant_pasajeros):
+	def crear_paquete(self, nombre, tipo, sub_tipo, esta_vigente, fecha, precio, senha, incluye, cant_pasajeros, imagen):
 		print('Model: creado paquete...')
 		paquete = None
 
@@ -438,6 +441,14 @@ class Model:
 
 		paquete.set_esta_vigente(esta_vigente)
 		paquete.set_incluye_descripcion(incluye)
+		
+		if imagen != None:
+			paquete.set_imagen(imagen)
+			print('SE AGREGAGO LA IMAGEN')
+			print('vuelvo a mirar la imagen: {}'.format(paquete.get_imagen()))
+		else:
+			print('NO AGREGAGO SE LA IMAGEN')
+
 		return paquete
 
 	def crear_pre_venta(self, precio, senha, monto_cuota, cant_cuotas, fecha_inicio, fecha_fin):
@@ -467,6 +478,11 @@ class Model:
 			pickle.dump(result, archivoNuevo)
 			archivoNuevo.close()
 		return
+
+	def copy_image_to_bd(self, image_path):
+		image = cv2.imread(image_path)
+		cv2.imwrite('data_base_files/' + str(Model.image_counter) + '.png', image)
+		Model.image_counter += 1
 
 	def guardar_paquete_editado(self, paquete, pos_paquete):
 		result = []
