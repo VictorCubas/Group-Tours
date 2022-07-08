@@ -26,6 +26,7 @@ class Paquete(metaclass=ABCMeta):
 		self.cantidad_pagos_actual = 0
 		self.cantidad_de_usuarios_total = 0
 		self.cantidad_de_usuarios_actual = 0
+		self.imagen = None
 		#Incrementamos la cantidad de instancias
 		Paquete.cantidad_total_paquetes += 1
 
@@ -35,6 +36,9 @@ class Paquete(metaclass=ABCMeta):
 
 	def get_usuarios(self):
 		return self.usuarios
+		
+	def get_imagen(self):
+		return self.imagen
 
 	def agregar_facturas(self, factura):
 		self.facturas.append(factura)
@@ -115,6 +119,9 @@ class Paquete(metaclass=ABCMeta):
 
 	def si_pre_venta(self):
 		return not(self.pre_venta == None)
+		
+	def set_imagen(self, imagen):
+		self.imagen = imagen
 
 	def set_precio(self, precio):
 		self.precio = precio
