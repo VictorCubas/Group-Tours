@@ -120,6 +120,7 @@ class Paquete(metaclass=ABCMeta):
 	def si_pre_venta(self):
 		return not(self.pre_venta == None)
 		
+		
 	def set_imagen(self, imagen):
 		self.imagen = imagen
 
