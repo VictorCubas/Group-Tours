@@ -6,7 +6,7 @@ import datetime
 from abc import ABCMeta, abstractmethod
 
 class Paquete(metaclass=ABCMeta):
-	'''Abstraccion de la clase Factura'''
+	'''Abstraccion de la clase Paquete'''
 
 	cantidad_total_paquetes = 0
 
