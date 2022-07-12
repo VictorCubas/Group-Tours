@@ -410,7 +410,6 @@ class Model:
 		print('Model: creado paquete...')
 		paquete = None
 
-		print()
 		if esta_vigente == 'Si':
 			esta_vigente = True
 		else:
@@ -443,11 +442,9 @@ class Model:
 		paquete.set_incluye_descripcion(incluye)
 		
 		if imagen != None:
-			paquete.set_imagen(imagen)
-			print('SE AGREGAGO LA IMAGEN')
-			print('vuelvo a mirar la imagen: {}'.format(paquete.get_imagen()))
-		else:
-			print('NO AGREGAGO SE LA IMAGEN')
+			self.copy_image_to_bd(imagen)
+			paquete.set_imagen(str(Model.image_counter))
+			Model.image_counter += 1
 
 		return paquete
 
@@ -480,9 +477,9 @@ class Model:
 		return
 
 	def copy_image_to_bd(self, image_path):
+		print('Copiando imagen a data_base_file')
 		image = cv2.imread(image_path)
 		cv2.imwrite('data_base_files/' + str(Model.image_counter) + '.png', image)
-		Model.image_counter += 1
 
 	def guardar_paquete_editado(self, paquete, pos_paquete):
 		result = []
