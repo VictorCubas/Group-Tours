@@ -437,18 +437,14 @@ class View:
 				#********************************************************
 				#	CREAMOS UNA ETIQUETA Y LE COLOCAMOS UN ICONO		*
 				#********************************************************
-				'''
-				label_logo = Label(paquete_view, width=225, height=142, relief=GROOVE, borderwidth=1)
-				label_logo.config(bg='#F9F9F9')
-				logo = PhotoImage(file='imagenes/logo.png')
-				label_logo.config(image=logo)
-				label_logo.photo = logo
-				label_logo.place(relx=0.01, rely=0.02)
-				'''
-				
 				#falta corregir aqui
 				#para agregar dinamicamente las imagenes
-				img = Image.open('imagenes/logo.png')
+				if paquete.get_imagen() != None:
+					path = 'data_base_files/' + paquete.get_imagen() + '.png'
+				else:
+					path = 'imagenes/logo.png'
+
+				img = Image.open(path)
 				img = img.resize((190,142), Image.ANTIALIAS)
 				logo = ImageTk.PhotoImage(img)
 				
@@ -1702,7 +1698,7 @@ class View:
 			im = Image.fromarray(imageToShow)
 			img = ImageTk.PhotoImage(image=im)
 			label.configure(image=img)
-			label.config(bg='#F9F9F9')
+			#label.config(bg='#F9F9F9')
 			label.image = img
 			self.image_to_see_path = path_name
 
