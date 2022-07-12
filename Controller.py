@@ -21,6 +21,12 @@ class Controller:
 
 	def stop_hilos(self):
 		self.model.stop_hilos()
+		
+	def generate_image_status_file(self, last_image_number):
+		self.model.generate_image_status_file(last_image_number)
+	
+	def get_last_image_number(self):
+		return self.model.get_last_image_number()
 
 	def buscar_paquete(self, **kwargs):
 		#Busca el paquete por nombre, vigencia o por anho (de acuerdo al filtro selccionado)
@@ -36,7 +42,7 @@ class Controller:
 
 		for key, value in kwargs.items():
 			if result_encontrando[1] and key == 'content1' and value != '':
-				print('1')
+				#print('1')
 				result_encontrando = self.model.buscar_paquete_por_nombre(value, cantidad_de_filtros, result_encontrando[1])
 				#print(str(result_encontrando[1]))
 			elif result_encontrando[1] and key == 'content2':
