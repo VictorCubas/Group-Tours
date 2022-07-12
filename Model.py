@@ -39,6 +39,30 @@ class Model:
 		self.t = TemporizadorVigencia(Model.HORA, 1)
 		#Iniciamos el hilo
 		self.t.start()
+	
+	def generate_image_status_file(self, last_image_number):
+		print('generando archivo para el estado de imagen...')
+
+		try:
+			archivoNuevo = open('data_base_files/last_image_number.pickle', 'wb')
+			pickle.dump(last_image_number, archivoNuevo)
+			archivoNuevo.close()
+		except IOError:
+			archivoNuevo = open('data_base_files/last_image_number.pickle', 'wb')
+			pickle.dump(last_image_number, archivoNuevo)
+			archivoNuevo.close()
+		return
+
+	def get_last_image_number(self):
+		result = []
+		try:
+			archivo = open('data_base_files/last_image_number.pickle', 'rb')
+			result = pickle.load(archivo)
+			archivo.close()
+			return result
+		except IOError:
+			return None
+		return
 
 	def stop_hilos(self):
 		self.t_existe_archivo.stop()
@@ -138,7 +162,6 @@ class Model:
 					if esta_vacio_el_vector:
 						pos_result_busqueda_aux.append(i)
 					else:
-						print('i: ' + str(i))
 						pos_result_busqueda_aux.append(self.pos_result_busqueda[i])
 
 					encontrando = True
