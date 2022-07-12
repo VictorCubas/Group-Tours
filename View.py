@@ -1628,7 +1628,7 @@ class View:
 
 		#view seleccionar imagen
 		#global image_to_see
-		self.image_to_see = None
+		self.image_to_see_path = None
 		
 		label = Label(self.frame_crear_paquete, text='Agregar imagen:',
 					  width='13', height='2', relief=GROOVE, borderwidth=0)
@@ -1669,9 +1669,9 @@ class View:
 		button_fecha_de_viaje.config(command=lambda:self.view_calendar(self.frame_crear_paquete, None, 1, 0.17, 0.277))
 		pre_venta_button.config(command=lambda:self.controller.agregar_editar_pre_venta())
 		select_button.config(command=lambda:self.elegir_imagen(label_aux))
-		save_button.config(command=lambda:self.controller.guardar_paquete(name_content_entry.get(), combobox_tipos.get(), combobox_sub_tipos.get(),
+		save_button.config(command=lambda:self.image_to_see_path==self.controller.guardar_paquete(name_content_entry.get(), combobox_tipos.get(), combobox_sub_tipos.get(),
 				combobox_vigencia.get(), self.lista_fecha, self.price_value, self.senha_value, incluye_text_widget.get(1.0, END),
-				cant_pasajeros_content_entry.get(), self.pre_venta, self.image_to_see))
+				cant_pasajeros_content_entry.get(), self.pre_venta, self.image_to_see_path))
 		cancel_button.config(command=lambda:self.controller.crear_paquete(True))
 
 		#********************************************************
@@ -1704,11 +1704,8 @@ class View:
 			label.configure(image=img)
 			label.config(bg='#F9F9F9')
 			label.image = img
-			self.image_to_see = img
-			print('Preparando imagen: {}'.format(img))
-			print('Preparando imagen: {}'.format(self.image_to_see))
-			
-			self.controller.copy_image_to_bd(path_name)
+			self.image_to_see_path = path_name
+
 
 	def update_price_pre_venta_content_entry(self, *args):
 		texto = ''
