@@ -8,8 +8,8 @@ import imutils
 from Usuario import Usuario
 from Calendar import Calendar
 from TemporizadorVigencia import TemporizadorVigencia
-
 import copy
+from Model import Model
 
 class View:
 	'''
@@ -95,10 +95,20 @@ class View:
 		#detectamos el cierre de la aplicacion.
 		self.parent.protocol("WM_DELETE_WINDOW", self.on_closing)
 		#self.show_parent()
-
+		#self.last_image_number = None	
+		self.last_image_number = self.controller.get_last_image_number()
+		
+		if self.last_image_number != None:
+			Model.image_counter = self.last_image_number
+	
 	def on_closing(self):
 		#le damos quit a la ejecucion
 		self.controller.stop_hilos()
+		
+		#significa que se guardo alguna imagen
+		if Model.image_counter > 0:
+			self.controller.generate_image_status_file(Model.image_counter)
+			
 		self.parent.destroy()
 
 	def view_inicio(self):
@@ -423,6 +433,9 @@ class View:
 		#aplicamos los nuevos resultados de la busqueda
 		paquete_view = None
 		#print(str(len(self.result_busqueda_paquete[0])))
+		
+		print('last_image_number: {}'.format(self.last_image_number))
+		
 		if len(self.result_busqueda_paquete[0]) != 0:
 			pos_result_busqueda = -1
 			aux = -1
@@ -433,19 +446,18 @@ class View:
 				paquete_view = Frame(self.frame_result_aux, bg='#F9F9F9', width='770', height='150', relief=GROOVE, borderwidth=0)
 				paquete_view.pack(padx=10, pady=5)
 
-
 				#********************************************************
 				#	CREAMOS UNA ETIQUETA Y LE COLOCAMOS UN ICONO		*
 				#********************************************************
-				#falta corregir aqui
-				#para agregar dinamicamente las imagenes
+				
+				
 				if paquete.get_imagen() != None:
 					path = 'data_base_files/' + paquete.get_imagen() + '.png'
 				else:
 					path = 'imagenes/logo.png'
 
 				img = Image.open(path)
-				img = img.resize((190,142), Image.ANTIALIAS)
+				img = img.resize((185,142), Image.ANTIALIAS)
 				logo = ImageTk.PhotoImage(img)
 				
 				label_logo = Label(paquete_view, width=225, height=142, relief=GROOVE, borderwidth=0)
@@ -453,11 +465,6 @@ class View:
 				label_logo.config(image=logo)
 				label_logo.photo = logo
 				label_logo.place(relx=0.01, rely=0.02)
-
-				#lab_im = Label(image=my_image)
-				#lab_im.pack()
-				
-				
 
 				paquete_name_view = Label(paquete_view, text=paquete.get_nombre(), width='20', height='1', relief=GROOVE, borderwidth=0)
 				paquete_name_view.config(font=('tahoma', 15, 'bold'), bg='#F9F9F9', fg='#343535', activeforeground='#343535', anchor=W) #posicionamos el texto a la izquierda
