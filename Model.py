@@ -20,6 +20,7 @@ class Model:
 	HORA = '05:00:00'
 	HORA_COMPROBACION = '00:00:00'
 	image_counter = 0
+	DELAY = 1
 
 	def __init__(self):
 		self.paquetes_result = []
@@ -36,7 +37,7 @@ class Model:
 		self.t_existe_archivo.start()
 
 		#Instanciamos nuestra clase Temporizador
-		self.t = TemporizadorVigencia(Model.HORA, 1)
+		self.t = TemporizadorVigencia(Model.HORA, Model.DELAY)
 		#Iniciamos el hilo
 		self.t.start()
 	
@@ -51,6 +52,8 @@ class Model:
 			archivoNuevo = open('data_base_files/last_image_number.pickle', 'wb')
 			pickle.dump(last_image_number, archivoNuevo)
 			archivoNuevo.close()
+		except EOFError:
+			print('Error EOFError en: generate_image_status_file');
 		return
 
 	def get_last_image_number(self):
@@ -62,6 +65,8 @@ class Model:
 			return result
 		except IOError:
 			return None
+		except EOFError:
+			print('Error EOFError en: get_last_image_number');
 		return
 
 	def stop_hilos(self):
@@ -343,6 +348,8 @@ class Model:
 			return paquetes
 		except IOError:
 			return paquetes
+		except EOFError:
+			print('Error EOFError en: abrir_archivo');
 		return
 
 	def generar_lista_anhos(self):
@@ -497,6 +504,8 @@ class Model:
 			result.append(paquete)
 			pickle.dump(result, archivoNuevo)
 			archivoNuevo.close()
+		except EOFError:
+			print('Error EOFError en: guardar_paquete');
 		return
 
 	def copy_image_to_bd(self, image_path):
@@ -521,6 +530,8 @@ class Model:
 			result[pos_paquete] = paquete
 			pickle.dump(result, archivoNuevo)
 			archivoNuevo.close()
+		except EOFError:
+			print('Error EOFError en: guardar_paquete_editado');
 		return
 
 	def guardar_paquetes(self, paquetes):
@@ -534,6 +545,8 @@ class Model:
 			archivoNuevo = open('data_base_files/paquete.pickle', 'wb')
 			pickle.dump(paquetes, archivoNuevo)
 			archivoNuevo.close()
+		except EOFError:
+			print('Error EOFError en: guardar_paquetes');
 		return
 
 	def listar_paquetes(self):
@@ -545,6 +558,8 @@ class Model:
 			return result
 		except IOError:
 			return result
+		except EOFError:
+			print('Error EOFError en: listar_paquetes');
 		return
 
 	'''def listar_usuarios(self):
