@@ -40,27 +40,12 @@ class TemporizadorVigencia(Thread):
             print('modificando fecha de comprobacion...')
             hora += timedelta(days=1)
 
-        #print('Comprobando la actualizacion de vigencias de los paquetes...')
-        #print('Proxima ejecucion programada el {0} a las {1}'.format(hora.date(),  hora.time()))
 
         #Iniciamos el ciclo:
         si_cambio_vigencia = None
         paquetes = []
 
-        #print('\nSEGUNDO')
-
         while self._estado:
-            #pause_counter = 1
-            #while pause_counter <= TemporizadorVigencia.TOTAL_PAUSE:
-            #    print(' .'.strip())
-            #    sleep(TemporizadorVigencia.PAUSE)
-            #    pause_counter += 1
-
-
-            # Comparamos la hora actual con la de ejecución y ejecutamos o no la función.
-            ## Si se ejecuta sumamos un dia a la fecha objetivo.
-            #print('Actualizando vigencia...')
-            #print('Hilo 2')
             if datetime.now() > hora and self.si_hice_la_comprobacion() == False:
                 print('Hilo 2: procesando...')
                 paquetes = self.get_paquetes()
@@ -72,23 +57,16 @@ class TemporizadorVigencia(Thread):
                 hora += timedelta(days=1)
                 #print('Proxima ejecucion programada el {0} a las {1}'.format(hora.date(), hora.time()))
                 self.generar_achivo_de_comprobacion(datetime.now().day)
-                #self.stop()
 
             #Esperamos x segundos para volver a ejecutar la comprobación.
-            #sleep(self.delay)
-
-        #Si usamos el método stop() salimos del ciclo y el hilo terminará.
-        #else:
-        #     print('Ejecución automática finalizada')
+            sleep(self.delay)
 
     def si_hice_la_comprobacion(self):
         #si el archivo existe entonces ya se realizo una comprobacion anterior
         result_return = None
         try:
             archivo = open('data_base_files/comprobacion_realizada.pickle', 'rb')
-            #print('a...')
             result = pickle.load(archivo)
-            #print('b...')
             if int(result) != 0:
                 #la fecha del dia es valida
                 result_returnt = True
@@ -96,11 +74,11 @@ class TemporizadorVigencia(Thread):
                 result_return = False
             archivo.close()
         except IOError:
+            print('IOError...')
             result_return = False
         except EOFError:
             print('*********************')
             print('*  ERROR: EOFError  *')
-            #print('* result:{}'.format(result_return))
             print('*********************')
             result_return = False
 
@@ -112,9 +90,15 @@ class TemporizadorVigencia(Thread):
             pickle.dump(dia_de_comprobacion, archivo_nuevo)
             archivo_nuevo.close()
         except IOError:
-            archivo_nuevo = open('data_base_files/comprobacion_realizada.pickle', 'wb')
-            archivo_nuevo.dump(dia_de_comprobacion, archivo_nuevo)
-            archivo_nuevo.close()
+            try:
+                archivo_nuevo = open('data_base_files/comprobacion_realizada.pickle', 'wb')
+                archivo_nuevo.dump(dia_de_comprobacion, archivo_nuevo)
+                archivo_nuevo.close()
+            except Exception:
+                print('*warnning: thread error  *')
+        except Exception:
+            print('*Error: something happened*')
+            #raise
         return
 
     def guardar_paquetes(self, paquetes):
