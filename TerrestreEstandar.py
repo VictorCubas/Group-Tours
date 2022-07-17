@@ -25,6 +25,7 @@ class TerrestreEstandar(Terrestre):
 	def accion(self):
 		pass
 
+'''
 nombre = 'cambo'
 terrestre = TerrestreEstandar( 2600000, 300000, "2019-06-12", nombre_paquete=nombre)
 #usuario = Usuario( "Andrea", "Escurra", "4028760", "18/11/1991", 20, "Paraguay" )
@@ -42,8 +43,6 @@ print('traslado: {} - tipo: {}'.format(terrestre.get_traslado(), terrestre.get_t
 print("precio: " + str(terrestre.precio))
 print('pasajeros: ' + str(terrestre.get_cantidad_de_usuarios_actual()))
 
-
-'''
 nombre = 'cambo'
 terrestre = TerrestreEstandar( 456, 12, "2019-06-12" , nombre_paquete=nombre, incluye_descripcion='Inclueye desayuno')
 
