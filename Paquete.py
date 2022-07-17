@@ -208,6 +208,14 @@ class Paquete(metaclass=ABCMeta):
 
 	def set_incluye_descripcion(self, incluye_descripcion):
 		self.incluye_descripcion = incluye_descripcion
+	
+	@abstractmethod	
+	def get_traslado(self):
+		pass
+		
+	@abstractmethod	
+	def get_tipo(self):
+		pass
 
 	@abstractmethod
 	def get_lugares_disponibles(self):
