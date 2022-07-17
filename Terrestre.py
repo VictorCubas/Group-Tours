@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
 from Paquete import Paquete
-#from abc import ABCMeta, abstractmethod
+from abc import ABCMeta, abstractmethod
 
-class Terrestre(Paquete):
+class Terrestre(Paquete, metaclass=ABCMeta):
 	'''Clase que representa a un paquete cuyo traslado es via terrestre'''
 
 	cantidad_total_terrestres = 0
@@ -22,6 +22,9 @@ class Terrestre(Paquete):
 
 	def get_cantidad_de_usuarios_total(self):
 		return self.cantidad_de_usuarios_total
+		
+	def get_traslado(self):
+		return Terrestre.TRASLADO
 
-#terrestre = Terrestre(nombre_paquete='Cambo',incluye_descripcion='Incluye desayuno')
+#terrestre = Terrestre(nombre_paquete='Cambo')
 
