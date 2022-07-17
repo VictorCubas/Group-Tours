@@ -15,6 +15,10 @@ class TerrestrePersonalizado(Terrestre):
 		self.senha = senha
 		#Incrementamos la cantidad de instancias
 		TerrestrePersonalizado.cantidad_total_terrestre_personalizado += 1
+		
+	def get_tipo(self):
+		return TerrestrePersonalizado.TIPO
 
 	def accion(self):
 		pass
+
