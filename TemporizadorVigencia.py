@@ -131,9 +131,7 @@ class TemporizadorVigencia(Thread):
         for paquete in paquetes:
             if paquete.get_esta_vigente():
                 fecha_de_viaje = str(paquete.get_fecha_de_viaje().year) + '-' + str(paquete.get_fecha_de_viaje().month) + '-' + str(paquete.get_fecha_de_viaje().day)
-                #print('fecha de viaje: {}'.format(fecha_de_viaje))
                 hoy = str(datetime.today().year) + '-' + str(datetime.today().month) + '-' + str(datetime.today().day)
-                #print('ahora: {}',format(hoy))
                 if hoy > fecha_de_viaje:
                     si_cambio_vigencia = True
                     print('Cambiando vigencia....')
@@ -141,20 +139,3 @@ class TemporizadorVigencia(Thread):
 
         return si_cambio_vigencia
 
-#t = Temporizador('12:42:00', 1)
-#t.start()
-#=========================================================================================
-#Ejemplo de uso:
-
-#t = Temporizador('22:10:00',1,ejecutar)# Instanciamos nuestra clase Temporizador
-#t.start() #Iniciamos el hilo
-
-#Mientras el programa principal puede seguir funcinando:
-#sleep(2)
-#for _ in range(10):
-#    print('Imprimiendo desde hilo principal')
-#    sleep(2)
-
-# Si en cualquier momento queremos detener el hilo desde la aplicacion simplemete usamos el método stop()
-#sleep(120) # Simulamos un tiempo de espera durante el cual el programa principal puede seguir funcionando.
-#t.stop()   # Detenemos el hilo.
