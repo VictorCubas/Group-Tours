@@ -17,6 +17,9 @@ class Aereo(Paquete):
 		#incrementamos la cantidad de instancias
 		Aereo.cantidad_total_aereos += 1
 
+	def get_traslado(self):
+		return Aereo.TRASLADO
+
 	def get_lugares_disponibles(self):
 		return -1
 
