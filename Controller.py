@@ -98,7 +98,6 @@ class Controller:
 	def guardar_paquete(self, nombre, tipo, sub_tipo, esta_vigente, lista_fecha, precio, senha, incluye, cant_pasajeros, pre_venta, image_path):
 		#print('{}, {}, {}, {}, {}, {}, {}, {}'.format(nombre, tipo, sub_tipo, fecha, esta_vigente, precio, senha, incluye))
 		
-		print('IMAGEN: {}'.format(image_path))
 		if len(lista_fecha) > 0:
 			try:
 				self.model.validar_datos_paquete(nombre, tipo, sub_tipo, esta_vigente, lista_fecha[0], precio, senha, incluye, cant_pasajeros)
