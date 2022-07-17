@@ -14,5 +14,8 @@ class AereoPersonalizado(Aereo):
 		#Incrementamos la cantidad de instancias
 		AereoPersonalizado.cantidad_total_aereo_personalizado += 1
 
+	def AereoPersonalizado(self):
+		return AereoEstandar.TIPO
+
 	def accion(self):
 		pass

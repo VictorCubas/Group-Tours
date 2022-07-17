@@ -20,5 +20,8 @@ class AereoEstandar(Aereo):
 		#Incrementamos la cantidad de instancias
 		AereoEstandar.cantidad_total_aereo_estandar += 1
 
+	def get_tipo(self):
+		return AereoEstandar.TIPO
+
 	def accion(self):
 		pass
