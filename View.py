@@ -666,7 +666,6 @@ class View:
 		precio_label.place(relx=0.35, rely=0.11)
 
 		texto = ''
-		#precio_texto = str(paquete.get_precio())
 		if paquete.si_pre_venta():
 			precio_texto = str(paquete.get_precio_pre_venta())
 		else:
@@ -906,9 +905,7 @@ class View:
 			texto = texto + str(date.month) + '/' + str(date.year)
 		else:
 			texto = '-- / -- / --'
-		
-		#self.lista_fecha = []
-		#self.lista_fecha_combobox = []
+
 		self.lista_fecha = []
 		self.lista_fecha_combobox = []
 		self.combobox_add_fecha = ttk.Combobox(self.frame_editar_paquete, values=self.lista_fecha_combobox)
@@ -927,40 +924,82 @@ class View:
 		button_fecha_de_viaje.config(command=lambda:self.view_calendar(self.frame_editar_paquete,
 																					None, 0, 0.17, 0.277))
 		
-		'''
-		from detalles
-		fecha_value_label = Label(frame_detalles, text=texto, width='10', height='1', relief=GROOVE, borderwidth=0)
-		fecha_value_label.config(font=('tahoma', 14), bg='#F9F9F9', fg='#2F3030', anchor=W)
-		fecha_value_label.place(relx=0.105, rely=0.11)
-		'''
+		#view precio
+		y_label += 0.08
+		y_aux += 0.074
+		label = Label(self.frame_editar_paquete, text='Precio:',
+												width='10', height='2', relief=GROOVE, borderwidth=1)
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA',
+																anchor=W) #posicionamos el texto a la izquierda
+		label.place(relx=0.02, rely=y_label)
 		
+		texto = ''
+		if paquete.si_pre_venta():
+			precio_texto = str(paquete.get_precio_pre_venta())
+		else:
+			precio_texto = str(paquete.get_precio())
+
+		j = 1
+		if len(precio_texto) > 3:
+			for i in range(len(precio_texto) -1, -1, -1):
+				texto = precio_texto[i] + texto
+				if j % 3 == 0 and i != 0:
+					texto = '.' + texto
+
+				j += 1
+		else:
+			texto = precio_texto
+		
+		self.price_content_entry = StringVar(value=texto)
+		self.price_value = None
+		price_entry = Entry(self.frame_editar_paquete, width='25', font=('tahoma', 13),
+															textvariable=self.price_content_entry)
+		price_entry.place(relx=0.13, rely=y_aux)
+		self.price_content_entry.trace("w", self.update_price_content_entry)
+		
+		#view senha
+		y_label += 0.08
+		y_aux += 0.08
+		label = Label(self.frame_editar_paquete, text='Seña:', width='10',
+															height='2', relief=GROOVE, borderwidth=1)
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', 
+											fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
+		label.place(relx=0.02, rely=y_label)
+		
+		texto = ''
+		senha_texto = str(paquete.get_senha())
+		if paquete.si_pre_venta():
+			senha_texto = str(paquete.get_senha_pre_venta())
+		else:
+			senha_texto = str(paquete.get_senha())
+
+		j = 1
+		if len(senha_texto) > 3:
+			for i in range(len(senha_texto) - 1, -1, -1):
+				texto = senha_texto[i] + texto
+				if j % 3 == 0 and i != 0:
+					texto = '.' + texto
+
+				j += 1
+		else:
+			texto = senha_texto
+		
+		self.senha_content_entry = StringVar(value=texto)
+		self.senha_value = None
+		senha_entry = Entry(self.frame_editar_paquete, width='25',
+									font=('tahoma', 13), textvariable=self.senha_content_entry)
+		senha_entry.place(relx=0.13, rely=y_aux)
+		self.senha_content_entry.trace("w", self.update_senha_content_entry)
+		
+		#incluye view
+		y_label += 0.08
+		y_aux += 0.074
+		label = Label(self.frame_editar_paquete, text='Incluye:', 
+										width='10', height='2', relief=GROOVE, borderwidth=1)
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
+		label.place(relx=0.02, rely=0.492)		
 		'''
 		from crear_paquete
-
-		#view precio
-		label = Label(self.frame_crear_paquete, text='Precio:', width='10', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
-		label.place(relx=0.02, rely=0.347)
-
-		self.price_content_entry = StringVar()
-		self.price_value = None
-		price_entry = Entry(self.frame_crear_paquete, width='25', font=('tahoma', 13), textvariable=self.price_content_entry)
-		price_entry.place(relx=0.17, rely=0.36)
-
-		#view senha
-		label = Label(self.frame_crear_paquete, text='Seña:', width='10', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
-		label.place(relx=0.02, rely=0.42)
-
-		self.senha_content_entry = StringVar()
-		self.senha_value = None
-		senha_entry = Entry(self.frame_crear_paquete, width='25', font=('tahoma', 13), textvariable=self.senha_content_entry)
-		senha_entry.place(relx=0.17, rely=0.43)
-
-		#incluye view
-		label = Label(self.frame_crear_paquete, text='Incluye:', width='10', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
-		label.place(relx=0.02, rely=0.492)
 
 		incluye_frame = Frame(self.frame_crear_paquete, width='400', height='200', bg='#F9F9F9', relief=GROOVE, borderwidth=0)
 		incluye_frame.place(relx=0.17, rely=0.492)
@@ -1037,8 +1076,6 @@ class View:
 		#********************************************************
 		button_anterior.config(command=lambda:self.pop_pila_anterior(View.VIEW_CREAR_PAQUETE))
 		button_siguiente.config(command=lambda:self.pop_pila_siguiente())
-		self.price_content_entry.trace("w", self.update_price_content_entry)
-		self.senha_content_entry.trace("w", self.update_senha_content_entry)
 		
 		pre_venta_button.config(command=lambda:self.controller.agregar_editar_pre_venta())
 		select_button.config(command=lambda:self.elegir_imagen(label_aux))
