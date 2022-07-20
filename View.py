@@ -823,25 +823,45 @@ class View:
 	def view_editar_paquete(self, frame, paquete, pos_paquete, pos_result_busqueda):
 		print('como pio...')
 		
-		frame_editar_paquete = Frame(frame, width='980', height='700', bg='#F9F9F9', relief=GROOVE, borderwidth=1)
+		frame_editar_paquete = Frame(frame, width='980', height='700',
+								bg='#F9F9F9', relief=GROOVE, borderwidth=1)
 		frame_editar_paquete.pack()
 		frame_editar_paquete.pack_propagate(0)
 		
 		y_label = 0.01
 		#view nombre paquete
-		label = Label(frame_editar_paquete, text='Nombre:', width='10', height='2', relief=GROOVE, borderwidth=1)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
+		label = Label(frame_editar_paquete, text='Nombre:', width='10',
+									height='2', relief=GROOVE, borderwidth=1)
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9',
+									fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=y_label)
 		
 		name_content_entry = StringVar(value=paquete.get_nombre())
-		name_entry = Entry(frame_editar_paquete, width='25', font=('tahoma', 13), textvariable=name_content_entry)
+		name_entry = Entry(frame_editar_paquete, width='25', font=('tahoma', 13),
+													 textvariable=name_content_entry)
 		name_entry.place(relx=0.13, rely=0.024)
 		
 		#view tipo de paquete
 		y_label += 0.08
-		label = Label(frame_editar_paquete, text='Tipo:', width='10', height='2', relief=GROOVE, borderwidth=1)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
+		label = Label(frame_editar_paquete, text='Tipo:', width='10',
+												height='2', relief=GROOVE, borderwidth=1)
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', 
+									fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=y_label)
+		
+		lista_tipos = ['Terrestre', 'Aereo']
+		combobox_tipos = ttk.Combobox(frame_editar_paquete, values=lista_tipos)
+		combobox_tipos.set(paquete.get_traslado())
+		combobox_tipos.config(state='readonly', font=(13),
+											width='9', height='6', background='#F9F9F9')
+		combobox_tipos.place(relx=0.13, rely=0.107)
+
+		lista_sub_tipos = ['Estandar', 'Personalizado']
+		combobox_sub_tipos = ttk.Combobox(frame_editar_paquete, values=lista_sub_tipos)
+		combobox_sub_tipos.set(paquete.get_tipo())
+		combobox_sub_tipos.config(state='readonly', font=(13), 
+											width='12', height='6', background='#F9F9F9')
+		combobox_sub_tipos.place(relx=0.24, rely=0.107)
 		
 		'''
 		#view vigente
@@ -1660,7 +1680,8 @@ class View:
 
 		#DEFINIMOS EL FRAME 
 		self.frame_pre_venta = None
-		self.frame_crear_paquete = Frame(self.main_frame, width='900', height='700', bg='#F9F9F9', relief=GROOVE, borderwidth=0)
+		self.frame_crear_paquete = Frame(self.main_frame, width='900', height='700', bg='#F9F9F9',
+								 relief=GROOVE, borderwidth=0)
 
 		#almacemamos los frame en una pila para los botones de 'anterior y siguiente'
 		self.add_pila_anterior(View.VIEW_PAQUETES_COD)
