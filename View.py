@@ -821,75 +821,121 @@ class View:
 		#editar_button.config(command=lambda:self.widget_destroy(frame_detalles))
 		
 	def view_editar_paquete(self, frame, paquete, pos_paquete, pos_result_busqueda):
-		print('como pio...')
-		
-		frame_editar_paquete = Frame(frame, width='980', height='700',
+		self.frame_editar_paquete = Frame(frame, width='980', height='700',
 								bg='#F9F9F9', relief=GROOVE, borderwidth=1)
-		frame_editar_paquete.pack()
-		frame_editar_paquete.pack_propagate(0)
+		self.frame_editar_paquete.pack()
+		self.frame_editar_paquete.pack_propagate(0)
 		
 		y_label = 0.01
 		#view nombre paquete
-		label = Label(frame_editar_paquete, text='Nombre:', width='10',
+		label = Label(self.frame_editar_paquete, text='Nombre:', width='10',
 									height='2', relief=GROOVE, borderwidth=1)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9',
 									fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=y_label)
 		
+		y_aux = 0.024
 		name_content_entry = StringVar(value=paquete.get_nombre())
-		name_entry = Entry(frame_editar_paquete, width='25', font=('tahoma', 13),
+		name_entry = Entry(self.frame_editar_paquete, width='25', font=('tahoma', 13),
 													 textvariable=name_content_entry)
-		name_entry.place(relx=0.13, rely=0.024)
+		name_entry.place(relx=0.13, rely=y_aux)
 		
 		#view tipo de paquete
 		y_label += 0.08
-		label = Label(frame_editar_paquete, text='Tipo:', width='10',
+		y_aux += 0.083
+		label = Label(self.frame_editar_paquete, text='Tipo:', width='10',
 												height='2', relief=GROOVE, borderwidth=1)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', 
 									fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=y_label)
 		
 		lista_tipos = ['Terrestre', 'Aereo']
-		combobox_tipos = ttk.Combobox(frame_editar_paquete, values=lista_tipos)
+		combobox_tipos = ttk.Combobox(self.frame_editar_paquete, values=lista_tipos)
 		combobox_tipos.set(paquete.get_traslado())
 		combobox_tipos.config(state='readonly', font=(13),
 											width='9', height='6', background='#F9F9F9')
-		combobox_tipos.place(relx=0.13, rely=0.107)
+		combobox_tipos.place(relx=0.13, rely=y_aux)
 
 		lista_sub_tipos = ['Estandar', 'Personalizado']
-		combobox_sub_tipos = ttk.Combobox(frame_editar_paquete, values=lista_sub_tipos)
+		combobox_sub_tipos = ttk.Combobox(self.frame_editar_paquete, values=lista_sub_tipos)
 		combobox_sub_tipos.set(paquete.get_tipo())
 		combobox_sub_tipos.config(state='readonly', font=(13), 
 											width='12', height='6', background='#F9F9F9')
-		combobox_sub_tipos.place(relx=0.24, rely=0.107)
+		combobox_sub_tipos.place(relx=0.24, rely=y_aux)
 		
-		'''
 		#view vigente
-		label = Label(self.frame_crear_paquete, text='Vigente:', width='10', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
-		label.place(relx=0.02, rely=0.204)
-
+		y_label += 0.08
+		y_aux += 0.083
+		label = Label(self.frame_editar_paquete, text='Vigente:', width='10', height='2', 
+																			relief=GROOVE, borderwidth=1)
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9',
+												fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
+		label.place(relx=0.02, rely=y_label)
+		
 		lista_vigencia = ['Si', 'No']
-		combobox_vigencia = ttk.Combobox(self.frame_crear_paquete, values=lista_vigencia)
+		combobox_vigencia = ttk.Combobox(self.frame_editar_paquete, values=lista_vigencia)
+
+		if paquete.get_esta_vigente():
+			combobox_vigencia.set('Si')
+		else:
+			combobox_vigencia.set('No')
+			
 		combobox_vigencia.config(state='readonly', font=(13), width='9', height='6', background='#F9F9F9')
-		combobox_vigencia.place(relx=0.17, rely=0.221)
-
+		combobox_vigencia.place(relx=0.13, rely=y_aux)
+		
 		#view fecha
-		label = Label(self.frame_crear_paquete, text='Salida/as:', width='11', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
-		label.place(relx=0.02, rely=0.276)
+		y_label += 0.08
+		y_aux += 0.083
+		label = Label(self.frame_editar_paquete, text='Salida/as:', 
+										width='11', height='2', relief=GROOVE, borderwidth=1)
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) 
+															#posicionamos el texto a la izquierda
+		label.place(relx=0.02, rely=y_label)
+		
+		texto = ''
+		date = paquete.get_fecha_de_viaje()
+		if date!= None:
+			if date.day < 10:
+				texto = '0'
 
+			texto = texto + str(date.day) + '/'
+
+			if date.month < 10:
+				texto = texto + '0'
+
+			texto = texto + str(date.month) + '/' + str(date.year)
+		else:
+			texto = '-- / -- / --'
+		
+		#self.lista_fecha = []
+		#self.lista_fecha_combobox = []
 		self.lista_fecha = []
 		self.lista_fecha_combobox = []
-		self.combobox_add_fecha = ttk.Combobox(self.frame_crear_paquete, values=self.lista_fecha_combobox)
-		self.combobox_add_fecha.config(state='readonly', font=(13), width='9', height='6', background='#F9F9F9')
-		self.combobox_add_fecha.set('-- / -- / --')
-		self.combobox_add_fecha.place(relx=0.17, rely=0.292)
-
-		button_fecha_de_viaje = Button(self.frame_crear_paquete, width='25', height='25', relief=GROOVE, borderwidth=0)
-		button_fecha_de_viaje.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
+		self.combobox_add_fecha = ttk.Combobox(self.frame_editar_paquete, values=self.lista_fecha_combobox)
+		self.combobox_add_fecha.config(state='readonly', font=(13),
+										width='10', height='6', background='#F9F9F9')
+		self.combobox_add_fecha.set(texto)
+		self.combobox_add_fecha.place(relx=0.13, rely=y_aux)
+		
+		button_fecha_de_viaje = Button(self.frame_editar_paquete, width='25',
+													 height='25', relief=GROOVE, borderwidth=0)
+		button_fecha_de_viaje.config(font=('tahoma', 13), bg='#F9F9F9',
+								fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
 		button_fecha_de_viaje.config(image=self.imagenes['add_icon'])
-		button_fecha_de_viaje.place(relx=0.3, rely=0.289)
+		button_fecha_de_viaje.place(relx=0.255, rely=y_aux)
+		
+		button_fecha_de_viaje.config(command=lambda:self.view_calendar(self.frame_editar_paquete,
+																					None, 0, 0.17, 0.277))
+		
+		'''
+		from detalles
+		fecha_value_label = Label(frame_detalles, text=texto, width='10', height='1', relief=GROOVE, borderwidth=0)
+		fecha_value_label.config(font=('tahoma', 14), bg='#F9F9F9', fg='#2F3030', anchor=W)
+		fecha_value_label.place(relx=0.105, rely=0.11)
+		'''
+		
+		'''
+		from crear_paquete
 
 		#view precio
 		label = Label(self.frame_crear_paquete, text='Precio:', width='10', height='2', relief=GROOVE, borderwidth=0)
@@ -993,7 +1039,7 @@ class View:
 		button_siguiente.config(command=lambda:self.pop_pila_siguiente())
 		self.price_content_entry.trace("w", self.update_price_content_entry)
 		self.senha_content_entry.trace("w", self.update_senha_content_entry)
-		button_fecha_de_viaje.config(command=lambda:self.view_calendar(self.frame_crear_paquete, None, 1, 0.17, 0.277))
+		
 		pre_venta_button.config(command=lambda:self.controller.agregar_editar_pre_venta())
 		select_button.config(command=lambda:self.elegir_imagen(label_aux))
 		save_button.config(command=lambda:self.image_to_see_path==self.controller.guardar_paquete(name_content_entry.get(), combobox_tipos.get(), combobox_sub_tipos.get(),
@@ -1830,14 +1876,12 @@ class View:
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
 		label.place(relx=0.56, rely=0.2)
 
-		select_button = Button(self.frame_crear_paquete, text='Elegir imagen', width=11, height=1, relief=GROOVE, borderwidth=1)
+		select_button = Button(self.frame_crear_paquete, text='Elegir imagen', width=11, height=1, relief=GROOVE, borderwidth=0)
 		select_button.config(font=('tahoma', 13), bg='#F9F9F9')
 		select_button.place(relx=0.742, rely=0.21)
 
 		select_image_view = Frame(self.frame_crear_paquete, bg='#F9F9F9', width='380', height='380', relief=GROOVE, borderwidth=0)
 		select_image_view.place(relx=0.56, rely=0.3)
-		#select_image_view.pack(padx=30, pady=190, anchor=SE)
-		#select_image_view.pack_propagate(0)
 
 		label_aux = Label(select_image_view, bg='#F9F9F9', fg='#48C2FA', width='380', height='380', borderwidth=0)
 		label_aux.grid(column=0,row=2)
@@ -2080,7 +2124,7 @@ class View:
 		widget.destroy()
 
 	def view_calendar(self, frame, content, cod_fecha, x, y):
-		frame_calendar = Frame(frame, bg='#F9F9F9', width='260', height='270', relief=GROOVE, borderwidth=1)
+		frame_calendar = Frame(frame, bg='#F9F9F9', width='260', height='310', relief=GROOVE, borderwidth=1)
 		frame_calendar.place(relx=x, rely=y)
 		frame_calendar.pack_propagate(0)
 
@@ -2088,16 +2132,18 @@ class View:
 		frame_date.pack()
 
 		calendario = Calendar(frame_date)
-		ok = Button(frame_calendar, width=5, bg='#F9F9F9', text='OK', command=lambda:self.update_button_fecha_de_viaje(frame_calendar, content, calendario, cod_fecha))
+		ok = Button(frame_calendar, width=5, bg='#F9F9F9', text='OK', 
+			command=lambda:self.update_button_fecha_de_viaje(frame_calendar, content, calendario, cod_fecha))
 		ok.pack(pady=2)
 
 	def update_button_fecha_de_viaje(self, frame_calendar, content, calendario, cod_fecha):
 		frame_calendar.destroy()
 		date = calendario.get_date_selected()
 
-		if cod_fecha == 1:
-			self.fecha_de_viaje = date
-		elif cod_fecha == 2:
+		#if cod_fecha == 1:
+		#	self.fecha_de_viaje = date
+		#elif cod_fecha == 2:
+		if cod_fecha == 2:
 			self.pre_venta_fecha_inicio = date
 		elif cod_fecha == 3:
 			self.pre_venta_fecha_fin = date
@@ -2115,14 +2161,23 @@ class View:
 		else:
 			month = str(date.month)
 
-		if cod_fecha == 1:
+		if cod_fecha == 1 or cod_fecha == 0:
 			self.combobox_add_fecha.destroy()
 			self.lista_fecha.append(date)
 			self.lista_fecha_combobox.append(day + '/' + month + '/' + str(date.year))
-			self.combobox_add_fecha = ttk.Combobox(self.frame_crear_paquete, values=self.lista_fecha_combobox)
-			self.combobox_add_fecha.config(state='readonly', font=(13), width='9', height='6', background='#F9F9F9')
+			
+			if cod_fecha == 1:
+				self.combobox_add_fecha = ttk.Combobox(self.frame_crear_paquete,
+														values=self.lista_fecha_combobox)
+				self.combobox_add_fecha.place(relx=0.17, rely=0.292)
+			else:
+				self.combobox_add_fecha = ttk.Combobox(self.frame_editar_paquete,
+														values=self.lista_fecha_combobox)
+				self.combobox_add_fecha.place(relx=0.13, rely=0.273)
+			self.combobox_add_fecha.config(state='readonly', font=(13),
+												width='10', height='6', background='#F9F9F9')
 			self.combobox_add_fecha.set(day + '/' + month + '/' + str(date.year))
-			self.combobox_add_fecha.place(relx=0.17, rely=0.292)
+			
 		else:
 			content.set(day + '/' + month + '/' + str(date.year))
 
