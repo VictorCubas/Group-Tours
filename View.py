@@ -993,29 +993,34 @@ class View:
 		
 		#incluye view
 		y_label += 0.08
-		y_aux += 0.074
+		y_aux += 0.07
 		label = Label(self.frame_editar_paquete, text='Incluye:', 
 										width='10', height='2', relief=GROOVE, borderwidth=1)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
-		label.place(relx=0.02, rely=0.492)		
-		'''
-		from crear_paquete
-
-		incluye_frame = Frame(self.frame_crear_paquete, width='400', height='200', bg='#F9F9F9', relief=GROOVE, borderwidth=0)
-		incluye_frame.place(relx=0.17, rely=0.492)
+		label.place(relx=0.02, rely=y_label)		
+		
+		incluye_frame = Frame(self.frame_editar_paquete, width='400', height='200', 
+													bg='#F9F9F9', relief=GROOVE, borderwidth=0)
+		incluye_frame.place(relx=0.13, rely=y_aux)
 
 		scroll = Scrollbar(incluye_frame, orient=VERTICAL)
 		scroll.pack(side=RIGHT, fill=Y)
 
-		incluye_content = StringVar()
+		incluye_content = StringVar(value=paquete.get_incluye_descripcion())
 		incluye_text_widget = Text(incluye_frame, height=7, width=30, relief=GROOVE, borderwidth=0)
-		incluye_text_widget.insert(END, '')
+		incluye_text_widget.insert(END, paquete.get_incluye_descripcion())
 		
 		incluye_text_widget.config(font=('tahoma', 12), bg='#FFFFFF', fg='#2F3030')
 		incluye_text_widget.pack(side=LEFT, fill=Y)
 
 		scroll.config(command=incluye_text_widget.yview)
 		incluye_text_widget.config(wrap=WORD, yscrollcommand=scroll.set)
+		
+	
+		'''
+		from crear_paquete
+
+		
 
 		#view cantidad de pasajeros
 		label = Label(self.frame_crear_paquete, text='Cant pasajeros:', width='13', height='2', relief=GROOVE, borderwidth=0)
