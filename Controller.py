@@ -92,6 +92,9 @@ class Controller:
 	def crear_paquete(self, value):
 		self.view.view_crear_paquete(value)
 
+	def cancelar_editar_paquete(self):
+		self.view.cancelar_editar_paquete()
+		
 	#def agregar_pre_venta_editar(pre_venta):
 	#	self.view.view_agregar_pre_venta_editar(pre_venta)
 
