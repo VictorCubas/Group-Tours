@@ -825,6 +825,9 @@ class View:
 		self.frame_editar_paquete.pack()
 		self.frame_editar_paquete.pack_propagate(0)
 		
+		self.pre_venta_fecha_inicio = None
+		self.pre_venta_fecha_fin = None
+		
 		y_label = 0.01
 		#view nombre paquete
 		label = Label(self.frame_editar_paquete, text='Nombre:', width='10',
@@ -1016,32 +1019,43 @@ class View:
 		scroll.config(command=incluye_text_widget.yview)
 		incluye_text_widget.config(wrap=WORD, yscrollcommand=scroll.set)
 		
-	
+		#view cantidad de pasajeros
+		y_label = 0.01
+		y_aux = 0.024
+		label = Label(self.frame_editar_paquete, text='Cant pasajeros:',
+													width='13', height='2', relief=GROOVE, borderwidth=1)
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
+		label.place(relx=0.56, rely=y_label)
+		
+		cant_pasajeros_content_entry = StringVar()
+		if paquete.get_cantidad_de_usuarios_total() != -1:
+			cant_pasajeros_content_entry.set(paquete.get_cantidad_de_usuarios_total())
+		cant_pasajeros_entry = Entry(self.frame_editar_paquete, width='15',
+							font=('tahoma', 13), textvariable=cant_pasajeros_content_entry)
+		cant_pasajeros_entry.place(relx=0.72, rely=y_aux)
+		
+		#view pre venta
+		y_label += 0.08
+		y_aux += 0.08
+
+		label = Label(self.frame_editar_paquete, text='Pre venta:', width='13', height='2', relief=GROOVE, borderwidth=1)
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
+		label.place(relx=0.56, rely=y_label)
+		
+		self.pre_venta = None
+		self.content_pre_venta_button = StringVar()
+		
+		if paquete.si_pre_venta:
+			self.pre_venta = paquete.get_pre_venta()
+			self.content_pre_venta_button.set('Editar')
+		else:
+			self.content_pre_venta_button.set('Agregar')
+			
+		pre_venta_button = Button(self.frame_editar_paquete, textvariable=self.content_pre_venta_button, width=10, height=1, relief=GROOVE, borderwidth=0)
+		pre_venta_button.config(font=('tahoma', 13), bg='#F9F9F9')
+		pre_venta_button.place(relx=0.72, rely=y_aux)
 		'''
 		from crear_paquete
-
-		
-
-		#view cantidad de pasajeros
-		label = Label(self.frame_crear_paquete, text='Cant pasajeros:', width='13', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
-		label.place(relx=0.56, rely=0.06)
-
-		cant_pasajeros_content_entry = StringVar()
-		cant_pasajeros_entry = Entry(self.frame_crear_paquete, width='15', font=('tahoma', 13), textvariable=cant_pasajeros_content_entry)
-		cant_pasajeros_entry.place(relx=0.742, rely=0.075)
-
-		#view pre venta
-		self.pre_venta = None
-		label = Label(self.frame_crear_paquete, text='Pre venta:', width='13', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
-		label.place(relx=0.56, rely=0.132)
-
-		self.content_pre_venta_button = StringVar()
-		self.content_pre_venta_button.set('Agregar')
-		pre_venta_button = Button(self.frame_crear_paquete, textvariable=self.content_pre_venta_button, width=10, height=1, relief=GROOVE, borderwidth=0)
-		pre_venta_button.config(font=('tahoma', 13), bg='#F9F9F9')
-		pre_venta_button.place(relx=0.742, rely=0.139)
 
 		#view seleccionar imagen
 		#global image_to_see
@@ -1766,6 +1780,8 @@ class View:
 		self.set_button_bold('paquetes')
 		self.anterior = 'paquetes'
 
+		self.pre_venta_fecha_inicio = None
+		self.pre_venta_fecha_fin = None
 		#DEFINIMOS EL FRAME 
 		self.frame_pre_venta = None
 		self.frame_crear_paquete = Frame(self.main_frame, width='900', height='700', bg='#F9F9F9',
