@@ -407,20 +407,26 @@ class Model:
 				raise Exception('Precio incorrecto')
 				
 			precio = int(precio)
+			
+			if not senha:
+				raise Exception('Seña incorrecta')
+				
 			if senha == '':
-				raise Exception('Seña incorrecto')
+				raise Exception('Seña incorrecta')
 
 			senha = int(senha)
 			if senha > precio:
 				raise Exception('La seña es mayor al precio')
 
-			monto_cuota = int(monto_cuota)
-			if monto_cuota == '':
+			if not monto_cuota or monto_cuota == '':
 				raise Exception('Monto cuota incorrecto')
+				
+			monto_cuota = int(monto_cuota)
 
-			cant_cuotas = int(cant_cuotas)
-			if cant_cuotas == '':
+			if not cant_cuotas or cant_cuotas == '':
 				raise Exception('Cantidad de cuotas incorrecta')
+				
+			cant_cuotas = int(cant_cuotas)
 
 			if fecha_inicio is None:
 				raise Exception('Fecha inicio incorrecta')
