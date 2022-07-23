@@ -403,6 +403,9 @@ class Model:
 
 	def validar_datos_pre_venta(self, precio, senha, monto_cuota, cant_cuotas, fecha_inicio, fecha_fin):
 		try:
+			if not precio:
+				raise Exception('Precio incorrecto')
+				
 			precio = int(precio)
 			if senha == '':
 				raise Exception('Seña incorrecto')
