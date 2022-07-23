@@ -623,7 +623,7 @@ class View:
 		if paquete.get_esta_vigente() == False:
 			texto = 'No'
 
-		vigente_value_label = Label(frame_detalles, text=texto, width='2', height='1', relief=GROOVE, borderwidth=0)
+		vigente_value_label = Label(frame_detalles, text=texto, width='3', height='1', relief=GROOVE, borderwidth=0)
 		vigente_value_label.config(font=('tahoma', 14), bg='#F9F9F9', fg='#2F3030', anchor=W)
 		vigente_value_label.place(relx=0.116, rely=0.155)
 
@@ -733,7 +733,7 @@ class View:
 		if paquete.si_pre_venta() == False:
 			texto = 'No'
 
-		pre_venta_label = Label(frame_detalles, text=texto, width='2', height='1', relief=GROOVE, borderwidth=0)
+		pre_venta_label = Label(frame_detalles, text=texto, width='3', height='1', relief=GROOVE, borderwidth=0)
 		pre_venta_label.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', anchor=W)
 		pre_venta_label.place(relx=0.474, rely=0.20)
 
@@ -1051,48 +1051,75 @@ class View:
 		else:
 			self.content_pre_venta_button.set('Agregar')
 			
-		pre_venta_button = Button(self.frame_editar_paquete, textvariable=self.content_pre_venta_button, width=10, height=1, relief=GROOVE, borderwidth=0)
+		pre_venta_button = Button(self.frame_editar_paquete, textvariable=self.content_pre_venta_button,
+																width=10, height=1, relief=GROOVE, borderwidth=0)
 		pre_venta_button.config(font=('tahoma', 13), bg='#F9F9F9')
 		pre_venta_button.place(relx=0.72, rely=y_aux)
-		'''
-		from crear_paquete
-
-		#view seleccionar imagen
-		#global image_to_see
-		self.image_to_see_path = None
 		
-		label = Label(self.frame_crear_paquete, text='Agregar imagen:',
-					  width='13', height='2', relief=GROOVE, borderwidth=0)
+		#view seleccionar imagen
+		y_label += 0.08
+		y_aux += 0.08
+		self.image_to_see_path = None
+
+		label = Label(self.frame_editar_paquete, text='Imagen',
+					  width='12', height='2', relief=GROOVE, borderwidth=1)		
+			
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
-		label.place(relx=0.56, rely=0.2)
-
-		select_button = Button(self.frame_crear_paquete, text='Elegir imagen', width=11, height=1, relief=GROOVE, borderwidth=1)
+		label.place(relx=0.56, rely=y_label)
+		
+		select_button = Button(self.frame_editar_paquete, text='Elegir imagen', width=11, height=1, relief=GROOVE, borderwidth=1)
 		select_button.config(font=('tahoma', 13), bg='#F9F9F9')
-		select_button.place(relx=0.742, rely=0.21)
+		select_button.place(relx=0.72, rely=y_aux)
 
-		select_image_view = Frame(self.frame_crear_paquete, bg='#F9F9F9', width='380', height='380', relief=GROOVE, borderwidth=0)
-		select_image_view.place(relx=0.56, rely=0.3)
-		#select_image_view.pack(padx=30, pady=190, anchor=SE)
-		#select_image_view.pack_propagate(0)
+		select_image_view = Frame(self.frame_editar_paquete, bg='#F9F9F9', width='380', height='380', relief=GROOVE, borderwidth=0)
+		select_image_view.place(relx=0.56, rely=0.28)
 
-		label_aux = Label(select_image_view, bg='#F9F9F9', fg='#48C2FA', width='380', height='380', borderwidth=0)
-		label_aux.grid(column=0,row=2)
+		label_image = Label(select_image_view, bg='#F9F9F9', fg='#48C2FA', width='380', height='380', borderwidth=0)
+		label_image.grid(column=0,row=2)
+		
+		path = None
+		if paquete.get_imagen() != None:
+			path = 'data_base_files/' + paquete.get_imagen() + '.png'
+		else:
+			path = 'imagenes/logo.png'
+		
+		image = cv2.imread(path)
+		print(path)
+		image = imutils.resize(image, height=380)
 
+		imageToShow = imutils.resize(image, width=360)
+		imageToShow = cv2.cvtColor(imageToShow, cv2.COLOR_BGR2RGB)
+		im = Image.fromarray(imageToShow)
+		img = ImageTk.PhotoImage(image=im)
+		label_image.configure(image=img)
+		label_image.config(bg='#F9F9F9')
+		label_image.image = img
+		self.image_to_see_path = path
+		
+		
 		#view ok and cancel
-		save_button = Button(self.frame_crear_paquete, text='Guardar', width=110, height=30, relief=GROOVE, borderwidth=0)
+		save_button = Button(self.frame_editar_paquete, text='Guardar', width=110, height=30, relief=GROOVE, borderwidth=0)
 		save_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#343535')
 		save_button.config(image=self.imagenes['save_icon'], compound=LEFT)
 		save_button.place(relx=0.5, rely=0.85)
 
-		cancel_button = Button(self.frame_crear_paquete, text='Cancelar', width=110, height=30, relief=GROOVE, borderwidth=0)
+		cancel_button = Button(self.frame_editar_paquete, text='Cancelar', width=110, height=30, relief=GROOVE, borderwidth=0)
 		cancel_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#343535')
 		cancel_button.config(image=self.imagenes['not_ok_icon'], compound=LEFT)
 		cancel_button.place(relx=0.34, rely=0.85)
-		#********************************************************
-
+		
 		#********************************************************
 		#				CONFIGURAMOS LOS EVENTOS				*
 		#********************************************************
+
+		cancel_button.config(command=lambda:self.controller.cancelar_editar_paquete())
+
+		'''
+		from crear_paquete
+
+		#********************************************************
+
+		
 		button_anterior.config(command=lambda:self.pop_pila_anterior(View.VIEW_CREAR_PAQUETE))
 		button_siguiente.config(command=lambda:self.pop_pila_siguiente())
 		
@@ -1101,17 +1128,12 @@ class View:
 		save_button.config(command=lambda:self.image_to_see_path==self.controller.guardar_paquete(name_content_entry.get(), combobox_tipos.get(), combobox_sub_tipos.get(),
 				combobox_vigencia.get(), self.lista_fecha, self.price_value, self.senha_value, incluye_text_widget.get(1.0, END),
 				cant_pasajeros_content_entry.get(), self.pre_venta, self.image_to_see_path))
-		cancel_button.config(command=lambda:self.controller.crear_paquete(True))
+		
 
-		#********************************************************
-		#				PACK A TODOS LOS BOTONES				*
-		#********************************************************
-		button_anterior.place(relx=0.025, rely=0.001)
-		button_siguiente.place(relx=0.08, rely=0)
-		self.frame_crear_paquete.pack(padx=20, pady=20, anchor=NE)
-		self.frame_crear_paquete.pack_propagate(0)
 		'''
-	
+
+	def	cancelar_editar_paquete(self):
+		self.widget_destroy(self.frame_editar_paquete)
 
 	def view_precio_detalles(self, precio, senha, pre_venta):
 		print('viendo precio en detalles....')
