@@ -98,12 +98,13 @@ class Controller:
 	#def agregar_pre_venta_editar(pre_venta):
 	#	self.view.view_agregar_pre_venta_editar(pre_venta)
 
-	def guardar_paquete(self, nombre, tipo, sub_tipo, esta_vigente, lista_fecha, precio, senha, incluye, cant_pasajeros, pre_venta, image_path):
+	def guardar_paquete(self, nombre, tipo, sub_tipo, esta_vigente, lista_fecha, precio,
+											senha, incluye, cant_pasajeros, pre_venta, image_path):
 		#print('{}, {}, {}, {}, {}, {}, {}, {}'.format(nombre, tipo, sub_tipo, fecha, esta_vigente, precio, senha, incluye))
-		
 		if len(lista_fecha) > 0:
 			try:
-				self.model.validar_datos_paquete(nombre, tipo, sub_tipo, esta_vigente, lista_fecha[0], precio, senha, incluye, cant_pasajeros)
+				self.model.validar_datos_paquete(nombre, tipo, sub_tipo, esta_vigente, lista_fecha[0],
+																		precio, senha, incluye, cant_pasajeros)
 			except NombreException as e:
 				self.view.view_show_message(False, e)
 			except Exception as e:
@@ -113,7 +114,8 @@ class Controller:
 			else:
 				for fecha in lista_fecha:
 					print('guardanding....')
-					paquete = self.model.crear_paquete(nombre, tipo, sub_tipo, esta_vigente, fecha, precio, senha, incluye, cant_pasajeros, image_path)
+					paquete = self.model.crear_paquete(nombre, tipo, sub_tipo,
+							esta_vigente, fecha, precio, senha, incluye, cant_pasajeros, image_path)
 
 					if pre_venta is not None:
 						paquete.agregar_pre_venta(pre_venta)
@@ -124,8 +126,7 @@ class Controller:
 				self.view.view_crear_paquete(True)
 		else:
 			self.view.view_show_message(False, 'Debe introducir una fecha')
-			
-		return None
+
 			
 	def agregar_editar_pre_venta(self):
 		#self.view.view_agregar_pre_venta()
