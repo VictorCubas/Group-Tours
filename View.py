@@ -817,11 +817,10 @@ class View:
 		#********************************************************
 		salir_button.config(command=lambda:self.widget_destroy(self.parent_detalles))
 		editar_button.config(command=lambda:self.controller.editar_paquete(frame_detalles, paquete, pos_paquete, pos_result_busqueda))
-		#editar_button.config(command=lambda:self.widget_destroy(frame_detalles))
 		
 	def view_editar_paquete(self, frame, paquete, pos_paquete, pos_result_busqueda):
 		self.frame_editar_paquete = Frame(frame, width='980', height='700',
-								bg='#F9F9F9', relief=GROOVE, borderwidth=1)
+								bg='#F9F9F9', relief=GROOVE, borderwidth=0)
 		self.frame_editar_paquete.pack()
 		self.frame_editar_paquete.pack_propagate(0)
 		
@@ -831,7 +830,7 @@ class View:
 		y_label = 0.01
 		#view nombre paquete
 		label = Label(self.frame_editar_paquete, text='Nombre:', width='10',
-									height='2', relief=GROOVE, borderwidth=1)
+									height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9',
 									fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=y_label)
@@ -846,7 +845,7 @@ class View:
 		y_label += 0.08
 		y_aux += 0.083
 		label = Label(self.frame_editar_paquete, text='Tipo:', width='10',
-												height='2', relief=GROOVE, borderwidth=1)
+												height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', 
 									fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=y_label)
@@ -869,7 +868,7 @@ class View:
 		y_label += 0.08
 		y_aux += 0.083
 		label = Label(self.frame_editar_paquete, text='Vigente:', width='10', height='2', 
-																			relief=GROOVE, borderwidth=1)
+																		relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9',
 												fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=y_label)
@@ -889,7 +888,7 @@ class View:
 		y_label += 0.08
 		y_aux += 0.083
 		label = Label(self.frame_editar_paquete, text='Salida/as:', 
-										width='11', height='2', relief=GROOVE, borderwidth=1)
+										width='11', height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) 
 															#posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=y_label)
@@ -931,7 +930,7 @@ class View:
 		y_label += 0.08
 		y_aux += 0.074
 		label = Label(self.frame_editar_paquete, text='Precio:',
-												width='10', height='2', relief=GROOVE, borderwidth=1)
+												width='10', height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA',
 																anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=y_label)
@@ -964,7 +963,7 @@ class View:
 		y_label += 0.08
 		y_aux += 0.08
 		label = Label(self.frame_editar_paquete, text='Seña:', width='10',
-															height='2', relief=GROOVE, borderwidth=1)
+															height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', 
 											fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=y_label)
@@ -998,7 +997,7 @@ class View:
 		y_label += 0.08
 		y_aux += 0.07
 		label = Label(self.frame_editar_paquete, text='Incluye:', 
-										width='10', height='2', relief=GROOVE, borderwidth=1)
+										width='10', height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
 		label.place(relx=0.02, rely=y_label)		
 		
@@ -1023,7 +1022,7 @@ class View:
 		y_label = 0.01
 		y_aux = 0.024
 		label = Label(self.frame_editar_paquete, text='Cant pasajeros:',
-													width='13', height='2', relief=GROOVE, borderwidth=1)
+													width='13', height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
 		label.place(relx=0.56, rely=y_label)
 		
@@ -1038,7 +1037,8 @@ class View:
 		y_label += 0.08
 		y_aux += 0.08
 
-		label = Label(self.frame_editar_paquete, text='Pre venta:', width='13', height='2', relief=GROOVE, borderwidth=1)
+		label = Label(self.frame_editar_paquete, text='Pre venta:', width='13',
+																	height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
 		label.place(relx=0.56, rely=y_label)
 		
@@ -1052,7 +1052,7 @@ class View:
 			self.content_pre_venta_button.set('Agregar')
 			
 		pre_venta_button = Button(self.frame_editar_paquete, textvariable=self.content_pre_venta_button,
-																width=10, height=1, relief=GROOVE, borderwidth=0)
+														width=10, height=1, relief=GROOVE, borderwidth=0)
 		pre_venta_button.config(font=('tahoma', 13), bg='#F9F9F9')
 		pre_venta_button.place(relx=0.72, rely=y_aux)
 		
@@ -1062,19 +1062,22 @@ class View:
 		self.image_to_see_path = None
 
 		label = Label(self.frame_editar_paquete, text='Imagen',
-					  width='12', height='2', relief=GROOVE, borderwidth=1)		
+					  width='12', height='2', relief=GROOVE, borderwidth=0)		
 			
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
 		label.place(relx=0.56, rely=y_label)
 		
-		select_button = Button(self.frame_editar_paquete, text='Elegir imagen', width=11, height=1, relief=GROOVE, borderwidth=1)
+		select_button = Button(self.frame_editar_paquete, text='Elegir imagen', width=11,
+															height=1, relief=GROOVE, borderwidth=0)
 		select_button.config(font=('tahoma', 13), bg='#F9F9F9')
 		select_button.place(relx=0.72, rely=y_aux)
 
-		select_image_view = Frame(self.frame_editar_paquete, bg='#F9F9F9', width='380', height='380', relief=GROOVE, borderwidth=0)
+		select_image_view = Frame(self.frame_editar_paquete, bg='#F9F9F9',
+													width='380', height='380', relief=GROOVE, borderwidth=0)
 		select_image_view.place(relx=0.56, rely=0.28)
 
-		label_image = Label(select_image_view, bg='#F9F9F9', fg='#48C2FA', width='380', height='380', borderwidth=0)
+		label_image = Label(select_image_view, bg='#F9F9F9', fg='#48C2FA',
+															width='380', height='380', borderwidth=0)
 		label_image.grid(column=0,row=2)
 		
 		path = None
@@ -1084,7 +1087,6 @@ class View:
 			path = 'imagenes/logo.png'
 		
 		image = cv2.imread(path)
-		print(path)
 		image = imutils.resize(image, height=380)
 
 		imageToShow = imutils.resize(image, width=360)
@@ -1098,12 +1100,14 @@ class View:
 		
 		
 		#view ok and cancel
-		save_button = Button(self.frame_editar_paquete, text='Guardar', width=110, height=30, relief=GROOVE, borderwidth=0)
+		save_button = Button(self.frame_editar_paquete, text='Guardar', width=110,
+															height=30, relief=GROOVE, borderwidth=0)
 		save_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#343535')
 		save_button.config(image=self.imagenes['save_icon'], compound=LEFT)
 		save_button.place(relx=0.5, rely=0.85)
 
-		cancel_button = Button(self.frame_editar_paquete, text='Cancelar', width=110, height=30, relief=GROOVE, borderwidth=0)
+		cancel_button = Button(self.frame_editar_paquete, text='Cancelar',
+													width=110, height=30, relief=GROOVE, borderwidth=0)
 		cancel_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#343535')
 		cancel_button.config(image=self.imagenes['not_ok_icon'], compound=LEFT)
 		cancel_button.place(relx=0.34, rely=0.85)
@@ -1111,20 +1115,11 @@ class View:
 		#********************************************************
 		#				CONFIGURAMOS LOS EVENTOS				*
 		#********************************************************
-
 		cancel_button.config(command=lambda:self.controller.cancelar_editar_paquete())
+		select_button.config(command=lambda:self.elegir_imagen(label_image))
 
 		'''
-		from crear_paquete
-
-		#********************************************************
-
-		
-		button_anterior.config(command=lambda:self.pop_pila_anterior(View.VIEW_CREAR_PAQUETE))
-		button_siguiente.config(command=lambda:self.pop_pila_siguiente())
-		
 		pre_venta_button.config(command=lambda:self.controller.agregar_editar_pre_venta())
-		select_button.config(command=lambda:self.elegir_imagen(label_aux))
 		save_button.config(command=lambda:self.image_to_see_path==self.controller.guardar_paquete(name_content_entry.get(), combobox_tipos.get(), combobox_sub_tipos.get(),
 				combobox_vigencia.get(), self.lista_fecha, self.price_value, self.senha_value, incluye_text_widget.get(1.0, END),
 				cant_pasajeros_content_entry.get(), self.pre_venta, self.image_to_see_path))
@@ -1815,7 +1810,8 @@ class View:
 		#********************************************************
 		#				CREAMOS TODOS LOS BOTONES				*
 		#********************************************************
-		button_anterior = Button(self.frame_crear_paquete, width='33', height='30', relief=GROOVE, borderwidth=0)
+		button_anterior = Button(self.frame_crear_paquete, width='33', 
+																height='30', relief=GROOVE, borderwidth=0)
 		button_anterior.config(bg='#F9F9F9', activebackground='#F9F9F9', highlightthickness=0)
 
 		button_siguiente = Button(self.frame_crear_paquete, width='33', height='30', relief=GROOVE, borderwidth=0)
@@ -1956,23 +1952,28 @@ class View:
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
 		label.place(relx=0.56, rely=0.2)
 
-		select_button = Button(self.frame_crear_paquete, text='Elegir imagen', width=11, height=1, relief=GROOVE, borderwidth=0)
+		select_button = Button(self.frame_crear_paquete, text='Elegir imagen',
+													width=11, height=1, relief=GROOVE, borderwidth=0)
 		select_button.config(font=('tahoma', 13), bg='#F9F9F9')
 		select_button.place(relx=0.742, rely=0.21)
 
-		select_image_view = Frame(self.frame_crear_paquete, bg='#F9F9F9', width='380', height='380', relief=GROOVE, borderwidth=0)
+		select_image_view = Frame(self.frame_crear_paquete, bg='#F9F9F9',
+													width='380', height='380', relief=GROOVE, borderwidth=0)
 		select_image_view.place(relx=0.56, rely=0.3)
 
-		label_aux = Label(select_image_view, bg='#F9F9F9', fg='#48C2FA', width='380', height='380', borderwidth=0)
+		label_aux = Label(select_image_view, bg='#F9F9F9', fg='#48C2FA', 
+															width='380', height='380', borderwidth=0)
 		label_aux.grid(column=0,row=2)
 
 		#view ok and cancel
-		save_button = Button(self.frame_crear_paquete, text='Guardar', width=110, height=30, relief=GROOVE, borderwidth=0)
+		save_button = Button(self.frame_crear_paquete, text='Guardar', width=110,
+																height=30, relief=GROOVE, borderwidth=0)
 		save_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#343535')
 		save_button.config(image=self.imagenes['save_icon'], compound=LEFT)
 		save_button.place(relx=0.5, rely=0.85)
 
-		cancel_button = Button(self.frame_crear_paquete, text='Cancelar', width=110, height=30, relief=GROOVE, borderwidth=0)
+		cancel_button = Button(self.frame_crear_paquete, text='Cancelar', width=110,
+																	height=30, relief=GROOVE, borderwidth=0)
 		cancel_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#343535')
 		cancel_button.config(image=self.imagenes['not_ok_icon'], compound=LEFT)
 		cancel_button.place(relx=0.34, rely=0.85)
@@ -1985,11 +1986,14 @@ class View:
 		button_siguiente.config(command=lambda:self.pop_pila_siguiente())
 		self.price_content_entry.trace("w", self.update_price_content_entry)
 		self.senha_content_entry.trace("w", self.update_senha_content_entry)
-		button_fecha_de_viaje.config(command=lambda:self.view_calendar(self.frame_crear_paquete, None, 1, 0.17, 0.277))
+		button_fecha_de_viaje.config(command=lambda:self.view_calendar(
+													self.frame_crear_paquete, None, 1, 0.17, 0.277))
 		pre_venta_button.config(command=lambda:self.controller.agregar_editar_pre_venta())
 		select_button.config(command=lambda:self.elegir_imagen(label_aux))
-		save_button.config(command=lambda:self.image_to_see_path==self.controller.guardar_paquete(name_content_entry.get(), combobox_tipos.get(), combobox_sub_tipos.get(),
-				combobox_vigencia.get(), self.lista_fecha, self.price_value, self.senha_value, incluye_text_widget.get(1.0, END),
+		save_button.config(command=lambda:self.controller.guardar_paquete(name_content_entry.get(),
+							 combobox_tipos.get(), combobox_sub_tipos.get(), combobox_vigencia.get(),
+							 self.lista_fecha, self.price_value, self.senha_value,
+							 incluye_text_widget.get(1.0, END),
 				cant_pasajeros_content_entry.get(), self.pre_venta, self.image_to_see_path))
 		cancel_button.config(command=lambda:self.controller.crear_paquete(True))
 
@@ -2021,7 +2025,6 @@ class View:
 			im = Image.fromarray(imageToShow)
 			img = ImageTk.PhotoImage(image=im)
 			label.configure(image=img)
-			#label.config(bg='#F9F9F9')
 			label.image = img
 			self.image_to_see_path = path_name
 
