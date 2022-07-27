@@ -267,7 +267,7 @@ class View:
 			button_siguiente.config(image=self.imagenes['next_available_icon'], compound=CENTER)
 		#********************************************************
 
-		label_nombre_paquete = Label(frame, text='Nombre/Destino:', font=('tahoma', 15), width=14, height=1, bg='#F9F9F9')
+		label_nombre_paquete = Label(frame, text='Nombre/Destino:', font=('tahoma', 15), width=15, height=1, bg='#F9F9F9')
 		label_nombre_paquete.config(fg='#48C2FA')
 		#declaramos una entreada para ingresar los datos
 		entry = Entry(frame, width='15', font=('tahoma', 15), textvariable=self.content_entry)
@@ -443,7 +443,8 @@ class View:
 				pos_result_busqueda += 1
 				aux += 1
 
-				paquete_view = Frame(self.frame_result_aux, bg='#F9F9F9', width='770', height='150', relief=GROOVE, borderwidth=0)
+				paquete_view = Frame(self.frame_result_aux, bg='#F9F9F9', width='770', 
+										height='150', relief=GROOVE, borderwidth=0)
 				paquete_view.pack(padx=10, pady=5)
 
 				#********************************************************
@@ -466,8 +467,10 @@ class View:
 				label_logo.photo = logo
 				label_logo.place(relx=0.01, rely=0.02)
 
-				paquete_name_view = Label(paquete_view, text=paquete.get_nombre(), width='20', height='1', relief=GROOVE, borderwidth=0)
-				paquete_name_view.config(font=('tahoma', 15, 'bold'), bg='#F9F9F9', fg='#343535', activeforeground='#343535', anchor=W) #posicionamos el texto a la izquierda
+				paquete_name_view = Label(paquete_view, text=paquete.get_nombre(), 
+													width='20', height='1', relief=GROOVE, borderwidth=0)
+				paquete_name_view.config(font=('tahoma', 15, 'bold'), bg='#F9F9F9', fg='#343535',
+								 activeforeground='#343535', anchor=W) #posicionamos el texto a la izquierda
 				paquete_name_view.place(relx=0.315, rely=0.05)
 
 				#fecha view
@@ -486,8 +489,10 @@ class View:
 				else:
 					texto = '-- / -- / --'
 
-				paquete_fecha_de_viaje_view = Button(paquete_view, text=texto, width='21', height='1', relief=GROOVE, borderwidth=0)
-				paquete_fecha_de_viaje_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
+				paquete_fecha_de_viaje_view = Button(paquete_view, text=texto, 
+												width='21', height='1', relief=GROOVE, borderwidth=0)
+				paquete_fecha_de_viaje_view.config(font=('tahoma', 13), bg='#F9F9F9',
+								fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
 				paquete_fecha_de_viaje_view.place(relx=0.3, rely=0.25)
 
 				#vigente view
@@ -495,13 +500,17 @@ class View:
 				if paquete.get_esta_vigente() == False:
 					texto = 'No vigente'
 
-				paquete_fecha_de_viaje_view = Button(paquete_view, text=texto, width='21', height='1', relief=GROOVE, borderwidth=0)
-				paquete_fecha_de_viaje_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
+				paquete_fecha_de_viaje_view = Button(paquete_view, text=texto, 
+													width='21', height='1', relief=GROOVE, borderwidth=0)
+				paquete_fecha_de_viaje_view.config(font=('tahoma', 13), bg='#F9F9F9', 
+								fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
 				paquete_fecha_de_viaje_view.place(relx=0.3, rely=0.50)
 
 				texto = 'Tipo: ' + paquete.TRASLADO
-				paquete_fecha_de_viaje_view = Button(paquete_view, text=texto, width='21', height='1', relief=GROOVE, borderwidth=0)
-				paquete_fecha_de_viaje_view.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
+				paquete_fecha_de_viaje_view = Button(paquete_view, text=texto,
+											width='21', height='1', relief=GROOVE, borderwidth=0)
+				paquete_fecha_de_viaje_view.config(font=('tahoma', 13), bg='#F9F9F9', 
+									fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
 				paquete_fecha_de_viaje_view.place(relx=0.3, rely=0.75)
 
 				#SEGUNDA CULUMNA
@@ -525,7 +534,8 @@ class View:
 				else:
 					texto = precio_texto
 
-				if paquete.get_precio() < 100000: #significa que el precio esta en dolares, ya que en guaranies se considera 5 digitos como minimo
+				if paquete.get_precio() < 100000: #significa que el precio esta en dolares, 
+											#ya que en guaranies se considera 5 digitos como minimo
 					texto = 'Precio: ' + texto + '$'
 				else:
 					texto = 'Precio: ' + texto + 'Gs.'
@@ -560,43 +570,45 @@ class View:
 
 				#print('esta vigente: ' + str(paquete.get_esta_vigente()))
 
-				paquete_pre_venta_view = Button(paquete_view, text=texto, width='18', height='1', relief=GROOVE, borderwidth=0)
-				paquete_pre_venta_view.config(font=('tahoma', 13), bg='#F9F9F9', fg=color, activeforeground=color, highlightthickness=0, anchor=W)
+				paquete_pre_venta_view = Button(paquete_view, text=texto, width='18', height='1',
+														 relief=GROOVE, borderwidth=0)
+				paquete_pre_venta_view.config(font=('tahoma', 13), bg='#F9F9F9', 
+								fg=color, activeforeground=color, highlightthickness=0, anchor=W)
 				paquete_pre_venta_view.place(relx=0.7, rely=0.5)
 
 				pos_paquete = self.result_busqueda_paquete[1][aux]
 				#detalles view
 				texto = 'Ver detalles      >'
-				paquete_detalles_view = Button(paquete_view, text=texto, width='18', height='1', relief=GROOVE, borderwidth=0)
-				paquete_detalles_view.config(font=('tahoma', 13), bg='#27A221', fg='#FFFFFF', activeforeground='#FFFFFF', activebackground='#20801B', highlightthickness=0, anchor=W)
-				paquete_detalles_view.place(relx=0.7, rely=0.75)
-				paquete_detalles_view.config(command=lambda paquete=paquete, pos_paquete=pos_paquete,
-						pos_result_busqueda=pos_result_busqueda:self.view_paquete_detalles(paquete, pos_paquete, pos_result_busqueda))
-				#print(paquete_name_view.config("text")[-1])
-				#print(paquete_detalles_view.config("text")[-1])
+				paquete_detalles_button = Button(paquete_view, text=texto, width='18',
+															 height='1', relief=GROOVE, borderwidth=0)
+				paquete_detalles_button.config(font=('tahoma', 13), bg='#27A221', fg='#FFFFFF',
+						 activeforeground='#FFFFFF', activebackground='#20801B', highlightthickness=0, anchor=W)
+				paquete_detalles_button.place(relx=0.7, rely=0.75)
+				paquete_detalles_button.config(command=lambda paquete=paquete, pos_paquete=pos_paquete,
+						pos_result_busqueda=pos_result_busqueda:self.view_paquete_detalles(paquete, 
+																	pos_paquete, pos_result_busqueda))
 
 				self.view_result_busqueda_paquete.append(paquete_view)
 
-	def view_paquete_detalles(self, paquete, pos_paquete, pos_result_busqueda):
-		print('viendo detalles')
-		self.parent_detalles = Toplevel(self.parent, bg='#F9F9F9', relief=GROOVE, borderwidth=0)
-		self.parent_detalles.title('Paquete Detalles')
-		self.parent_detalles.geometry('1000x800+450+100')
-		self.parent_detalles.resizable(width=False, height=False)
-
-		frame_detalles = Frame(self.parent_detalles, width='1000', height='900', bg='#F9F9F9', relief=GROOVE, borderwidth=0)
+	def view_paquete_detalles_body(self, paquete, pos_paquete, pos_result_busqueda):
+		frame_detalles = Frame(self.parent_detalles, width='1000', height='900', bg='#F9F9F9',
+																			relief=GROOVE, borderwidth=0)
 		frame_detalles.pack()
 		frame_detalles.pack_propagate(0)
-		paquete_name_label = Label(frame_detalles, text=paquete.get_nombre(), width='20', height='2', relief=GROOVE, borderwidth=0)
-		paquete_name_label.config(font=('tahoma', 25, 'bold'), bg='#F9F9F9', fg='#48C2FA') #posicionamos el texto a la izquierda
+		paquete_name_label = Label(frame_detalles, text=paquete.get_nombre(),
+														width='20', height='2', relief=GROOVE, borderwidth=0)
+		paquete_name_label.config(font=('tahoma', 25, 'bold'),
+												bg='#F9F9F9', fg='#48C2FA') #posicionamos el texto a la izquierda
 		paquete_name_label.pack()
 
 		#fecha view
 		fecha_label = Label(frame_detalles, text='Fecha:', width='6', height='1', relief=GROOVE, borderwidth=0)
-		fecha_label.config(font=('tahoma', 14, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
+		fecha_label.config(font=('tahoma', 14, 'bold'), bg='#F9F9F9', fg='#48C2FA', 
+													anchor=W) #posicionamos el texto a la izquierda
 		fecha_label.place(relx=0.02, rely=0.11)
 
 		texto = ''
+		
 		date = paquete.get_fecha_de_viaje()
 		if date!= None:
 			if date.day < 10:
@@ -611,19 +623,23 @@ class View:
 		else:
 			texto = '-- / -- / --'
 
-		fecha_value_label = Label(frame_detalles, text=texto, width='10', height='1', relief=GROOVE, borderwidth=0)
+		fecha_value_label = Label(frame_detalles, text=texto, width='10', height='1', 
+																	relief=GROOVE, borderwidth=0)
 		fecha_value_label.config(font=('tahoma', 14), bg='#F9F9F9', fg='#2F3030', anchor=W)
 		fecha_value_label.place(relx=0.105, rely=0.11)
 
 		#vigente view
-		vigente_label = Label(frame_detalles, text='Vigente:', width='7', height='1', relief=GROOVE, borderwidth=0)
-		vigente_label.config(font=('tahoma', 14, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
+		vigente_label = Label(frame_detalles, text='Vigente:', width='7', height='1', 
+																	relief=GROOVE, borderwidth=0)
+		vigente_label.config(font=('tahoma', 14, 'bold'), bg='#F9F9F9', 
+											fg='#48C2FA', anchor=W) #posicionamos el texto a la izquierda
 		vigente_label.place(relx=0.02, rely=0.155)
 		texto = 'Si'
 		if paquete.get_esta_vigente() == False:
 			texto = 'No'
 
-		vigente_value_label = Label(frame_detalles, text=texto, width='3', height='1', relief=GROOVE, borderwidth=0)
+		vigente_value_label = Label(frame_detalles, text=texto, width='3', height='1',
+																	relief=GROOVE, borderwidth=0)
 		vigente_value_label.config(font=('tahoma', 14), bg='#F9F9F9', fg='#2F3030', anchor=W)
 		vigente_value_label.place(relx=0.116, rely=0.155)
 
@@ -682,12 +698,14 @@ class View:
 		else:
 			texto = precio_texto
 
-		if paquete.get_precio() < 100000: #significa que el precio esta en dolares, ya que en guaranies se considera 5 digitos como minimo
+		if paquete.get_precio() < 100000: #significa que el precio esta en dolares, 
+										#ya que en guaranies se considera 5 digitos como minimo
 			texto = texto + '$'
 		else:
 			texto = texto + 'Gs.'
 
-		precio_value_label = Label(frame_detalles, text=texto, width='12', height='1', relief=GROOVE, borderwidth=0)
+		precio_value_label = Label(frame_detalles, text=texto, width='12', 
+															height='1', relief=GROOVE, borderwidth=0)
 		precio_value_label.config(font=('tahoma', 14), bg='#F9F9F9', fg='#2F3030', anchor=W)
 		precio_value_label.place(relx=0.435, rely=0.11)
 
@@ -715,7 +733,8 @@ class View:
 		else:
 			texto = senha_texto
 
-		if paquete.get_senha() < 100000: #significa que el precio esta en dolares, ya que en guaranies se considera 5 digitos como minimo
+		if paquete.get_senha() < 100000: #significa que el precio esta en dolares, 
+										#ya que en guaranies se considera 5 digitos como minimo
 			texto = texto + '$'
 		else:
 			texto = texto + 'Gs.'
@@ -725,7 +744,8 @@ class View:
 		senha_value_label.place(relx=0.435, rely=0.155)
 
 		#pre venta view
-		pre_venta_label = Label(frame_detalles, text='Pre venta:', width='9', height='1', relief=GROOVE, borderwidth=0)
+		pre_venta_label = Label(frame_detalles, text='Pre venta:', width='9', height='1',
+																	relief=GROOVE, borderwidth=0)
 		pre_venta_label.config(font=('tahoma', 14, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
 		pre_venta_label.place(relx=0.35, rely=0.20)
 
@@ -738,11 +758,14 @@ class View:
 		pre_venta_label.place(relx=0.474, rely=0.20)
 
 		texto = 'Ver precio en detalles      >'
-		precio_detalles_button = Button(frame_detalles, text=texto, width='19', height='1', relief=GROOVE, borderwidth=2)
-		precio_detalles_button.config(font=('tahoma', 13), bg='#27A221', fg='#FFFFFF', activeforeground='#FFFFFF', activebackground='#20801B', highlightthickness=0, anchor=W)
+		precio_detalles_button = Button(frame_detalles, text=texto, width='19', height='1',
+																	relief=GROOVE, borderwidth=2)
+		precio_detalles_button.config(font=('tahoma', 13), bg='#27A221', fg='#FFFFFF', 
+						activeforeground='#FFFFFF', activebackground='#20801B', highlightthickness=0, anchor=W)
 		if paquete.si_pre_venta():
 			precio_detalles_button.config(bg='#27A221', activebackground='#20801B')
-			precio_detalles_button.config(command=lambda:self.view_precio_detalles(paquete.get_precio(), paquete.get_senha(), paquete.get_pre_venta()))
+			precio_detalles_button.config(command=lambda:self.view_precio_detalles(paquete.get_precio(),
+															 paquete.get_senha(), paquete.get_pre_venta()))
 		else:
 			precio_detalles_button.config(bg='#A6A0A0', activebackground='#A6A0A0')
 
@@ -750,17 +773,20 @@ class View:
 
 		#TERCERA COLUMNA
 		#cantidad de pasajeros view
-		cantidad_usuarios_label = Label(frame_detalles, text='Cantidad de pasajeros:', width='19', height='1', relief=GROOVE, borderwidth=0)
+		cantidad_usuarios_label = Label(frame_detalles, text='Cantidad de pasajeros:', 
+												width='19', height='1', relief=GROOVE, borderwidth=0)
 		cantidad_usuarios_label.config(font=('tahoma', 14, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
 		cantidad_usuarios_label.place(relx=0.65, rely=0.11)
 
 		texto = paquete.get_cantidad_de_usuarios_actual()
-		cantidad_usuarios_value_label = Label(frame_detalles, text=texto, width='2', height='1', relief=GROOVE, borderwidth=0)
+		cantidad_usuarios_value_label = Label(frame_detalles, text=texto, width='2', 
+																height='1', relief=GROOVE, borderwidth=0)
 		cantidad_usuarios_value_label.config(font=('tahoma', 14), bg='#F9F9F9', fg='#2F3030', anchor=W)
 		cantidad_usuarios_value_label.place(relx=0.903, rely=0.11)
 
 		#lugares disponibles view
-		lugares_disponibles_label = Label(frame_detalles, text='Lugares disponibles:', width='17', height='1', relief=GROOVE, borderwidth=0)
+		lugares_disponibles_label = Label(frame_detalles, text='Lugares disponibles:', 
+												width='17', height='1', relief=GROOVE, borderwidth=0)
 		lugares_disponibles_label.config(font=('tahoma', 14, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
 		lugares_disponibles_label.place(relx=0.65, rely=0.155)
 
@@ -774,12 +800,14 @@ class View:
 		else:
 			texto = '--'
 
-		lugares_disponibles_value_label = Label(frame_detalles, text=texto, width='9', height='1', relief=GROOVE, borderwidth=0)
+		lugares_disponibles_value_label = Label(frame_detalles, text=texto, width='9', 
+																height='1', relief=GROOVE, borderwidth=0)
 		lugares_disponibles_value_label.config(font=('tahoma', 14), bg='#F9F9F9', fg=color, anchor=W)
 		lugares_disponibles_value_label.place(relx=0.877, rely=0.155)
 
 		#maxima cantidad de pasajeros
-		max_cantidad_pasajeros_label = Label(frame_detalles, text='Max de pasajeros:', width='15', height='1', relief=GROOVE, borderwidth=0)
+		max_cantidad_pasajeros_label = Label(frame_detalles, text='Max de pasajeros:', 
+													width='15', height='1', relief=GROOVE, borderwidth=0)
 		max_cantidad_pasajeros_label.config(font=('tahoma', 14, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
 		max_cantidad_pasajeros_label.place(relx=0.65, rely=0.20)
 
@@ -787,17 +815,20 @@ class View:
 		if texto == -1:
 			texto = '--'
 
-		max_cantidad_value_pasajeros_label = Label(frame_detalles, text=texto, width='2', height='1', relief=GROOVE, borderwidth=0)
+		max_cantidad_value_pasajeros_label = Label(frame_detalles, text=texto, 
+									width='2', height='1', relief=GROOVE, borderwidth=0)
 		max_cantidad_value_pasajeros_label.config(font=('tahoma', 14), bg='#F9F9F9', fg='#2F3030', anchor=W)
 		max_cantidad_value_pasajeros_label.place(relx=0.852, rely=0.20)
 
 		#Habitaciones view
-		habitaciones_label = Label(frame_detalles, text='Habitaciones:', width='11', height='1', relief=GROOVE, borderwidth=0)
+		habitaciones_label = Label(frame_detalles, text='Habitaciones:', width='11', 
+														height='1', relief=GROOVE, borderwidth=0)
 		habitaciones_label.config(font=('tahoma', 14, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
 		habitaciones_label.place(relx=0.65, rely=0.245)
 
 		#texto = paquete.get_cantidad_de_usuarios_actual()
-		habitaciones_value_label = Label(frame_detalles, text='En proceso...', width='11', height='1', relief=GROOVE, borderwidth=0)
+		habitaciones_value_label = Label(frame_detalles, text='En proceso...', 
+													width='11', height='1', relief=GROOVE, borderwidth=0)
 		habitaciones_value_label.config(font=('tahoma', 14), bg='#F9F9F9', fg='#2F3030', anchor=W)
 		habitaciones_value_label.place(relx=0.8, rely=0.245)
 
@@ -816,7 +847,18 @@ class View:
 		#				CONFIGURAMOS LOS EVENTOS				*
 		#********************************************************
 		salir_button.config(command=lambda:self.widget_destroy(self.parent_detalles))
-		editar_button.config(command=lambda:self.controller.editar_paquete(frame_detalles, paquete, pos_paquete, pos_result_busqueda))
+		editar_button.config(command=lambda:self.controller.editar_paquete(frame_detalles, paquete, 
+														pos_paquete, pos_result_busqueda))
+
+	def view_paquete_detalles(self, paquete, pos_paquete, pos_result_busqueda):
+		print('viendo detalles')
+		self.parent_detalles = Toplevel(self.parent, bg='#F9F9F9', relief=GROOVE, borderwidth=0)
+		self.parent_detalles.title('Paquete Detalles')
+		self.parent_detalles.geometry('1000x800+450+100')
+		self.parent_detalles.resizable(width=False, height=False)
+
+		self.view_paquete_detalles_body(paquete, pos_paquete, pos_result_busqueda)
+		
 		
 	def view_editar_paquete(self, frame, paquete, pos_paquete, pos_result_busqueda):
 		self.frame_editar_paquete = Frame(frame, width='980', height='700',
@@ -909,6 +951,9 @@ class View:
 			texto = '-- / -- / --'
 
 		self.lista_fecha = []
+		if date!= None:
+			self.lista_fecha.append(date)
+
 		self.lista_fecha_combobox = []
 		self.combobox_add_fecha = ttk.Combobox(self.frame_editar_paquete, values=self.lista_fecha_combobox)
 		self.combobox_add_fecha.config(state='readonly', font=(13),
@@ -932,14 +977,16 @@ class View:
 		label = Label(self.frame_editar_paquete, text='Precio:',
 												width='10', height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA',
-																anchor=W) #posicionamos el texto a la izquierda
+													anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=y_label)
 		
 		texto = ''
 		if paquete.si_pre_venta():
 			precio_texto = str(paquete.get_precio_pre_venta())
+			self.price_value = paquete.get_precio_pre_venta()
 		else:
 			precio_texto = str(paquete.get_precio())
+			self.price_value = paquete.get_precio()
 
 		j = 1
 		if len(precio_texto) > 3:
@@ -953,7 +1000,6 @@ class View:
 			texto = precio_texto
 		
 		self.price_content_entry = StringVar(value=texto)
-		self.price_value = None
 		price_entry = Entry(self.frame_editar_paquete, width='25', font=('tahoma', 13),
 															textvariable=self.price_content_entry)
 		price_entry.place(relx=0.13, rely=y_aux)
@@ -969,11 +1015,14 @@ class View:
 		label.place(relx=0.02, rely=y_label)
 		
 		texto = ''
+		self.senha_value = None
 		senha_texto = str(paquete.get_senha())
 		if paquete.si_pre_venta():
 			senha_texto = str(paquete.get_senha_pre_venta())
+			self.senha_value = paquete.get_senha_pre_venta()
 		else:
 			senha_texto = str(paquete.get_senha())
+			self.senha_value = paquete.get_senha()
 
 		j = 1
 		if len(senha_texto) > 3:
@@ -987,7 +1036,6 @@ class View:
 			texto = senha_texto
 		
 		self.senha_content_entry = StringVar(value=texto)
-		self.senha_value = None
 		senha_entry = Entry(self.frame_editar_paquete, width='25',
 									font=('tahoma', 13), textvariable=self.senha_content_entry)
 		senha_entry.place(relx=0.13, rely=y_aux)
@@ -1034,11 +1082,12 @@ class View:
 		cant_pasajeros_entry.place(relx=0.72, rely=y_aux)
 		
 		#view pre venta
+		self.frame_pre_venta = None
 		y_label += 0.08
 		y_aux += 0.08
 
 		label = Label(self.frame_editar_paquete, text='Pre venta:', width='13',
-																	height='2', relief=GROOVE, borderwidth=0)
+														height='2', relief=GROOVE, borderwidth=0)
 		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#48C2FA', anchor=W)
 		label.place(relx=0.56, rely=y_label)
 		
@@ -1073,7 +1122,7 @@ class View:
 		select_button.place(relx=0.72, rely=y_aux)
 
 		select_image_view = Frame(self.frame_editar_paquete, bg='#F9F9F9',
-													width='380', height='380', relief=GROOVE, borderwidth=0)
+												width='380', height='380', relief=GROOVE, borderwidth=0)
 		select_image_view.place(relx=0.56, rely=0.28)
 
 		label_image = Label(select_image_view, bg='#F9F9F9', fg='#48C2FA',
@@ -1107,7 +1156,7 @@ class View:
 		save_button.place(relx=0.5, rely=0.85)
 
 		cancel_button = Button(self.frame_editar_paquete, text='Cancelar',
-													width=110, height=30, relief=GROOVE, borderwidth=0)
+											width=110, height=30, relief=GROOVE, borderwidth=0)
 		cancel_button.config(font=('tahoma', 13), bg='#F9F9F9', fg='#343535')
 		cancel_button.config(image=self.imagenes['not_ok_icon'], compound=LEFT)
 		cancel_button.place(relx=0.34, rely=0.85)
@@ -1118,11 +1167,16 @@ class View:
 		cancel_button.config(command=lambda:self.controller.cancelar_editar_paquete())
 		select_button.config(command=lambda:self.elegir_imagen(label_image))
 
+
+		save_button.config(command=lambda:self.controller.guardar_paquete_editado(
+				pos_paquete, pos_result_busqueda, name_content_entry.get(), combobox_tipos.get(),
+				combobox_sub_tipos.get(), combobox_vigencia.get(), self.lista_fecha,
+				self.price_value, self.senha_value, incluye_text_widget.get(1.0, END),
+				cant_pasajeros_content_entry.get(), self.pre_venta, self.image_to_see_path,
+				frame))
 		'''
 		pre_venta_button.config(command=lambda:self.controller.agregar_editar_pre_venta())
-		save_button.config(command=lambda:self.image_to_see_path==self.controller.guardar_paquete(name_content_entry.get(), combobox_tipos.get(), combobox_sub_tipos.get(),
-				combobox_vigencia.get(), self.lista_fecha, self.price_value, self.senha_value, incluye_text_widget.get(1.0, END),
-				cant_pasajeros_content_entry.get(), self.pre_venta, self.image_to_see_path))
+		
 		
 
 		'''
@@ -2184,7 +2238,8 @@ class View:
 		message.geometry('300x100+750+440')
 		message.resizable(width=False, height=False)
 
-		message_label = Label(message, text=msj, width='40', height='2', bg='#F9F9F9', relief=GROOVE, borderwidth=0)
+		message_label = Label(message, text=msj, width='40', height='2', bg='#F9F9F9', relief=GROOVE,
+																			 borderwidth=0)
 		message_label.config(font=('tahoma', 10))
 		message_label.pack()
 
