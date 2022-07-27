@@ -382,11 +382,12 @@ class Model:
 			if fecha is None and tipo == 'Terrestre' and sub_tipo == 'Estandar':
 				raise Exception('Fecha incorrecta')
 
-			if precio == '':
+			if not precio or precio == '':
 				raise Exception('Precio incorrecto')
 
 			precio = int(precio)
-			if senha == '':
+			
+			if not senha or senha == '':
 				raise Exception('Seña incorrecto')
 
 			senha = int(senha)
