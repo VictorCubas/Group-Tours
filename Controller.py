@@ -100,7 +100,8 @@ class Controller:
 
 	def guardar_paquete(self, nombre, tipo, sub_tipo, esta_vigente, lista_fecha, precio,
 											senha, incluye, cant_pasajeros, pre_venta, image_path):
-		#print('{}, {}, {}, {}, {}, {}, {}, {}'.format(nombre, tipo, sub_tipo, fecha, esta_vigente, precio, senha, incluye))
+		#print('{}, {}, {}, {}, {}, {}, {}, {}'.format(nombre, tipo, sub_tipo, fecha,
+		#										esta_vigente, precio, senha, incluye))
 		if len(lista_fecha) > 0:
 			try:
 				self.model.validar_datos_paquete(nombre, tipo, sub_tipo, esta_vigente, lista_fecha[0],
@@ -154,11 +155,16 @@ class Controller:
 	def editar_paquete(self, frame, paquete, pos_paquete, pos_result_busqueda):
 		self.view.view_editar_paquete(frame, paquete, pos_paquete, pos_result_busqueda)
 
-	def guardar_paquete_editado(self, pos_paquete, pos_result_busqueda, nombre, tipo, sub_tipo, esta_vigente, fecha, precio, senha, incluye, cant_pasajeros, pre_venta, parent_detalles):
-		#print('{}, {}, {}, {}, {}, {}, {}, {}'.format(nombre, tipo, sub_tipo, fecha, esta_vigente, precio, senha, incluye))
+	def guardar_paquete_editado(self, pos_paquete, pos_result_busqueda, nombre, tipo, sub_tipo,
+								 esta_vigente, fecha, precio, senha, incluye, cant_pasajeros,
+								 pre_venta, image_path, parent_detalles):
+		#print('{}, {}, {}, {}, {}, {}, {}, {}'.format(nombre, tipo, sub_tipo, fecha, esta_vigente,
+		#											 precio, senha, incluye))
+		
 		success = None
 		try:
-			self.model.validar_datos_paquete(nombre, tipo, sub_tipo, esta_vigente, fecha, precio, senha, incluye, cant_pasajeros)
+			self.model.validar_datos_paquete(nombre, tipo, sub_tipo, esta_vigente, fecha[0], precio,
+													 senha, incluye, cant_pasajeros)
 			success = True
 		except NombreException as e:
 			success = False
@@ -171,26 +177,17 @@ class Controller:
 			self.view.view_show_message(False, e)
 		else:
 			self.view.view_show_message(True, 'Se ha guardado con exito')
-			paquete = self.model.crear_paquete(nombre, tipo, sub_tipo, esta_vigente, fecha, precio, senha, incluye, cant_pasajeros)
+			paquete = self.model.crear_paquete(nombre, tipo, sub_tipo, esta_vigente, fecha[0],
+											precio, senha, incluye, cant_pasajeros, image_path)
 
 			if pre_venta is not None:
 				paquete.agregar_pre_venta(pre_venta)
 
-			#print('paquete a guardar: ' + paquete.get_nombre())
-			#print('pos_paquete: ' + str(pos_paquete))
-			#print('listando paquetes1...')
-			#paq = self.model.listar_paquetes()
-			#for p in paq:
-			#	print('paquete: ' + p.get_nombre())
 
-			print('guardando paquete editado..........')
+			print('guardando paquete editado...')
 			self.model.guardar_paquete_editado(paquete, pos_paquete)
-
-			#print('listando paquetes2...')
-			#paq = self.model.listar_paquetes()
-			#for p in paq:
-			#	print('paquete: ' + p.get_nombre())
-			self.view.view_paquete_detalles(paquete, pos_paquete, pos_result_busqueda)
+			
+			self.view.view_paquete_detalles_body(paquete, pos_paquete, pos_result_busqueda)
 			self.view.widget_destroy(parent_detalles)
 
 			#actualizamos el vector resultado de la busqueda
