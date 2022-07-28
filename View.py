@@ -1094,7 +1094,7 @@ class View:
 		self.pre_venta = None
 		self.content_pre_venta_button = StringVar()
 		
-		if paquete.si_pre_venta:
+		if paquete.si_pre_venta():
 			self.pre_venta = paquete.get_pre_venta()
 			self.content_pre_venta_button.set('Editar')
 		else:
@@ -1174,12 +1174,8 @@ class View:
 				self.price_value, self.senha_value, incluye_text_widget.get(1.0, END),
 				cant_pasajeros_content_entry.get(), self.pre_venta, self.image_to_see_path,
 				frame))
-		'''
+				
 		pre_venta_button.config(command=lambda:self.controller.agregar_editar_pre_venta())
-		
-		
-
-		'''
 
 	def	cancelar_editar_paquete(self):
 		self.widget_destroy(self.frame_editar_paquete)
@@ -1424,7 +1420,8 @@ class View:
 
 		#view precio
 		label = Label(self.frame_pre_venta, text='Precio:', width='11', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535', anchor=W) #posicionamos el texto a la izquierda
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535',
+																 anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=0.05)
 		#label.grid(row=0, column=1, padx=10, pady=20)
 
@@ -1451,12 +1448,14 @@ class View:
 
 			self.price_pre_venta_content_entry.set(texto)
 
-		price_entry = Entry(self.frame_pre_venta, width='10', font=('tahoma', 13), textvariable=self.price_pre_venta_content_entry)
+		price_entry = Entry(self.frame_pre_venta, width='10', font=('tahoma', 13),
+														 textvariable=self.price_pre_venta_content_entry)
 		price_entry.place(relx=0.25, rely=0.075)
 
 		#view senha
 		label = Label(self.frame_pre_venta, text='Seña:', width='11', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535', anchor=W) #posicionamos el texto a la izquierda
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535', 
+																	anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=0.176)
 
 		self.senha_pre_venta_content_entry = StringVar()
@@ -1484,12 +1483,14 @@ class View:
 		#print('senha: {}'.format(self.senha_content_entry.get()))
 		#print('A VER QUE ONDA...')
 
-		senha_entry = Entry(self.frame_pre_venta, width='10', font=('tahoma', 13), textvariable=self.senha_pre_venta_content_entry)
+		senha_entry = Entry(self.frame_pre_venta, width='10', font=('tahoma', 13),
+												 textvariable=self.senha_pre_venta_content_entry)
 		senha_entry.place(relx=0.25, rely=0.2)
 
 		#view monto cuota
 		label = Label(self.frame_pre_venta, text='Monto cuota:', width='11', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535', anchor=W) #posicionamos el texto a la izquierda
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535',
+														 anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=0.301)
 
 		self.monto_cuota_content_entry = StringVar()
@@ -1515,12 +1516,14 @@ class View:
 
 			self.monto_cuota_content_entry.set(texto)
 
-		monto_cuota_entry = Entry(self.frame_pre_venta, width='10', font=('tahoma', 13), textvariable=self.monto_cuota_content_entry)
+		monto_cuota_entry = Entry(self.frame_pre_venta, width='10', font=('tahoma', 13),
+														 textvariable=self.monto_cuota_content_entry)
 		monto_cuota_entry.place(relx=0.25, rely=0.325)
 
 		#view cantidad de cuotas
 		label = Label(self.frame_pre_venta, text='Cant cuotas:', width='11', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535', anchor=W) #posicionamos el texto a la izquierda
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535',
+																	 anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=0.425)
 
 		cant_cuota_content_entry = StringVar()
@@ -1528,12 +1531,14 @@ class View:
 
 		if self.pre_venta:
 			cant_cuota_content_entry.set(self.pre_venta.get_cantidad_cuotas())
-		cant_cuota_entry = Entry(self.frame_pre_venta, width='10', font=('tahoma', 13), textvariable=cant_cuota_content_entry)
+		cant_cuota_entry = Entry(self.frame_pre_venta, width='10', font=('tahoma', 13),
+																	 textvariable=cant_cuota_content_entry)
 		cant_cuota_entry.place(relx=0.25, rely=0.448)
 
 		#view fecha inicio
 		label = Label(self.frame_pre_venta, text='Fecha inicio:', width='11', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535', anchor=W) #posicionamos el texto a la izquierda
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535',
+															anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.5, rely=0.05)
 
 		content_button_fecha_inicio = StringVar()
@@ -1559,13 +1564,16 @@ class View:
 
 		if self.pre_venta:
 			self.pre_venta_fecha_inicio = self.pre_venta.get_fecha_inicio()
-		button_fecha_inicio = Button(self.frame_pre_venta, textvariable=content_button_fecha_inicio, width='8', height='1', relief=GROOVE, borderwidth=0)
-		button_fecha_inicio.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
+		button_fecha_inicio = Button(self.frame_pre_venta, textvariable=content_button_fecha_inicio,
+														width='8', height='1', relief=GROOVE, borderwidth=0)
+		button_fecha_inicio.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030',
+														activeforeground='#2F3030', highlightthickness=0, anchor=W)
 		button_fecha_inicio.place(relx=0.73, rely=0.07)
 
 		#view fecha fin
 		label = Label(self.frame_pre_venta, text='Fecha fin:', width='11', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535', anchor=W) #posicionamos el texto a la izquierda
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535',
+														anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.5, rely=0.174)
 
 		content_button_fecha_fin = StringVar()
@@ -1590,8 +1598,10 @@ class View:
 
 		if self.pre_venta:
 			self.pre_venta_fecha_fin = self.pre_venta.get_fecha_fin()
-		button_fecha_fin = Button(self.frame_pre_venta, textvariable=content_button_fecha_fin, width='8', height='1', relief=GROOVE, borderwidth=0)
-		button_fecha_fin.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
+		button_fecha_fin = Button(self.frame_pre_venta, textvariable=content_button_fecha_fin, 
+														width='8', height='1', relief=GROOVE, borderwidth=0)
+		button_fecha_fin.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030',
+													activeforeground='#2F3030', highlightthickness=0, anchor=W)
 		button_fecha_fin.place(relx=0.73, rely=0.195)
 
 		#view ok and cancel
@@ -1608,12 +1618,15 @@ class View:
 		#********************************************************
 		#				CONFIGURAMOS LOS EVENTOS				*
 		#********************************************************
-		button_fecha_inicio.config(command=lambda:self.view_calendar(self.frame_pre_venta, content_button_fecha_inicio, 2, 0.55, 0.06))
-		button_fecha_fin.config(command=lambda:self.view_calendar(self.frame_pre_venta, content_button_fecha_fin, 3, 0.55, 0.13))
+		button_fecha_inicio.config(command=lambda:self.view_calendar(self.frame_pre_venta,
+																content_button_fecha_inicio, 2, 0.55, 0.06))
+		button_fecha_fin.config(command=lambda:self.view_calendar(self.frame_pre_venta,
+																content_button_fecha_fin, 3, 0.55, 0.13))
 		self.price_pre_venta_content_entry.trace("w", self.update_price_pre_venta_content_entry)
 		self.senha_pre_venta_content_entry.trace("w", self.update_senha_pre_venta_content_entry)
 		self.monto_cuota_content_entry.trace("w", self.update_monto_cuota_content_entry)
-		save_button.config(command=lambda:self.controller.guardar_pre_venta(self.price_pre_venta_value, self.senha_pre_venta_value, self.monto_cuota_value,
+		save_button.config(command=lambda:self.controller.guardar_pre_venta(self.price_pre_venta_value,
+														 self.senha_pre_venta_value, self.monto_cuota_value,
 				cant_cuota_content_entry.get(), self.pre_venta_fecha_inicio, self.pre_venta_fecha_fin))
 		cancel_button.config(command=lambda:self.widget_destroy(self.frame_pre_venta))
 
@@ -1628,18 +1641,18 @@ class View:
 
 		#view precio
 		label = Label(self.frame_pre_venta, text='Precio:', width='11', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535', anchor=W) #posicionamos el texto a la izquierda
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535',
+																anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=0.05)
-		#label.grid(row=0, column=1, padx=10, pady=20)
 
 		self.price_pre_venta_content_entry = StringVar()
 		self.price_pre_venta_value = self.pre_venta.get_precio()
 		self.price_pre_venta_content_entry.set(self.pre_venta.get_precio())
 		precio_texto = str(self.pre_venta.get_precio())
 
-		price_entry = Entry(self.frame_pre_venta, width='10', font=('tahoma', 13), textvariable=self.price_pre_venta_content_entry)
+		price_entry = Entry(self.frame_pre_venta, width='10', font=('tahoma', 13),
+														 textvariable=self.price_pre_venta_content_entry)
 		price_entry.place(relx=0.25, rely=0.075)
-		#price_entry.grid(row=0, column=2, padx=-10)
 
 		texto = ''
 		j = 1
@@ -1657,7 +1670,8 @@ class View:
 
 		#view senha
 		label = Label(self.frame_pre_venta, text='Seña:', width='11', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535', anchor=W) #posicionamos el texto a la izquierda
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535',
+																anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=0.176)
 
 		self.senha_pre_venta_value = self.pre_venta.get_senha()
@@ -1681,12 +1695,14 @@ class View:
 		#print('senha: {}'.format(self.senha_content_entry.get()))
 		#print('A VER QUE ONDA...')
 
-		senha_entry = Entry(self.frame_pre_venta, width='10', font=('tahoma', 13), textvariable=self.senha_pre_venta_content_entry)
+		senha_entry = Entry(self.frame_pre_venta, width='10', font=('tahoma', 13),
+												 textvariable=self.senha_pre_venta_content_entry)
 		senha_entry.place(relx=0.25, rely=0.2)
 
 		#view monto cuota
 		label = Label(self.frame_pre_venta, text='Monto cuota:', width='11', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535', anchor=W) #posicionamos el texto a la izquierda
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535',
+																	anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=0.301)
 
 		self.monto_cuota_content_entry = StringVar()
@@ -1708,23 +1724,27 @@ class View:
 
 		self.monto_cuota_content_entry.set(texto)
 
-		monto_cuota_entry = Entry(self.frame_pre_venta, width='10', font=('tahoma', 13), textvariable=self.monto_cuota_content_entry)
+		monto_cuota_entry = Entry(self.frame_pre_venta, width='10', font=('tahoma', 13),
+																	 textvariable=self.monto_cuota_content_entry)
 		monto_cuota_entry.place(relx=0.25, rely=0.325)
 
 		#view cantidad de cuotas
 		label = Label(self.frame_pre_venta, text='Cant cuotas:', width='11', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535', anchor=W) #posicionamos el texto a la izquierda
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535',
+																anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.02, rely=0.425)
 
 		cant_cuota_content_entry = StringVar()
 		if self.pre_venta:
 			cant_cuota_content_entry.set(self.pre_venta.get_cantidad_cuotas())
-		cant_cuota_entry = Entry(self.frame_pre_venta, width='10', font=('tahoma', 13), textvariable=cant_cuota_content_entry)
+		cant_cuota_entry = Entry(self.frame_pre_venta, width='10', font=('tahoma', 13),
+																	 textvariable=cant_cuota_content_entry)
 		cant_cuota_entry.place(relx=0.25, rely=0.448)
 
 		#view fecha inicio
 		label = Label(self.frame_pre_venta, text='Fecha inicio:', width='11', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535', anchor=W) #posicionamos el texto a la izquierda
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535', 
+																anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.5, rely=0.05)
 
 		content_button_fecha_inicio = StringVar()
@@ -1749,13 +1769,16 @@ class View:
 
 		if self.pre_venta:
 			self.pre_venta_fecha_inicio = self.pre_venta.get_fecha_inicio()
-		button_fecha_inicio = Button(self.frame_pre_venta, textvariable=content_button_fecha_inicio, width='8', height='1', relief=GROOVE, borderwidth=0)
-		button_fecha_inicio.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
+		button_fecha_inicio = Button(self.frame_pre_venta, textvariable=content_button_fecha_inicio, 
+															width='8', height='1', relief=GROOVE, borderwidth=0)
+		button_fecha_inicio.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', 
+														activeforeground='#2F3030', highlightthickness=0, anchor=W)
 		button_fecha_inicio.place(relx=0.73, rely=0.07)
 
 		#view fecha fin
 		label = Label(self.frame_pre_venta, text='Fecha fin:', width='11', height='2', relief=GROOVE, borderwidth=0)
-		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535', anchor=W) #posicionamos el texto a la izquierda
+		label.config(font=('tahoma', 13, 'bold'), bg='#F9F9F9', fg='#343535', 
+															anchor=W) #posicionamos el texto a la izquierda
 		label.place(relx=0.5, rely=0.174)
 
 		content_button_fecha_fin = StringVar()
@@ -1780,8 +1803,10 @@ class View:
 
 		if self.pre_venta:
 			self.pre_venta_fecha_fin = self.pre_venta.get_fecha_fin()
-		button_fecha_fin = Button(self.frame_pre_venta, textvariable=content_button_fecha_fin, width='8', height='1', relief=GROOVE, borderwidth=0)
-		button_fecha_fin.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030', activeforeground='#2F3030', highlightthickness=0, anchor=W)
+		button_fecha_fin = Button(self.frame_pre_venta, textvariable=content_button_fecha_fin, 
+													width='8', height='1', relief=GROOVE, borderwidth=0)
+		button_fecha_fin.config(font=('tahoma', 13), bg='#F9F9F9', fg='#2F3030',
+												activeforeground='#2F3030', highlightthickness=0, anchor=W)
 		button_fecha_fin.place(relx=0.73, rely=0.195)
 
 		#view ok and cancel
@@ -1798,12 +1823,15 @@ class View:
 		#********************************************************
 		#				CONFIGURAMOS LOS EVENTOS				*
 		#********************************************************
-		button_fecha_inicio.config(command=lambda:self.view_calendar(self.frame_pre_venta, content_button_fecha_inicio, 2, 0.55, 0.06))
-		button_fecha_fin.config(command=lambda:self.view_calendar(self.frame_pre_venta, content_button_fecha_fin, 3, 0.55, 0.13))
+		button_fecha_inicio.config(command=lambda:self.view_calendar(self.frame_pre_venta,
+																content_button_fecha_inicio, 2, 0.55, 0.06))
+		button_fecha_fin.config(command=lambda:self.view_calendar(self.frame_pre_venta, 
+																content_button_fecha_fin, 3, 0.55, 0.13))
 		self.price_pre_venta_content_entry.trace("w", self.update_price_pre_venta_content_entry)
 		self.senha_pre_venta_content_entry.trace("w", self.update_senha_pre_venta_content_entry)
 		self.monto_cuota_content_entry.trace("w", self.update_monto_cuota_content_entry)
-		save_button.config(command=lambda:self.controller.guardar_pre_venta(self.price_pre_venta_value, self.senha_pre_venta_value, self.monto_cuota_value,
+		save_button.config(command=lambda:self.controller.guardar_pre_venta(self.price_pre_venta_value,
+														self.senha_pre_venta_value, self.monto_cuota_value,
 				cant_cuota_content_entry.get(), self.pre_venta_fecha_inicio, self.pre_venta_fecha_fin))
 		cancel_button.config(command=lambda:self.widget_destroy(self.frame_pre_venta))
 
@@ -2301,14 +2329,23 @@ class View:
 
 		if cod_fecha == 1 or cod_fecha == 0:
 			self.combobox_add_fecha.destroy()
-			self.lista_fecha.append(date)
 			self.lista_fecha_combobox.append(day + '/' + month + '/' + str(date.year))
 			
 			if cod_fecha == 1:
+				#comming from view_crear_paquete
+				self.lista_fecha.append(date)
 				self.combobox_add_fecha = ttk.Combobox(self.frame_crear_paquete,
 														values=self.lista_fecha_combobox)
 				self.combobox_add_fecha.place(relx=0.17, rely=0.292)
 			else:
+				#comming from view_editar_paquete
+				
+				if len(self.lista_fecha) > 0:
+					#proximamente debemos cambiar 
+					self.lista_fecha[0] = date
+				else:
+					self.lista_fecha.append(date)
+					
 				self.combobox_add_fecha = ttk.Combobox(self.frame_editar_paquete,
 														values=self.lista_fecha_combobox)
 				self.combobox_add_fecha.place(relx=0.13, rely=0.273)
