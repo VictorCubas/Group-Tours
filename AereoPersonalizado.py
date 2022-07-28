@@ -15,7 +15,7 @@ class AereoPersonalizado(Aereo):
 		AereoPersonalizado.cantidad_total_aereo_personalizado += 1
 
 	def AereoPersonalizado(self):
-		return AereoEstandar.TIPO
+		return AereoPersonalizado.TIPO
 
 	def accion(self):
 		pass
