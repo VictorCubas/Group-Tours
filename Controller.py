@@ -135,6 +135,9 @@ class Controller:
 
 	def guardar_pre_venta(self, precio, senha, monto_cuota, cant_cuotas, fecha_inicio, fecha_fin):
 		success = None
+		
+		print('pre_venta')
+		print(f'fecha_inicio: {fecha_inicio} - fecha_fin: {fecha_fin}')
 		try:
 			self.model.validar_datos_pre_venta(precio, senha, monto_cuota, cant_cuotas, fecha_inicio, fecha_fin)
 			success = True
@@ -146,10 +149,11 @@ class Controller:
 			self.view.view_show_message(False, e)
 		else:
 			pre_venta = self.model.crear_pre_venta(precio, senha, monto_cuota, cant_cuotas, fecha_inicio, fecha_fin)
-			#print('{} {} {} {} {} {}'.format(pre_venta.precio, pre_venta.senha, pre_venta.monto_cuota, pre_venta.cantidad_cuotas, pre_venta.fecha_inicio, fecha_fin))
+			#print('{} {} {} {} {} {}'.format(pre_venta.precio, pre_venta.senha, 
+			#				pre_venta.monto_cuota, pre_venta.cantidad_cuotas, pre_venta.fecha_inicio, fecha_fin))
 			#self.model.guardar_pre_venta(pre_venta)
 			self.view.set_value_pre_venta(pre_venta)
-			self.view.view_show_message(True, 'Pre venta añdido con exito')
+			self.view.view_show_message(True, 'Pre venta añadido con exito')
 
 	
 	def editar_paquete(self, frame, paquete, pos_paquete, pos_result_busqueda):
